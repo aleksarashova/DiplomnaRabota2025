@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import LoginForm from './components/forms/LoginForm';
 import RegisterForm from './components/forms/RegisterForm';
+import ForgotPasswordForm from "./components/forms/ForgotPasswordForm";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginForm />}></Route>
         <Route path="/register" element={<RegisterForm />}></Route>
+        <Route path="/forgot-password" element={<ForgotPasswordForm />}></Route>
       </Routes>
     </div>
   );
