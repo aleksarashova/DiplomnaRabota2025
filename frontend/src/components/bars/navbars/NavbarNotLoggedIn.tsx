@@ -6,7 +6,7 @@ import { FaHome } from "react-icons/fa";
 import { IoMdLogIn } from "react-icons/io";
 import { MdAppRegistration } from "react-icons/md";
 
-import SearchBar from "../searchbar/searchbar";
+import SearchBar from "../searchbar";
 
 const NavbarNotLoggedIn = () => {
     return (

@@ -6,7 +6,7 @@ import { FaHome } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { IoMdLogOut } from "react-icons/io";
 
-import SearchBar from "../searchbar/searchbar";
+import SearchBar from "../searchbar";
 
 const NavbarLoggedIn = () => {
     return (
