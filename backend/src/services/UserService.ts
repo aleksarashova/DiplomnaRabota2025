@@ -2,7 +2,7 @@ import {HydratedDocument} from "mongoose";
 import User, {UserInterface} from "../models/User";
 
 import bcrypt from 'bcryptjs';
-import {RegisterUserDTO} from "../DTOs/UserDTOs";
+import {RegisterUserDTO, UpdateUserDTO} from "../DTOs/UserDTOs";
 
 export const hashPassword = async (password: string): Promise<string> => {
     try {
@@ -106,6 +106,46 @@ export const updateUserLoggedOut = async(id: string): Promise<void> => {
         } else {
             throw new Error("Could not find user while trying to update it to logged out.");
         }
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while updating the user to logged out.");
+    }
+}
+
+export const updateUserProfile = async(updatedUserData: UpdateUserDTO): Promise<void> => {
+    try {
+        if (!updatedUserData.user_id) {
+            throw new Error("User ID is required.");
+        }
+        if (!updatedUserData.field || !updatedUserData.value) {
+            throw new Error("Both field and value are required for updating the profile.");
+        }
+
+        const user = await findUserById(updatedUserData.user_id);
+        if(!user) {
+            throw new Error("Could not find user while trying to update his profile.");
+        }
+
+        switch(updatedUserData.field) {
+            case "username":
+                user.username = updatedUserData.value;
+                break;
+            case "email":
+                user.email = updatedUserData.value;
+                break;
+            case "password":
+                user.password_hash = await hashPassword(updatedUserData.value);
+                break;
+            case "bio":
+                user.bio = updatedUserData.value;
+                break;
+            default:
+                throw new Error("Invalid field name is provided for teh profile update.");
+        }
+
+        await user.save();
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
