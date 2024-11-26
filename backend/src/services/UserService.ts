@@ -16,6 +16,18 @@ export const hashPassword = async (password: string): Promise<string> => {
     }
 }
 
+export const checkForRightPassword = async(password: string, real_password_hash: string): Promise<boolean> => {
+    try {
+        return await bcrypt.compare(password, real_password_hash);
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while checking the password.");
+    }
+}
+
+
 export const createUser = async (userData: RegisterUserDTO): Promise<void> => {
     try {
         const passwordHash: string = await hashPassword(userData.password);
