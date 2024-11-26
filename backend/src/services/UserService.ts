@@ -68,3 +68,48 @@ export const deleteUser = async (id: string): Promise<void> => {
         throw new Error("Unknown error while deleting user.");
     }
 }
+
+export const findUserById = async(id: string): Promise<HydratedDocument<UserInterface> | null> => {
+    try {
+        return await User.findOne({_id: id});
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while searching for a user by id.");
+    }
+}
+
+export const updateUserLoggedIn = async(id: string): Promise<void> => {
+    try {
+        const user = await findUserById(id);
+        if (user) {
+            user.is_logged_in = true;
+            await user.save();
+        } else {
+            throw new Error("Could not find user while trying to update it to logged in.");
+        }
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while updating the user to logged in.");
+    }
+}
+
+export const updateUserLoggedOut = async(id: string): Promise<void> => {
+    try {
+        const user = await findUserById(id);
+        if (user) {
+            user.is_logged_in = false;
+            await user.save();
+        } else {
+            throw new Error("Could not find user while trying to update it to logged out.");
+        }
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while updating the user to logged out.");
+    }
+}
