@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
-import dotenv from 'dotenv';
 
 import {createUser} from "../services/UserService";
-
-dotenv.config();
 
 export const register = async (req: Request, res: Response): Promise<void | any> => {
     try {

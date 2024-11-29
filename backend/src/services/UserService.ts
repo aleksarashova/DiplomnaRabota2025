@@ -80,6 +80,28 @@ export const findUserById = async(id: string): Promise<HydratedDocument<UserInte
     }
 }
 
+export const findUserByEmail = async(email: string): Promise<HydratedDocument<UserInterface> | null> => {
+    try {
+        return await User.findOne({email: email});
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while searching for a user by email.");
+    }
+}
+
+export const findUserByUsername = async(username: string): Promise<HydratedDocument<UserInterface> | null> => {
+    try {
+        return await User.findOne({username: username});
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while searching for a user by username.");
+    }
+}
+
 export const updateUserLoggedIn = async(id: string): Promise<void> => {
     try {
         const user = await findUserById(id);
