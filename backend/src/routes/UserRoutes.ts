@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 
-import {login, register, updateProfile, deleteProfile} from "../controllers/UserController";
+import {login, register, updateProfile, deleteProfile, getMyProfileData} from "../controllers/UserController";
 import {validateRequest} from "../middlewares/RequestValidationMiddleware";
 import {profileUpdateSchema, userLoginSchema, userRegisterSchema} from "../validationSchemas/UserValidation";
 import {checkAuthentication, checkCredentialsLogin, checkUniquenessRegister} from "../middlewares/UserMiddleware";
@@ -11,6 +11,6 @@ router.post("/register", validateRequest(userRegisterSchema), checkUniquenessReg
 router.post("/login", validateRequest(userLoginSchema), checkCredentialsLogin, login);
 router.post("/update-profile", validateRequest(profileUpdateSchema), checkAuthentication, updateProfile);
 router.post("/delete-profile", checkAuthentication, deleteProfile);
-router.get("/my-profile-data");
+router.get("/my-profile-data", getMyProfileData);
 
 export default router;

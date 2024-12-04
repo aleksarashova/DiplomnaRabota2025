@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-import {createUser, deleteUser, findUserByUsername, updateUserLoggedIn, updateUserProfile} from "../services/UserService";
+import {createUser, deleteUser, findUserByUsername, updateUserLoggedIn, updateUserProfile, getUserProfileData} from "../services/UserService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
-import { UpdateUserDTO } from "../DTOs/UserDTOs";
+import { UpdateUserDTO, UserProfileDTO } from "../DTOs/UserDTOs";
 
 export const register = async (req: Request, res: Response): Promise<void | any> => {
     try {
@@ -94,6 +94,22 @@ export const deleteProfile = async (req: ExtendedRequest, res: Response): Promis
         res.status(200).json({ message: "User deleted successfully." });
     } catch (error) {
         console.error("Error during deleting profile:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+export const getMyProfileData = async (req: ExtendedRequest, res: Response): Promise<void | any> => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is missing" });
+        }
+
+        const userData: UserProfileDTO = await getUserProfileData(userId);
+        res.status(200).json({ user: userData });
+    } catch (error) {
+        console.error("Error during getting profile data:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 }
