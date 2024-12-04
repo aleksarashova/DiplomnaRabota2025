@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import jwt, {JwtPayload} from "jsonwebtoken";
 
 import {findUserByEmail, findUserByUsername, checkForRightPassword} from "../services/UserService";
 
@@ -53,5 +54,36 @@ export const checkCredentialsLogin = async (
     } catch (error) {
         console.error("Error during credentials check:", error);
         return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+export const checkAuthentication = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void | any> => {
+    try {
+        const token = req.headers['authorization']?.split(' ')[1];
+
+        if (!token) {
+            return res.status(401).json({message: "No access token found."});
+        }
+
+        const real_access_token_secret: string | undefined = process.env.JWT_SECRET;
+
+        if (real_access_token_secret) {
+            const decoded = jwt.verify(token, real_access_token_secret) as JwtPayload;
+
+            if (!decoded || !decoded.userId) {
+                return res.status(401).json({message: "The user is not authenticated."});
+            }
+
+            req.userId = decoded.userId;
+        }
+
+        next();
+    } catch (error) {
+        console.error("Error during authentication check:", error);
+        return res.status(401).json({message: "Invalid or expired access token"});
     }
 }
