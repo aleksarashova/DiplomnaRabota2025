@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-import {createUser, findUserByUsername, updateUserLoggedIn} from "../services/UserService";
+import {createUser, findUserByUsername, updateUserLoggedIn, updateUserProfile} from "../services/UserService";
+import { ExtendedRequest } from "../middlewares/UserMiddleware";
+import { UpdateUserDTO } from "../DTOs/UserDTOs";
 
 export const register = async (req: Request, res: Response): Promise<void | any> => {
     try {
@@ -18,8 +20,8 @@ export const register = async (req: Request, res: Response): Promise<void | any>
 }
 
 export const login = async (req: Request, res: Response): Promise<void | any> => {
-    const { username } = req.body;
     try {
+        const { username } = req.body;
         const user = await findUserByUsername(username);
         if (user) {
             const accessToken = jwt.sign(
@@ -52,6 +54,29 @@ export const login = async (req: Request, res: Response): Promise<void | any> =>
         }
     } catch (error) {
         console.error("Error during login:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+export const updateProfile = async (req: ExtendedRequest, res: Response): Promise<void | any> => {
+    try {
+        const userId = req.userId as string;
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is missing" });
+        }
+
+        const { field, value } = req.body;
+
+        const newUserData: UpdateUserDTO = {
+            user_id: userId,
+            field: field,
+            value: value
+        };
+
+        await updateUserProfile(newUserData);
+        res.status(200).json({ message: "User updated successfully." });
+    } catch (error) {
+        console.error("Error during updating profile:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 }
