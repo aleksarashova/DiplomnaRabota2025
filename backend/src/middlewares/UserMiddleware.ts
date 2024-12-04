@@ -57,8 +57,12 @@ export const checkCredentialsLogin = async (
     }
 }
 
+export interface ExtendedRequest extends Request {
+    userId?: string
+}
+
 export const checkAuthentication = async (
-    req: Request,
+    req: ExtendedRequest,
     res: Response,
     next: NextFunction
 ): Promise<void | any> => {
