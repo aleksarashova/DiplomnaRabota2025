@@ -14,3 +14,12 @@ export interface UpdateUserDTO {
     field: keyof RegisterUserDTO | keyof UserInterface;
     value: string;
 }
+
+export interface UserProfileDTO {
+    first_name: string;
+    last_name: string;
+    username: string;
+    email: string;
+    password_placeholder: string;
+    bio: string;
+}
