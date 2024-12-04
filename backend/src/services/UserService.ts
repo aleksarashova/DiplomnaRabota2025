@@ -2,7 +2,7 @@ import {HydratedDocument} from "mongoose";
 import User, {UserInterface} from "../models/User";
 
 import bcrypt from 'bcryptjs';
-import {RegisterUserDTO, UpdateUserDTO} from "../DTOs/UserDTOs";
+import {RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 
 export const hashPassword = async (password: string): Promise<string> => {
     try {
@@ -173,5 +173,31 @@ export const updateUserProfile = async(updatedUserData: UpdateUserDTO): Promise<
             throw new Error(error.message);
         }
         throw new Error("Unknown error while updating the user to logged out.");
+    }
+}
+
+export const getUserProfileData = async (id: string): Promise<UserProfileDTO | any> => {
+    try {
+        const user: UserInterface | null = await findUserById(id);
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const userData: UserProfileDTO = {
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            username: user.username,
+            password_placeholder: "********",
+            bio: user.bio,
+        };
+
+        return userData;
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting the user profile data.");
     }
 }
