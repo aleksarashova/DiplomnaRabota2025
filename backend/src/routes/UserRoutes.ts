@@ -11,6 +11,6 @@ router.post("/register", validateRequest(userRegisterSchema), checkUniquenessReg
 router.post("/login", validateRequest(userLoginSchema), checkCredentialsLogin, login);
 router.post("/update-profile", validateRequest(profileUpdateSchema), checkAuthentication, updateProfile);
 router.post("/delete-profile", checkAuthentication, deleteProfile);
-router.get("/my-profile-data", getMyProfileData);
+router.get("/my-profile-data", checkAuthentication, getMyProfileData);
 
 export default router;
