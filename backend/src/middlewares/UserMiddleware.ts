@@ -91,3 +91,23 @@ export const checkAuthentication = async (
         return res.status(401).json({message: "Invalid or expired access token"});
     }
 }
+
+export const checkEmailForSendingAVerificationCode = async (
+    req: ExtendedRequest,
+    res: Response,
+    next: NextFunction
+): Promise<void | any> => {
+    try {
+        const { email } = req.body;
+        const user = await findUserByEmail(email);
+
+        if(!user) {
+            return res.status(400).json({message: "There is no such user registered with this email."});
+        }
+
+        next();
+    } catch (error) {
+        console.error("Error during email check:", error);
+        return res.status(401).json({message: "Invalid email address."});
+    }
+}

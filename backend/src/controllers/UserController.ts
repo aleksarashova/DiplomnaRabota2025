@@ -1,7 +1,16 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-import {createUser, deleteUser, findUserByUsername, updateUserLoggedIn, updateUserProfile, getUserProfileData} from "../services/UserService";
+import {
+    createUser,
+    deleteUser,
+    findUserByUsername,
+    updateUserLoggedIn,
+    updateUserProfile,
+    getUserProfileData,
+    updateUserVerified
+} from "../services/UserService";
+import { sendVerificationEmail, validateVerificationCode, deleteRecord } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
 import { UpdateUserDTO, UserProfileDTO } from "../DTOs/UserDTOs";
 
@@ -9,12 +18,55 @@ export const register = async (req: Request, res: Response): Promise<void | any>
     try {
         const newUser = await createUser(req.body);
 
-        //const {email} = req.body;
-        //await sendVerificationEmail(email);
+        const {email} = req.body;
+        await sendVerificationEmail(email);
 
         return res.status(201).json({ message: "User registered successfully", user: newUser });
     } catch (error) {
         console.error("Error during registration:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+
+export const verify = async(req: Request, res: Response): Promise<void | any> => {
+    try {
+        const { email, code } = req.body;
+
+        const shouldItBeVerified = await validateVerificationCode(email, code);
+
+        if (!shouldItBeVerified) {
+            return res.status(402).json({ message: "Invalid verification code. It may be expired." });
+        }
+
+        await updateUserVerified(email);
+        await deleteRecord(email);
+
+        return res.status(201).json({ message: "User verified successfully." });
+    } catch (error) {
+        console.error("Error during verification:", error);
+
+        if (error instanceof Error) {
+            return res.status(400).json({message: error.message});
+        }
+
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+export const resendEmail = async(req: Request, res: Response): Promise<void | any> => {
+    try {
+        const { email } = req.body;
+        await sendVerificationEmail(email);
+
+        return res.status(201).json({ message: "Resent email successfully."});
+    } catch (error) {
+        console.error("Error during resending email:", error);
+
+        if (error instanceof Error) {
+            return res.status(400).json({message: error.message});
+        }
+
         return res.status(500).json({ message: "Internal server error" });
     }
 }

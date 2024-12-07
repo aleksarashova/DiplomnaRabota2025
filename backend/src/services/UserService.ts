@@ -136,6 +136,23 @@ export const updateUserLoggedOut = async(id: string): Promise<void> => {
     }
 }
 
+export const updateUserVerified = async(email: string): Promise<void> => {
+    try {
+        const user = await findUserByEmail(email);
+        if (user) {
+            user.is_verified = true;
+            await user.save();
+        } else {
+            throw new Error("Could not find user while trying to update it to verified.");
+        }
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while updating the user to verified.");
+    }
+}
+
 export const updateUserProfile = async(updatedUserData: UpdateUserDTO): Promise<void> => {
     try {
         if (!updatedUserData.user_id) {
