@@ -7,24 +7,31 @@ export const checkUniquenessRegister = async (
     req: Request,
     res: Response,
     next: NextFunction
-): Promise<void | any> => {
+) => {
     try {
         const { email, username } = req.body;
 
         const existingEmail = await findUserByEmail(email);
         if (existingEmail) {
-            return res.status(400).json({ message: "Email is already in use. Try another one." });
+            res.status(400).json({ message: "Email is already in use. Try another one." });
+            return;
         }
 
         const existingUsername = await findUserByUsername(username);
         if (existingUsername) {
-            return res.status(400).json({ message: "Username is already in use. Try another one." });
+            res.status(400).json({ message: "Username is already in use. Try another one." });
+            return;
         }
 
         next();
     } catch (error) {
-        console.error("Error during uniqueness check:", error);
-        return res.status(500).json({ message: "Internal server error" });
+        console.error("Error during checking uniqueness of user:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
     }
 }
 
@@ -32,28 +39,36 @@ export const checkCredentialsLogin = async (
     req: Request,
     res: Response,
     next: NextFunction
-): Promise<void | any> => {
+) => {
     try {
         const { username, password } = req.body;
 
         const existingUser = await findUserByUsername(username);
         if (!existingUser) {
-            return res.status(400).json({ message: "No such user. Please register first." });
+            res.status(400).json({ message: "No such user. Please register first." });
+            return;
         }
 
         if(!existingUser.is_verified) {
-            return res.status(400).json({ message: "You should verify your account first." });
+            res.status(400).json({ message: "You should verify your account first." });
+            return;
         }
 
         const isPasswordValid = await checkForRightPassword(password, existingUser.password_hash);
         if (!isPasswordValid) {
-            return res.status(400).json({ message: "Invalid password. Please try again." });
+            res.status(400).json({ message: "Invalid password. Please try again." });
+            return;
         }
 
         next();
     } catch (error) {
-        console.error("Error during credentials check:", error);
-        return res.status(500).json({ message: "Internal server error" });
+        console.error("Error during checking login credentials:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
     }
 }
 
@@ -65,12 +80,13 @@ export const checkAuthentication = async (
     req: ExtendedRequest,
     res: Response,
     next: NextFunction
-): Promise<void | any> => {
+) => {
     try {
         const token = req.headers['authorization']?.split(' ')[1];
 
         if (!token) {
-            return res.status(401).json({message: "No access token found."});
+            res.status(401).json({message: "No access token found."});
+            return;
         }
 
         const real_access_token_secret: string | undefined = process.env.JWT_SECRET;
@@ -79,7 +95,8 @@ export const checkAuthentication = async (
             const decoded = jwt.verify(token, real_access_token_secret) as JwtPayload;
 
             if (!decoded || !decoded.userId) {
-                return res.status(401).json({message: "The user is not authenticated."});
+                res.status(401).json({message: "The user is not authenticated."});
+                return;
             }
 
             req.userId = decoded.userId;
@@ -88,7 +105,12 @@ export const checkAuthentication = async (
         next();
     } catch (error) {
         console.error("Error during authentication check:", error);
-        return res.status(401).json({message: "Invalid or expired access token"});
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
     }
 }
 
@@ -96,18 +118,24 @@ export const checkEmailForSendingAVerificationCode = async (
     req: ExtendedRequest,
     res: Response,
     next: NextFunction
-): Promise<void | any> => {
+) => {
     try {
         const { email } = req.body;
         const user = await findUserByEmail(email);
 
         if(!user) {
-            return res.status(400).json({message: "There is no such user registered with this email."});
+            res.status(400).json({message: "There is no such user registered with this email."});
+            return;
         }
 
         next();
     } catch (error) {
-        console.error("Error during email check:", error);
-        return res.status(401).json({message: "Invalid email address."});
+        console.error("Error during checking email for sending a verification code:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
     }
 }

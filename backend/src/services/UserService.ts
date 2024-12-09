@@ -4,7 +4,7 @@ import User, {UserInterface} from "../models/User";
 import bcrypt from 'bcryptjs';
 import {RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 
-export const hashPassword = async (password: string): Promise<string> => {
+export const hashPassword = async (password: string) => {
     try {
         const salt: string = await bcrypt.genSalt(10);
         return await bcrypt.hash(password, salt);
@@ -16,7 +16,7 @@ export const hashPassword = async (password: string): Promise<string> => {
     }
 }
 
-export const checkForRightPassword = async(password: string, real_password_hash: string): Promise<boolean> => {
+export const checkForRightPassword = async(password: string, real_password_hash: string) => {
     try {
         return await bcrypt.compare(password, real_password_hash);
     } catch(error) {
@@ -28,7 +28,7 @@ export const checkForRightPassword = async(password: string, real_password_hash:
 }
 
 
-export const createUser = async (userData: RegisterUserDTO): Promise<void> => {
+export const createUser = async (userData: RegisterUserDTO) => {
     try {
         const passwordHash: string = await hashPassword(userData.password);
         const role: string = userData.admin_code === process.env.ADMIN_CODE ? "admin" : "user";
@@ -58,7 +58,7 @@ export const createUser = async (userData: RegisterUserDTO): Promise<void> => {
     }
 }
 
-export const deleteUser = async (id: string): Promise<void> => {
+export const deleteUser = async (id: string) => {
     try {
         await User.findByIdAndDelete({_id: id});
     } catch(error) {
@@ -69,7 +69,7 @@ export const deleteUser = async (id: string): Promise<void> => {
     }
 }
 
-export const findUserById = async(id: string): Promise<HydratedDocument<UserInterface> | null> => {
+export const findUserById = async(id: string) => {
     try {
         return await User.findOne({_id: id});
     } catch(error) {
@@ -80,7 +80,7 @@ export const findUserById = async(id: string): Promise<HydratedDocument<UserInte
     }
 }
 
-export const findUserByEmail = async(email: string): Promise<HydratedDocument<UserInterface> | null> => {
+export const findUserByEmail = async(email: string) => {
     try {
         return await User.findOne({email: email});
     } catch(error) {
@@ -91,7 +91,7 @@ export const findUserByEmail = async(email: string): Promise<HydratedDocument<Us
     }
 }
 
-export const findUserByUsername = async(username: string): Promise<HydratedDocument<UserInterface> | null> => {
+export const findUserByUsername = async(username: string) => {
     try {
         return await User.findOne({username: username});
     } catch(error) {
@@ -102,7 +102,7 @@ export const findUserByUsername = async(username: string): Promise<HydratedDocum
     }
 }
 
-export const updateUserLoggedIn = async(id: string): Promise<void> => {
+export const updateUserLoggedIn = async(id: string) => {
     try {
         const user = await findUserById(id);
         if (user) {
@@ -119,7 +119,7 @@ export const updateUserLoggedIn = async(id: string): Promise<void> => {
     }
 }
 
-export const updateUserLoggedOut = async(id: string): Promise<void> => {
+export const updateUserLoggedOut = async(id: string) => {
     try {
         const user = await findUserById(id);
         if (user) {
@@ -136,7 +136,7 @@ export const updateUserLoggedOut = async(id: string): Promise<void> => {
     }
 }
 
-export const updateUserVerified = async(email: string): Promise<void> => {
+export const updateUserVerified = async(email: string) => {
     try {
         const user = await findUserByEmail(email);
         if (user) {
@@ -153,7 +153,7 @@ export const updateUserVerified = async(email: string): Promise<void> => {
     }
 }
 
-export const updateUserProfile = async(updatedUserData: UpdateUserDTO): Promise<void> => {
+export const updateUserProfile = async(updatedUserData: UpdateUserDTO) => {
     try {
         if (!updatedUserData.user_id) {
             throw new Error("User ID is required.");
@@ -193,7 +193,7 @@ export const updateUserProfile = async(updatedUserData: UpdateUserDTO): Promise<
     }
 }
 
-export const getUserProfileData = async (id: string): Promise<UserProfileDTO | any> => {
+export const getUserProfileData = async (id: string) => {
     try {
         const user: UserInterface | null = await findUserById(id);
 

@@ -1,4 +1,4 @@
-import {Schema, Model, model} from "mongoose";
+import {Schema, Types, Model, model} from "mongoose";
 
 export interface UserInterface {
     first_name: string;
@@ -10,9 +10,9 @@ export interface UserInterface {
     role: string;
     is_verified: boolean;
     is_logged_in: boolean;
-    recipes: Schema.Types.ObjectId[];
-    favourites: Schema.Types.ObjectId[];
-    liked: Schema.Types.ObjectId[];
+    recipes: Types.ObjectId[];
+    favourites: Types.ObjectId[];
+    liked: Types.ObjectId[];
 }
 
 type UserModel = Model<UserInterface>;

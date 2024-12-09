@@ -1,9 +1,9 @@
-import {Schema, Model, model} from "mongoose";
+import {Schema, Types, Model, model} from "mongoose";
 
 interface RecipeInterface {
     title: string;
-    category: Schema.Types.ObjectId;
-    author: Schema.Types.ObjectId;
+    category: Types.ObjectId;
+    author: Types.ObjectId;
     date: Date;
     is_approved: boolean;
     time_for_cooking: string;
@@ -11,7 +11,7 @@ interface RecipeInterface {
     products: string[];
     preparation_steps: string[];
     likes: number;
-    comments: Schema.Types.ObjectId[];
+    comments: Types.ObjectId[];
 }
 
 type RecipeModel = Model<RecipeInterface>;

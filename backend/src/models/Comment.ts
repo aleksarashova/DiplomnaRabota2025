@@ -1,17 +1,17 @@
-import {Schema, Model, model} from "mongoose";
+import {Schema, Types, Model, model} from "mongoose";
 
 interface CommentInterface {
-    author: Schema.Types.ObjectId;
+    author: Types.ObjectId;
     date: Date;
     content: string;
-    recipe: Schema.Types.ObjectId;
+    recipe: Types.ObjectId;
     is_approved: boolean;
 }
 
 type CommentModel = Model<CommentInterface>;
 
 const CommentSchema: Schema = new Schema<CommentInterface, CommentModel>({
-    author: { type: [Schema.Types.ObjectId], ref: "User" },
+    author: { type: Schema.Types.ObjectId, ref: "User" },
     date: { type: Date },
     content: { type: String },
     recipe: { type: Schema.Types.ObjectId, ref: "Recipe"},

@@ -14,64 +14,70 @@ import { sendVerificationEmail, validateVerificationCode, deleteRecord } from ".
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
 import { UpdateUserDTO, UserProfileDTO } from "../DTOs/UserDTOs";
 
-export const register = async (req: Request, res: Response): Promise<void | any> => {
+export const register = async (req: Request, res: Response) => {
     try {
         const newUser = await createUser(req.body);
 
         const {email} = req.body;
         await sendVerificationEmail(email);
 
-        return res.status(201).json({ message: "User registered successfully", user: newUser });
+        res.status(201).json({ message: "User registered successfully.", user: newUser });
     } catch (error) {
         console.error("Error during registration:", error);
-        return res.status(500).json({ message: "Internal server error" });
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
     }
 }
 
 
-export const verify = async(req: Request, res: Response): Promise<void | any> => {
+export const verify = async(req: Request, res: Response) => {
     try {
         const { email, code } = req.body;
 
         const shouldItBeVerified = await validateVerificationCode(email, code);
 
         if (!shouldItBeVerified) {
-            return res.status(402).json({ message: "Invalid verification code. It may be expired." });
+            res.status(402).json({ message: "Invalid verification code. It may be expired." });
+            return;
         }
 
         await updateUserVerified(email);
         await deleteRecord(email);
 
-        return res.status(201).json({ message: "User verified successfully." });
+        res.status(201).json({ message: "User verified successfully." });
     } catch (error) {
         console.error("Error during verification:", error);
 
         if (error instanceof Error) {
-            return res.status(400).json({message: error.message});
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
         }
-
-        return res.status(500).json({ message: "Internal server error" });
     }
 }
 
-export const resendEmail = async(req: Request, res: Response): Promise<void | any> => {
+export const resendEmail = async(req: Request, res: Response) => {
     try {
         const { email } = req.body;
         await sendVerificationEmail(email);
 
-        return res.status(201).json({ message: "Resent email successfully."});
+        res.status(201).json({ message: "Resent email successfully."});
     } catch (error) {
         console.error("Error during resending email:", error);
 
         if (error instanceof Error) {
-            return res.status(400).json({message: error.message});
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
         }
-
-        return res.status(500).json({ message: "Internal server error" });
     }
 }
 
-export const login = async (req: Request, res: Response): Promise<void | any> => {
+export const login = async (req: Request, res: Response) => {
     try {
         const { username } = req.body;
         const user = await findUserByUsername(username);
@@ -103,19 +109,28 @@ export const login = async (req: Request, res: Response): Promise<void | any> =>
                 accessToken,
                 refreshToken,
             });
+        } else {
+            res.status(400).json({message: "No user is registered with this username. Please register first."});
+            return;
         }
     } catch (error) {
         console.error("Error during login:", error);
-        return res.status(500).json({ message: "Internal server error" });
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
     }
 }
 
-export const updateProfile = async (req: ExtendedRequest, res: Response): Promise<void | any> => {
+export const updateProfile = async (req: ExtendedRequest, res: Response) => {
     try {
         const userId = req.userId as string;
 
         if (!userId) {
-            return res.status(400).json({ message: "User ID is missing" });
+            res.status(400).json({ message: "User ID is missing" });
+            return;
         }
 
         const { field, value } = req.body;
@@ -130,38 +145,55 @@ export const updateProfile = async (req: ExtendedRequest, res: Response): Promis
         res.status(200).json({ message: "User updated successfully." });
     } catch (error) {
         console.error("Error during updating profile:", error);
-        return res.status(500).json({ message: "Internal server error" });
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
     }
 }
 
-export const deleteProfile = async (req: ExtendedRequest, res: Response): Promise<void | any> => {
+export const deleteProfile = async (req: ExtendedRequest, res: Response) => {
     try {
         const userId = req.userId as string;
 
         if (!userId) {
-            return res.status(400).json({ message: "User ID is missing" });
+            res.status(400).json({ message: "User ID is missing." });
+            return;
         }
 
         await deleteUser(userId);
         res.status(200).json({ message: "User deleted successfully." });
     } catch (error) {
         console.error("Error during deleting profile:", error);
-        return res.status(500).json({ message: "Internal server error" });
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
     }
 }
 
-export const getMyProfileData = async (req: ExtendedRequest, res: Response): Promise<void | any> => {
+export const getMyProfileData = async (req: ExtendedRequest, res: Response) => {
     try {
         const userId = req.userId as string;
 
         if (!userId) {
-            return res.status(400).json({ message: "User ID is missing" });
+            res.status(400).json({ message: "User ID is missing." });
+            return;
         }
 
         const userData: UserProfileDTO = await getUserProfileData(userId);
         res.status(200).json({ user: userData });
     } catch (error) {
         console.error("Error during getting profile data:", error);
-        return res.status(500).json({ message: "Internal server error" });
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
     }
 }
