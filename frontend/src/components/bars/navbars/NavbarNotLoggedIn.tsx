@@ -1,4 +1,5 @@
 import React from "react";
+import "./navbar.css";
 
 import { Link } from 'react-router-dom';
 
@@ -6,7 +7,7 @@ import { FaHome } from "react-icons/fa";
 import { IoMdLogIn } from "react-icons/io";
 import { MdAppRegistration } from "react-icons/md";
 
-import SearchBar from "../searchbar";
+import SearchBar from "../searchbar/searchbar";
 
 const NavbarNotLoggedIn = () => {
     return (

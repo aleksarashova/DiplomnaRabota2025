@@ -1,4 +1,5 @@
 import React from "react";
+import "../form.css";
 
 import { FaLock } from "react-icons/fa";
 

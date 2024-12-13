@@ -1,0 +1,46 @@
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.popupTitle {
+    color: #383838;
+    font-family: -apple-system, sans-serif;
+    font-size: 20px;
+    font-weight: bolder;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.popupContent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.popupButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.popupQuestion {
+    color: dimgray;
+    font-family: -apple-system, sans-serif;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.messageCloseButton {
+    align-self: flex-end;
+    width: 70px;
+    padding: 5px;
+}

@@ -1,0 +1,105 @@
+.recipes-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    left: auto;
+    width: 80%;
+    gap: 60px;
+}
+
+.recipe {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 300px;
+    height: 430px;
+    border-radius: 40px;
+    background-color: whitesmoke;
+    cursor: default;
+    box-shadow: 0 0 10px 2px grey;
+    overflow: hidden;
+}
+
+.recipe:hover {
+    box-shadow: 0 0 20px 2px black;
+}
+
+.recipeLink {
+    text-decoration: none;
+    color: black;
+}
+
+.recipeTitle {
+    font-size: large;
+    text-align: left;
+    margin: 10px 5% 0 5%;
+    word-break: break-word;
+    max-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    flex-shrink: 0;
+    font-family: "Felix Titling", sans-serif;
+    font-weight: bold;
+}
+
+.basicInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-right: 3%;
+}
+
+.recipeAuthor, .dateOfPosting {
+    font-weight: lighter;
+    font-size: smaller;
+    font-family: "Dubai Light", sans-serif;
+    text-align: right;
+    cursor: default;
+    margin: 0;
+    padding: 0;
+}
+
+.recipeImage {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 40px 40px 0 0;
+}
+
+/*@media (max-width: 1024px) {*/
+/*    .recipes-list {*/
+/*        width: 70%;*/
+/*        flex-direction: column;*/
+/*        margin-top: 10%;*/
+/*        z-index: -2;*/
+/*    }*/
+/*}*/
+
+/*@media (max-width: 412px) {*/
+/*    .recipes-list {*/
+/*        width: 50%;*/
+/*        flex-direction: column;*/
+/*        margin-top: 10%;*/
+/*        z-index: -2;*/
+/*    }*/
+/*}*/
+
+.likes-comments-home {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-left: auto;
+    margin-bottom: 2px;
+    padding: 15px;
+    font-size: medium;
+}
+
+.recipeCategoryHome {
+    color: grey;
+    font-size: small;
+    font-weight: lighter;
+    margin-left: 5%;
+}

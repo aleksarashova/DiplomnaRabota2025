@@ -1,0 +1,29 @@
+.deleteAccountPopup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: whitesmoke;
+    width: 350px;
+    height: 200px;
+    padding: 30px;
+    border-radius: 20px;
+    border-top: 5px solid red;
+}
+
+.cancelDeleteButton {
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    font-weight: bold;
+}
+
+.confirmDeleteButton {
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    color: white;
+    background-color: #FF033E;
+    font-weight: bold;
+}

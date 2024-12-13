@@ -1,6 +1,6 @@
 import {Schema, Types, Model, model} from "mongoose";
 
-interface RecipeInterface {
+export interface RecipeInterface {
     title: string;
     category: Types.ObjectId;
     author: Types.ObjectId;
@@ -12,6 +12,7 @@ interface RecipeInterface {
     preparation_steps: string[];
     likes: number;
     comments: Types.ObjectId[];
+    image: string;
 }
 
 type RecipeModel = Model<RecipeInterface>;
@@ -27,7 +28,8 @@ const RecipeSchema: Schema = new Schema<RecipeInterface, RecipeModel>({
     products: { type: [String] },
     preparation_steps: { type: [String] },
     likes: { type: Number },
-    comments: { type: [Schema.Types.ObjectId], ref: "Comment" }
+    comments: { type: [Schema.Types.ObjectId], ref: "Comment" },
+    image: { type: String }
 }, {collection: 'recipes'});
 
 const Recipe: RecipeModel = model<RecipeInterface, RecipeModel>('Recipe', RecipeSchema);

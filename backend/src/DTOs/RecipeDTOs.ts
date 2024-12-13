@@ -6,3 +6,14 @@ export interface AddRecipeDTO {
     products: string[];
     preparation_steps: string[];
 }
+
+export interface GetRecipeDTO {
+    id: string;
+    title: string;
+    author: string;
+    date: string;
+    category: string;
+    likes: number;
+    comments: number;
+    image?: string;
+}

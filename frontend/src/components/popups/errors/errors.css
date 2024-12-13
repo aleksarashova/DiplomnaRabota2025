@@ -1,0 +1,55 @@
+.errorMessageBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: whitesmoke;
+    width: 300px;
+    height: 150px;
+    padding: 10px;
+    border-radius: 10px;
+    border-top: 5px solid #FF033E;
+}
+
+.error {
+    font-weight: bolder;
+    font-family: "Eras Bold ITC", sans-serif;
+    font-size: 20px;
+    color: #FF033E;
+}
+
+.errorContent {
+    margin-top: 10px;
+    font-weight: lighter;
+    color: grey;
+    font-family: "Eras Bold ITC", sans-serif;
+    margin-left: 5px;
+}
+
+.errorCloseButton, .errorCloseButtonWider {
+    color: black;
+    width: 40px;
+    margin-left: 220px;
+    margin-top: 20px;
+    border: 1px solid black;
+    border-radius: 2px;
+    font-size: 15px;
+}
+
+.errorCloseButtonWider {
+    width: 70px;
+    margin-left: 200px;
+}
+
+.errorCloseButton:hover, .errorCloseButtonWider:hover {
+    color: #383838;
+}
+
+.resendEmailButton {
+    color: black;
+    width: 120px;
+    height: 30px;
+    border-radius: 2px;
+    border: 1px solid black;
+    font-size: 15px;
+    background-color: green;
+}

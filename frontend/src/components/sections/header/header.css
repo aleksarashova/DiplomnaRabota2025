@@ -1,0 +1,9 @@
+.siteTitle {
+    font-family: Broadway, sans-serif;
+    font-weight: bolder;
+    font-size: x-large;
+    cursor: default;
+    position: fixed;
+    margin-top: 4%;
+    margin-left: 3%;
+}

@@ -1,0 +1,63 @@
+.editAccountPopup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: whitesmoke;
+    width: 400px;
+    height: 300px;
+    padding: 20px;
+    border-radius: 30px;
+    border-top: 10px solid cornflowerblue;
+}
+
+.popupTitle {
+    color: #383838;
+    font-family: -apple-system, sans-serif;
+    font-size: 20px;
+    font-weight: bolder;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.popupContent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.edit-input {
+    border: 1px solid grey;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 20px;
+    resize: none;
+    height: fit-content;
+}
+
+.edit-input:hover {
+    border: 1px solid black;
+}
+
+.popupButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.cancelEditButton {
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    font-weight: bold;
+}
+
+.confirmEditButton {
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    color: white;
+    background-color: green;
+    font-weight: bold;
+}

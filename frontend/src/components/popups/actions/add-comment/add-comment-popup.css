@@ -1,0 +1,52 @@
+.addCommentPopup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: whitesmoke;
+    width: 800px;
+    height: 300px;
+    padding: 20px;
+    border-radius: 30px;
+    border-top: 10px solid cornflowerblue;
+}
+
+.comment-input {
+    border: 1px solid grey;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 20px;
+    width: 600px;
+    height: 100px;
+    resize: none;
+    text-align: left;
+    vertical-align: top;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.comment-input:hover {
+    border: 1px solid black;
+}
+
+#buttonsAddComment {
+    align-self: flex-end;
+    gap: 15px;
+}
+
+.cancelAddCommentButton {
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    font-weight: bold;
+}
+
+.confirmAddCommentButton {
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    color: white;
+    background-color: cornflowerblue;
+    font-weight: bold;
+}

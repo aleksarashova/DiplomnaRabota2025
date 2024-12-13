@@ -1,0 +1,29 @@
+.message-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: whitesmoke;
+    width: fit-content;
+    height: fit-content;
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid black;
+}
+
+.message-success {
+    font-weight: lighter;
+    font-family: -apple-system, sans-serif;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    color: green;
+    margin-bottom: 20px;
+}
+
+.message-warning {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #FF033E;
+    font-size: 15px;
+}

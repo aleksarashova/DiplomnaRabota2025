@@ -1,4 +1,5 @@
 import React from "react";
+import "../form.css";
 
 import {MdEmail} from "react-icons/md";
 

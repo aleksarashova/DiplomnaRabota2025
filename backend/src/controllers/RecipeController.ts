@@ -1,6 +1,21 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
-import { addRecipe } from "../services/RecipeService";
+import { addRecipe, getAllRecipesData } from "../services/RecipeService";
+
+export const getAllRecipes = async (req: Request, res: Response) => {
+    try {
+        const recipes = await getAllRecipesData();
+        res.status(200).json({ recipes: recipes });
+    } catch (error) {
+        console.error("Error during trying to get all recipes:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: "Internal server error." });
+        }
+    }
+}
 
 export const makeRecipe = async (req: ExtendedRequest, res: Response) => {
     try {
