@@ -47,7 +47,7 @@ const RegisterForm = () => {
         }
     }
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData: RegisterFormData = {

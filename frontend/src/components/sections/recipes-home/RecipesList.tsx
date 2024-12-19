@@ -31,7 +31,7 @@ const RecipesList: React.FC = () => {
                     <div key={recipe.id} className="recipe">
                         <Link to={`/singleview/${recipe.id}`} className="recipeLink">
                             <img
-                                src={recipe.image || FoodImage}
+                                src={FoodImage}
                                 alt={recipe.title}
                                 className="recipeImage"
                             />

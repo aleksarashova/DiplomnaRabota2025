@@ -102,9 +102,9 @@ export const findUserByUsername = async(username: string) => {
     }
 }
 
-export const updateUserLoggedIn = async(id: string) => {
+export const updateUserLoggedIn = async(username: string) => {
     try {
-        const user = await findUserById(id);
+        const user = await findUserByUsername(username);
         if (user) {
             user.is_logged_in = true;
             await user.save();

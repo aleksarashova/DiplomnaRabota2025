@@ -1,0 +1,145 @@
+#recipe-form-page {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.addRecipeFormWrapper {
+    display: flex;
+    min-width: 500px;
+    min-height: 600px;
+    width: fit-content;
+    height: auto;
+    margin: auto auto;
+    padding: 20px 10px;
+    background: whitesmoke;
+    color: black;
+    box-shadow: 0 0 30px black;
+    border-radius: 2%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow-x: hidden;
+    overflow-y: visible;
+}
+
+.addRecipeForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+}
+
+.addRecipeFormInputBox {
+    border-bottom: 1px solid lightslategrey;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: whitesmoke;
+}
+
+.recipeFormInputTitle,
+.recipeFormInputTime,
+.recipeFormInputServings,
+.recipeFormInputCategory,
+.recipeFormInputProduct,
+.recipeFormInputStep
+{
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    font-weight: lighter;
+    font-family: Arial, serif;
+    width: fit-content;
+}
+
+.recipeFormInputCategory {
+    width: 120px;
+}
+
+.recipeFormInputCategory option {
+    background-color: whitesmoke;
+    color: black;
+    font-size: 16px;
+    padding: 10px;
+    box-shadow: none;
+}
+
+.recipeFormInputTitle::placeholder,
+.recipeFormInputCategory::placeholder,
+.recipeFormInputServings::placeholder,
+.recipeFormInputTime::placeholder,
+.recipeFormInputProduct::placeholder,
+.recipeFormInputStep::placeholder
+{
+    color: black;
+    font-weight: normal;
+}
+
+.addProductButton, .addStepButton, .removeProductButton, .removeStepButton {
+    background-color: whitesmoke;
+    width: 100px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bolder;
+    font-family: Arial, serif;
+    font-size: 14px;
+    color: green;
+}
+
+.removeProductButton, .removeStepButton {
+    width: 200px;
+    color: red;
+}
+
+.productListTitle, .stepListTitle {
+    font-weight: bolder;
+    margin-left: 40px;
+    margin-top: 50px;
+}
+
+.stepListTitle {
+    margin-top: 0;
+}
+
+.productList, .stepList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    width: 100%;
+    overflow: visible;
+    height: auto;
+}
+
+.productListItem, .stepListItem {
+    font-size: 16px;
+    font-weight: normal;
+    font-family: Arial, serif;
+    width: 100%;
+}
+
+.product-button-pair, .step-button-pair {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addRecipeButton {
+    margin-left: auto;
+    margin-right: 20px;
+    width: 150px;
+    height: 40px;
+    background: cornflowerblue;
+    border: 1px solid grey;
+    border-radius: 5px;
+    font-weight: bolder;
+    color: white;
+}
