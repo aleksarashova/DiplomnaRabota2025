@@ -1,11 +1,12 @@
 .form-page {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    margin: 0;
+    flex-direction: column;
+    min-height: 100vh;
+    margin-top: 70px;
+    margin-bottom: 0;
     padding: 0;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .form-wrapper {

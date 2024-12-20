@@ -1,0 +1,97 @@
+.commentsWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: whitesmoke;
+    margin-top: 0;
+    margin-bottom: 100px;
+    padding: 50px 30px 30px 50px;
+}
+
+.commentsTitle-addYours {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.addCommentButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+}
+
+.addCommentIcon {
+    font-size: 40px;
+    color: gray;
+    background-color: transparent;
+}
+
+.commentsSectionTitle {
+    color: grey;
+    font-weight: bolder;
+    font-size: large;
+    font-family: "Century Schoolbook", sans-serif;
+}
+
+.comment {
+    border-bottom: 1px solid dimgrey;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+}
+
+.comments {
+    margin-top: 30px;
+    margin-left: 100px;
+    width: fit-content;
+    min-width: 70%;
+    max-width: 70%;
+    padding: 30px;
+}
+
+.commentAuthor-commentDate-Single {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+.commentAuthor {
+    font-weight: bolder;
+    max-width: 300px;
+    font-size: medium;
+}
+
+.profileLinkComments {
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    color: deeppink;
+}
+
+.profileLinkComments:hover {
+    color: lightslategrey;
+}
+
+.profileLinkComments:active {
+    color: pink;
+}
+
+.commentDate {
+    font-weight: lighter;
+    color: dimgrey;
+}
+
+.commentContent {
+    padding-top: 20px;
+    padding-left: 50px;
+    font-size: smaller;
+    font-family: -apple-system, sans-serif;
+    flex-wrap: wrap;
+}

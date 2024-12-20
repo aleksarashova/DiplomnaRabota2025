@@ -1,0 +1,130 @@
+.moreInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 2% 12% 5%;
+}
+
+.collapsible-products,
+.collapsible-preparation,
+.collapsible-steps {
+    width: 100%;
+    margin: 10px 0;
+    padding: 0 30px;
+    background-color: transparent;
+}
+
+.collapsible-steps {
+    margin-bottom: 30px;
+}
+
+.steps-to-prepare {
+    border-left: 1px solid grey;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 0;
+    margin-left: 80px;
+    margin-top: 30px;
+}
+
+.collapsible-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.Products,
+.Preparation,
+.Steps {
+    margin: 0;
+    font-size: 25px;
+    border-bottom: 2px solid black;
+    width: 100%;
+    font-family: "Ink Free", sans-serif;
+    font-weight: bolder;
+}
+
+.Steps {
+    font-size: 20px;
+    border-bottom: none;
+}
+
+.expand-symbol::after {
+    content: "+";
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+
+details[open] .collapsibleContent {
+    display: flex;
+}
+
+details[open] > summary .expand-symbol::after {
+    content: "-";
+}
+
+.collapsible-preparation details[open] > summary .expand-symbol::after {
+    content: "-";
+}
+
+.products-list {
+    background-color: whitesmoke;
+    width: fit-content;
+    max-width: 80%;
+    margin-left: 80px;
+    margin-top: 30px;
+    box-shadow: 0 0 10px 5px grey;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 30px 300px 30px 30px;
+}
+
+.product {
+    list-style: none;
+    font-size: medium;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border-bottom: 1px solid grey;
+    padding-bottom: 10px;
+    width: fit-content;
+    min-width: 500px;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-left: auto;
+}
+
+.productName {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.productIcon {
+    font-size: x-large;
+}
+
+.step-description {
+    background-color: whitesmoke;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    margin-left: 30px;
+    padding: 20px 30px;
+    box-shadow: 0 0 10px 2px grey;
+    border-radius: 10px 10px 10px 10px;
+    font-family: -apple-system, sans-serif;
+    font-weight: bold;
+    width: fit-content;
+    min-width: 600px;
+    max-width: 800px;
+}

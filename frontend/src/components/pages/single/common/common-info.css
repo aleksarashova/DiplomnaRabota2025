@@ -1,0 +1,151 @@
+.commonInfoImageWrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 150px 150px 0;
+    background-color: whitesmoke;
+    height: 600px;
+    border-radius: 10px 10px;
+    box-shadow: 0 0 30px black;
+}
+
+.commonInfoSingle {
+    float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 50px;
+    margin-left: 60px;
+}
+
+.likes-comments-single {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.recipeTitleSingle {
+    font-weight: bolder;
+    color: #282828;
+    font-size: large;
+    word-wrap: break-word;
+    max-width: 300px;
+    font-family: "Felix Titling", sans-serif;
+    margin-top: 15px;
+}
+
+.profileLink {
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    color: grey;
+}
+
+.profileLink:hover {
+    text-decoration: underline blink grey 0.3px;
+}
+
+.profileLink:active {
+    color: pink;
+}
+
+.recipeAuthorSingle {
+    font-weight: lighter;
+    color: black;
+    font-size: medium;
+    word-wrap: break-word;
+    max-width: 300px;
+    margin-top: 5px;
+}
+
+.profileIcon {
+    color: dimgrey;
+    font-size: x-large;
+}
+
+.recipeImageSingle {
+    float: right;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    margin-left: 80px;
+    align-self: center;
+    justify-self: flex-end;
+    border-radius: 0 10px 10px 0;
+    max-width: 800px;
+}
+
+.recipeDateOfPostingSingle,
+.recipeCategorySingle,
+.recipeTimeSingle,
+.recipeServingsSingle {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid black;
+    margin-bottom: 10px;
+}
+
+
+.recipeDateOfPostingSingle {
+    margin-top: 80px;
+}
+
+.leaveComment,
+.leaveLike,
+.saveToFavourites {
+    border: none;
+    background-color: transparent;
+}
+
+.favouritesIconEmpty,
+.favouritesIconFull {
+    font-size: x-large;
+}
+
+.favouritesIconEmpty {
+    stroke: black;
+    fill: whitesmoke;
+    stroke-width: 1.5;
+}
+
+.favouritesIconFull {
+    stroke: black;
+    fill: orange;
+    stroke-width: 1.5;
+}
+
+.saveToFavourites {
+    margin-left: auto;
+    margin-bottom: 20px;
+}
+
+.likeIconEmpty,
+.likeIconFull,
+.commentIcon {
+    font-size: x-large;
+}
+
+.likeIconEmpty {
+    stroke: black;
+    fill: whitesmoke;
+    stroke-width: 1.5;
+}
+
+.likeIconFull {
+    stroke: black;
+    fill: #FF033E;
+    stroke-width: 1.5;
+}
+
+.leave-like-comment {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 80px;
+    justify-content: flex-end;
+}

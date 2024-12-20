@@ -1,13 +1,22 @@
 import React from 'react';
 import "./header.css";
 
-import NavbarLoggedIn from "../../bars/navbars/NavbarLoggedIn";
+import Navbar from "../../bars/navbar/Navbar";
 
-const Header = () => {
+interface NavbarProps {
+    isLoggedIn: boolean;
+    isProfilePage: boolean;
+    isHomePage: boolean;
+}
+
+const Header: React.FC<NavbarProps> = ({ isLoggedIn, isProfilePage, isHomePage }) => {
+
     return (
         <div className="header">
-            <h1 className="siteTitle">CookeryPlace</h1>
-            <NavbarLoggedIn />
+            { isHomePage &&
+                <h1 className="siteTitle">CookeryPlace</h1>
+            }
+            <Navbar isLoggedIn={isLoggedIn} isProfilePage={isProfilePage} isHomePage={isHomePage}/>
         </div>
     );
 }
