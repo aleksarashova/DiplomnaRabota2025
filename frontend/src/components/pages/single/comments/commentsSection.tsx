@@ -9,6 +9,9 @@ import { AddCommentPopup } from "../../../popups/actions/add-comment/addCommentP
 import AddCommentMessage from "../../../popups/messages/addCommentMessage";
 
 import {useNavigate} from "react-router-dom";
+import {registerUser} from "../../../forms/register/requests";
+import {addComment} from "./requests";
+import CommentError from "../../../popups/errors/AddCommentError";
 
 const CommentsSection = () => {
     //vzimame gi ot bazata
@@ -20,10 +23,21 @@ const CommentsSection = () => {
 
     const [visibilityAddCommentPopup, setVisibilityAddCommentPopup] = useState(false);
     const [visibilityAddCommentMessage, setVisibilityAddCommentMessage] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [visibilityCommentErrorPopup, setVisibilityCommentErrorPopup] = useState(false);
 
     const navigateTo = useNavigate();
 
-    const handleAddComment = (content: string) => {
+    const handleInvalidInput = (message: string) => {
+        setErrorMessage(message);
+        setVisibilityCommentErrorPopup(true);
+    }
+
+    const handleCloseCommentError = () => {
+        setVisibilityCommentErrorPopup(false);
+    }
+
+    const handleAddComment = async (content: string) => {
         const accessToken = localStorage.getItem("accessToken");
 
         if (!accessToken) {
@@ -32,44 +46,35 @@ const CommentsSection = () => {
             return;
         }
 
-        fetch("http://localhost:8000/api/comments/add-comment", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify({ content }),
-        })
-            .then((response) => {
-                console.log("Response status:", response.status);
-                if(response.status === 401) {
+        try {
+            const data = await addComment(content, accessToken);
+
+            console.log("Backend Response:", data);
+
+            setVisibilityAddCommentPopup(false);
+            setVisibilityAddCommentMessage(true);
+        } catch (error) {
+            console.error("Error during adding comment:", error);
+
+            if (error instanceof Error) {
+                if (error.message.includes("401")) {
                     navigateTo("/login");
+                } else {
+                    handleInvalidInput(error.message);
                 }
-                return response.json();
-            })
-            .then((data) => {
-                console.log("Backend Response:", data);
-
-                if (!data || !data.message) {
-                    console.error("Unexpected response data:", data);
-                    return;
-                }
-
-                setVisibilityAddCommentPopup(false);
-                setVisibilityAddCommentMessage(true);
-            })
-            .catch((error) => {
-                console.error("Error:", error.message);
-            });
-    };
+            } else {
+                handleInvalidInput("An unknown error occurred.");
+            }
+        }
+    }
 
     const handleCancelAddComment = () => {
         setVisibilityAddCommentPopup(false);
-    };
+    }
 
     const handleCloseAddCommentMessage = () => {
         setVisibilityAddCommentMessage(false);
-    };
+    }
 
     return (
         <div className="commentsWrapper">
@@ -107,8 +112,15 @@ const CommentsSection = () => {
                     handleCloseMessage={handleCloseAddCommentMessage}
                 />
             )}
+
+            {visibilityCommentErrorPopup && (
+                <CommentError
+                    handleCloseError={handleCloseCommentError}
+                    errorContent={errorMessage}
+                />
+            )}
         </div>
     );
-};
+}
 
 export default CommentsSection;

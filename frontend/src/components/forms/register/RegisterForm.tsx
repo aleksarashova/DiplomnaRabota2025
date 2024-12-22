@@ -192,10 +192,15 @@ const RegisterForm = () => {
                 </div>
             </div>
             {visibilityRegisterErrorPopup && (
-                <RegisterError handleCloseError={handleCloseRegisterError} errorContent={errorMessage} />
+                <RegisterError
+                    handleCloseError={handleCloseRegisterError}
+                    errorContent={errorMessage}
+                />
             )}
             {visibilitySuccessfulRegisterPopup && (
-                <RegisterSuccessfulMessage handleCloseMessage={handleCloseSuccessfulRegisterMessage} />
+                <RegisterSuccessfulMessage
+                    handleCloseMessage={handleCloseSuccessfulRegisterMessage}
+                />
             )}
         </div>
     );

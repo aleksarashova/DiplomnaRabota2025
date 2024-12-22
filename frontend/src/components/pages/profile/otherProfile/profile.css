@@ -1,0 +1,130 @@
+.commonProfileInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 50px;
+    margin: 100px 400px 50px 50px;
+    background-color: whitesmoke;
+    padding: 50px;
+    box-shadow: 0 0 10px 5px grey;
+    min-height: 600px;
+}
+
+.profilePhoto {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid white;
+}
+
+.profileNamesBio {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid grey;
+    flex-grow: 1;
+}
+
+.bioTitle {
+    color: grey;
+    font-weight: bolder;
+    font-family: "Imprint MT Shadow", sans-serif;
+    margin-bottom: 10px;
+}
+
+.nameProfile {
+    margin-bottom: 10px;
+    font-size: xx-large;
+    font-weight: bolder;
+    font-family: "Imprint MT Shadow", sans-serif;
+}
+
+.usernameProfile {
+    font-family: "Imprint MT Shadow", sans-serif;
+    font-weight: bold;
+    color: dimgrey;
+    font-size: large;
+    padding-bottom: 30px;
+}
+
+.profileBio {
+    max-width: 400px;
+    overflow: hidden;
+    white-space: normal;
+    text-align: justify;
+    flex-shrink: 0;
+    font-family: Century, sans-serif;
+    font-weight: normal;
+    font-size: 18px;
+}
+
+.photo-rating-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.star-rating {
+    font-size: x-large;
+    color: grey;
+}
+
+.star-form {
+    font-size: xxx-large;
+    color: black;
+    font-weight: bolder;
+}
+
+.rateThisAuthor {
+    background-color: whitesmoke;
+    padding: 30px;
+}
+
+.rateThisAuthorTitle {
+    color: #383838;
+    font-weight: bolder;
+    font-size: large;
+}
+
+.stars {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.recipes-list-profile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 100px;
+    margin-top: 70px;
+    background-color: transparent;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.recipesSectionProfileTitle {
+    font-family: "Felix Titling", sans-serif;
+    font-weight: bolder;
+    font-size: xx-large;
+    color: dimgray;
+    margin-left: 50px;
+    margin-top: 200px;
+}
+
+
+
+
+
+
+

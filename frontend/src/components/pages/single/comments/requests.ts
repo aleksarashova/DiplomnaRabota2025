@@ -1,13 +1,12 @@
-import { RegisterFormData } from "./types";
-
-export const registerUser = async (formData: RegisterFormData) => {
+export const addComment = async (content: string, accessToken: string) => {
     try {
-        const response = await fetch("http://localhost:8000/api/users/register", {
+        const response = await fetch("http://localhost:8000/api/comments/add-comment", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`,
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(content),
         });
 
         const data = await response.json();
@@ -19,7 +18,7 @@ export const registerUser = async (formData: RegisterFormData) => {
 
         return data;
     } catch (error) {
-        console.error("Error during registration:", error);
+        console.error("Error during adding comment:", error);
         throw error;
     }
 }

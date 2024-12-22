@@ -3,7 +3,7 @@ import "./common-info.css";
 
 import { Link } from "react-router-dom";
 
-import FoodImage from "../../../images/altFoodImage.png";
+import FoodImage from "../../../images/altImage.png";
 
 import { FaHeart, FaComment, FaRegComment, FaHourglassHalf, FaRegCalendarAlt } from "react-icons/fa";
 import { VscHeartFilled } from "react-icons/vsc";

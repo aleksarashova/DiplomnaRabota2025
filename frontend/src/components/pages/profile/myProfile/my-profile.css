@@ -1,0 +1,99 @@
+.myProfileInfoBox {
+    display: flex;
+    flex-direction: row;
+    background-color: whitesmoke;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    gap: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+
+.my-photo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content;
+    padding: 50px 30px;
+}
+
+.myProfilePhoto {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border: 3px solid white;
+    align-self: flex-start;
+    margin-bottom: 20px;
+}
+
+.my-rating {
+    margin-top: 10px;
+}
+
+.myProfileData {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.fieldTitle {
+    color: grey;
+    font-weight: bolder;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.fieldContent {
+    border: 2px solid grey;
+    border-radius: 20px;
+    background-color: whitesmoke;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: justify;
+    width: 600px;
+}
+
+#bioField {
+    padding: 20px;
+}
+
+.editField {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+}
+
+.field {
+    min-width: 600px;
+}
+
+.editMyProfileButton {
+    width: 100px;
+    height: 30px;
+    margin-top: 10px;
+    background-color: cornflowerblue;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bolder;
+}
+
+.editMyProfileButton:hover {
+    border: 1px solid black;
+}
+
+#deleteProfileButton {
+    width: 150px;
+    height: 50px;
+    background-color: #FF033E;
+    color: white;
+    font-weight: bolder;
+    border: none;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: 20px;
+    align-self: flex-end;
+}

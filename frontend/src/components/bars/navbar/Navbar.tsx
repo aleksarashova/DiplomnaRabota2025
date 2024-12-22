@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { MdAppRegistration } from "react-icons/md";
@@ -17,6 +17,12 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isProfilePage, isHomePage }
     const navbarClass = isHomePage
         ? "navbar-home"
         : "navbar-home navbar-default";
+
+    const handleLogOut = () => {
+        //ako nqma da maham login ot bazata da go promenqm i tam
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+    }
 
     return (
         <nav className={navbarClass}>
@@ -66,7 +72,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isProfilePage, isHomePage }
 
                 {isLoggedIn && (
                     <li>
-                        <Link to="/logout" className="link">
+                        <Link to="/login" onClick={handleLogOut} className="link">
                             <div className="icon-box-nav-last">
                                 <IoMdLogOut className="icon-nav" />
                             </div>

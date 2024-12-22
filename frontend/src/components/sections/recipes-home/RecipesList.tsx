@@ -5,7 +5,7 @@ import { getAllRecipes } from "./requests";
 import { Recipe } from "./types";
 
 import { Link } from "react-router-dom";
-import FoodImage from "../../images/altFoodImage.png";
+import FoodImage from "../../images/altImage.png";
 import { FaComment, FaHeart } from "react-icons/fa";
 
 const RecipesList: React.FC = () => {

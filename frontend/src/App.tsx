@@ -11,6 +11,8 @@ import VerifyProfileForm from "./components/forms/verify-profile/VerifyProfile";
 import SendEmailForm from "./components/forms/send-verification-email/SendVerificationEmail";
 import AddRecipeForm from "./components/forms/add-recipe/AddRecipe";
 import SingleView from "./components/pages/single/singlepage/singleview";
+import MyProfile from "./components/pages/profile/myProfile/myProfile";
+import Profile from "./components/pages/profile/otherProfile/profile";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/verify-profile/:email" element={<VerifyProfileForm />}></Route>
         <Route path="/send-verification-email" element={<SendEmailForm />}></Route>
         <Route path="/add-recipe" element={<AddRecipeForm />}></Route>
+        <Route path="/profile" element={<Profile />}></Route>
+        <Route path="/myProfile" element={<MyProfile />}></Route>
       </Routes>
     </div>
   );
