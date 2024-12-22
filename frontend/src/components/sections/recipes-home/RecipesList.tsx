@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./recipes.css";
 
-import { getAllRecipes } from "./requests";
+import {getAllApprovedRecipes} from "./requests";
 import { Recipe } from "./types";
 
 import { Link } from "react-router-dom";
@@ -23,7 +23,7 @@ const RecipesList: React.FC = () => {
 
         const fetchRecipes = async () => {
             try {
-                const recipesData = await getAllRecipes();
+                const recipesData = await getAllApprovedRecipes();
                 setRecipes(recipesData);
             } catch (error) {
                 console.error("Error getting recipes:", error);

@@ -47,6 +47,7 @@ export const getAllRecipesData = async (): Promise<GetRecipeDTO[]> => {
             id: recipe._id.toString(),
             title: recipe.title,
             author: (recipe.author as any)?.username || "Unknown",
+            is_approved: recipe.is_approved,
             date: recipe.date.toISOString().split("T")[0],
             category: (recipe.category as any)?.name || "Uncategorized",
             likes: recipe.likes,
