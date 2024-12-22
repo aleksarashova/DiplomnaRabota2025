@@ -58,6 +58,7 @@
 .recipeFormInputServings,
 .recipeFormInputCategory,
 .recipeFormInputProduct,
+.recipeFormInputQuantity,
 .recipeFormInputStep
 {
     border: none;
@@ -85,6 +86,7 @@
 .recipeFormInputServings::placeholder,
 .recipeFormInputTime::placeholder,
 .recipeFormInputProduct::placeholder,
+.recipeFormInputQuantity::placeholder,
 .recipeFormInputStep::placeholder
 {
     color: black;

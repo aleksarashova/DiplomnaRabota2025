@@ -7,16 +7,17 @@ import { useNavigate } from "react-router-dom";
 import RecipeCreationError from "../../popups/errors/RecipeCreationError";
 import RecipeCreationSuccessfulMessage from "../../popups/messages/RecipeCreationSuccessfulMessage";
 
-import {addRecipe, getAllCategories} from "./requests";
-import {AddRecipeFormData} from "./types";
-import {registerUser} from "../register/requests";
+import { addRecipe, getAllCategories } from "./requests";
+import { AddRecipeFormData } from "./types";
+import { registerUser } from "../register/requests";
 
 const AddRecipeForm = () => {
     const [categories, setCategories] = useState<string[] | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [product, setProduct] = useState<string>("");
+    const [productName, setProductName] = useState<string>("");
+    const [productQuantity, setProductQuantity] = useState<string>("");
     const [step, setStep] = useState<string>("");
-    const [products, setProducts] = useState<string[]>([]);
+    const [products, setProducts] = useState<{ name: string; quantity: string }[]>([]);
     const [steps, setSteps] = useState<string[]>([]);
 
     const [visibilityRecipeCreationErrorPopup, setVisibilityRecipeCreationErrorPopup] = useState(false);
@@ -37,13 +38,11 @@ const AddRecipeForm = () => {
     const handleCloseSuccessfulRecipeCreationMessage = () => {
         setVisibilitySuccessfulRecipeCreation(false);
         navigateTo("/");
-
     }
 
     const getCategories = async () => {
         try {
             const data = await getAllCategories();
-
             console.log("Backend Response:", data);
             setCategories(data.categories);
         } catch (error) {
@@ -60,11 +59,11 @@ const AddRecipeForm = () => {
         getCategories();
     }, []);
 
-
     const handleAddProduct = () => {
-        if (product.trim() !== "") {
-            setProducts((prev) => [...prev, product.trim()]);
-            setProduct("");
+        if (productName.trim() !== "" && productQuantity.trim() !== "") {
+            setProducts((prev) => [...prev, { name: productName.trim(), quantity: productQuantity.trim() }]);
+            setProductName("");
+            setProductQuantity("");
         }
     }
 
@@ -83,7 +82,7 @@ const AddRecipeForm = () => {
         setSteps((prev) => prev.filter((_, i) => i !== index));
     }
 
-    const handleSubmit = async(e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const accessToken = localStorage.getItem("accessToken");
@@ -99,7 +98,7 @@ const AddRecipeForm = () => {
             category: selectedCategory || "",
             time_for_cooking: (e.target as HTMLFormElement).timeForCooking.value,
             servings: (e.target as HTMLFormElement).servings.value,
-            products: products,
+            products: products.map(product => `${product.name} (${product.quantity})`),
             preparation_steps: steps
         };
 
@@ -107,7 +106,6 @@ const AddRecipeForm = () => {
 
         try {
             const data = await addRecipe(formData, accessToken);
-
             console.log("Backend Response:", data);
             setVisibilitySuccessfulRecipeCreation(true);
         } catch (error) {
@@ -122,7 +120,7 @@ const AddRecipeForm = () => {
 
     return (
         <div className="form-page" id="recipe-form-page">
-            <p className="recipe-creation-title">Create you recipe:</p>
+            <p className="recipe-creation-title">Create your recipe:</p>
             <div className="addRecipeFormWrapper">
                 <form onSubmit={handleSubmit} className="addRecipeForm">
                     <div className="addRecipeFormInputBox">
@@ -171,10 +169,17 @@ const AddRecipeForm = () => {
                     <div className="addRecipeFormInputBox">
                         <input
                             type="text"
-                            value={product}
-                            onChange={(e) => setProduct(e.target.value)}
+                            value={productName}
+                            onChange={(e) => setProductName(e.target.value)}
                             placeholder="Product"
                             className="recipeFormInputProduct"
+                        />
+                        <input
+                            type="text"
+                            value={productQuantity}
+                            onChange={(e) => setProductQuantity(e.target.value)}
+                            placeholder="Quantity"
+                            className="recipeFormInputQuantity"
                         />
                         <button
                             type="button"
@@ -184,6 +189,7 @@ const AddRecipeForm = () => {
                             Add Product
                         </button>
                     </div>
+
                     <div className="addRecipeFormInputBox">
                         <input
                             type="text"
@@ -200,12 +206,13 @@ const AddRecipeForm = () => {
                             Add Step
                         </button>
                     </div>
+
                     <h3 className="productListTitle">Product list:</h3>
                     <ol className="productList">
                         {products.map((item, index) => (
                             <li key={index} className="productListItem">
                                 <div className="product-button-pair">
-                                    {item}
+                                    {item.name} ({item.quantity})
                                     <button
                                         type="button"
                                         onClick={() => handleRemoveProduct(index)}
@@ -217,6 +224,7 @@ const AddRecipeForm = () => {
                             </li>
                         ))}
                     </ol>
+
                     <h3 className="stepListTitle">Steps:</h3>
                     <ol className="stepList">
                         {steps.map((step, index) => (
@@ -240,12 +248,14 @@ const AddRecipeForm = () => {
                     </button>
                 </form>
             </div>
+
             {visibilityRecipeCreationErrorPopup && (
                 <RecipeCreationError
                     handleCloseError={handleCloseRecipeCreationError}
                     errorContent={errorMessage}
                 />
             )}
+
             {visibilitySuccessfulRecipeCreation && (
                 <RecipeCreationSuccessfulMessage
                     handleCloseMessage={handleCloseSuccessfulRecipeCreationMessage}

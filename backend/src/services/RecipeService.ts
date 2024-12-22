@@ -102,13 +102,40 @@ export const getRecipeData = async (id: string): Promise<GetExtendedRecipeDTO> =
         const commentsWithAuthors = await Promise.all(
             comments.map(async (comment) => {
                 const commentAuthor = await User.findById(comment.author).select('username');
+
+                const now = new Date();
+                const commentDate = new Date(comment.date);
+
+                const diffInSeconds = Math.floor((now.getTime() - commentDate.getTime()) / 1000);
+
+                let timeAgo = "";
+
+                if (diffInSeconds < 60) {
+                    timeAgo = `${diffInSeconds} second${diffInSeconds > 1 ? 's' : ''} ago`;
+                } else if (diffInSeconds < 3600) {
+                    const diffInMinutes = Math.floor(diffInSeconds / 60);
+                    timeAgo = `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
+                } else if (diffInSeconds < 86400) {
+                    const diffInHours = Math.floor(diffInSeconds / 3600);
+                    timeAgo = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+                } else if (diffInSeconds < 2592000) {
+                    const diffInDays = Math.floor(diffInSeconds / 86400);
+                    timeAgo = `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+                } else if (diffInSeconds < 31536000) {
+                    const diffInMonths = Math.floor(diffInSeconds / 2592000);
+                    timeAgo = `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
+                } else {
+                    const diffInYears = Math.floor(diffInSeconds / 31536000);
+                    timeAgo = `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
+                }
+
                 return {
                     content: comment.content,
                     author: {
                         id: comment.author.toString(),
                         username: commentAuthor ? commentAuthor.username : 'Unknown',
                     },
-                    date: comment.date.toISOString().split('T')[0],
+                    date: timeAgo,
                     is_approved: comment.is_approved,
                 };
             })

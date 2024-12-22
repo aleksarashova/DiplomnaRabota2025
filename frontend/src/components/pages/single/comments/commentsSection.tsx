@@ -58,7 +58,6 @@ const CommentsSection = ({recipeData}: CommentsInfoProps) => {
 
             setVisibilityAddCommentPopup(false);
             setVisibilityAddCommentMessage(true);
-            window.location.reload();
         } catch (error) {
             console.error("Error during adding comment:", error);
 
@@ -80,6 +79,7 @@ const CommentsSection = ({recipeData}: CommentsInfoProps) => {
 
     const handleCloseAddCommentMessage = () => {
         setVisibilityAddCommentMessage(false);
+        window.location.reload();
     }
 
     return (
