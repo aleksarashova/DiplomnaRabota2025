@@ -9,9 +9,9 @@ import { AddCommentPopup } from "../../../popups/actions/add-comment/addCommentP
 import AddCommentMessage from "../../../popups/messages/addCommentMessage";
 
 import {useNavigate} from "react-router-dom";
-import {registerUser} from "../../../forms/register/requests";
 import {addComment} from "./requests";
 import CommentError from "../../../popups/errors/AddCommentError";
+
 
 const CommentsSection = () => {
     //vzimame gi ot bazata

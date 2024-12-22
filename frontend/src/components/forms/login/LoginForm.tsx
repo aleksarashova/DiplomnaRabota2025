@@ -84,10 +84,6 @@ const LoginForm = () => {
                                 required
                             />
                         </div>
-                        <label className="form-label">
-                            <input type="checkbox" className="form-input"/>
-                            <span className="remember-me">Remember me</span>
-                        </label>
                         <div className="forgot-password">
                             <Link to="/forgot-password" className="form-link">Forgot password?</Link>
                         </div>

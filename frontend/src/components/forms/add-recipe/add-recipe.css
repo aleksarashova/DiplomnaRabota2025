@@ -1,11 +1,21 @@
 #recipe-form-page {
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-top: 0;
+    padding-bottom: 100px;
+}
+
+.recipe-creation-title {
+    font-family: "Lucida Handwriting", sans-serif;
+    font-size: 30px;
+    font-weight: bolder;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: whitesmoke;
+    text-shadow: 2px 2px 5px black;
 }
 
 .addRecipeFormWrapper {
     display: flex;
-    min-width: 500px;
+    min-width: 800px;
     min-height: 600px;
     width: fit-content;
     height: auto;

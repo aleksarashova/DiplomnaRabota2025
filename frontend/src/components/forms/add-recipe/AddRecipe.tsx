@@ -122,6 +122,7 @@ const AddRecipeForm = () => {
 
     return (
         <div className="form-page" id="recipe-form-page">
+            <p className="recipe-creation-title">Create you recipe:</p>
             <div className="addRecipeFormWrapper">
                 <form onSubmit={handleSubmit} className="addRecipeForm">
                     <div className="addRecipeFormInputBox">

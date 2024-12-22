@@ -1,3 +1,35 @@
+.recipes-list-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.link-for-recipe-creation {
+    text-decoration: none;
+    margin-right: 770px;
+    margin-bottom: 60px;
+}
+
+.recipe-creation-caption {
+    font-family: "Felix Titling", sans-serif;
+    font-size: 18px;
+    font-weight: bolder;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #282828;
+}
+
+.addRecipeIcon {
+    width: 250px;
+    height: 380px;
+    color: #282828;
+    background-color: transparent;
+}
+
 .recipes-list {
     display: flex;
     flex-wrap: wrap;
@@ -68,24 +100,6 @@
     object-fit: cover;
     border-radius: 40px 40px 0 0;
 }
-
-/*@media (max-width: 1024px) {*/
-/*    .recipes-list {*/
-/*        width: 70%;*/
-/*        flex-direction: column;*/
-/*        margin-top: 10%;*/
-/*        z-index: -2;*/
-/*    }*/
-/*}*/
-
-/*@media (max-width: 412px) {*/
-/*    .recipes-list {*/
-/*        width: 50%;*/
-/*        flex-direction: column;*/
-/*        margin-top: 10%;*/
-/*        z-index: -2;*/
-/*    }*/
-/*}*/
 
 .likes-comments-home {
     display: flex;

@@ -1,11 +1,14 @@
 import React from "react";
-import {Link, useNavigate} from "react-router-dom";
+import "./navbar.css";
+
+import {Link} from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { MdAppRegistration } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import SearchBar from "../searchbar/searchbar";
-import "./navbar.css";
+
+import { TiDocumentAdd } from "react-icons/ti";
 
 interface NavbarProps {
     isLoggedIn: boolean;
