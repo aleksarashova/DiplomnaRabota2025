@@ -19,6 +19,7 @@ type CommentsInfoProps = {
 
 const CommentsSection = ({recipeData}: CommentsInfoProps) => {
     const comments = recipeData?.comments;
+    const approvedComments = comments?.filter((comment) => comment.is_approved);
 
     const [visibilityAddCommentPopup, setVisibilityAddCommentPopup] = useState(false);
     const [visibilityAddCommentMessage, setVisibilityAddCommentMessage] = useState(false);
@@ -92,7 +93,7 @@ const CommentsSection = ({recipeData}: CommentsInfoProps) => {
             </div>
             <div className="comments">
                 {
-                    comments?.map((comment, index) => (
+                    approvedComments?.map((comment, index) => (
                         <div key={index} className="comment">
                             <div className="commentAuthor-commentDate-Single">
                                 <div className="commentAuthor">
