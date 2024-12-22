@@ -1,6 +1,10 @@
 import * as Yup from "yup";
 import { getAllCategoryNames } from "../services/CategoryService";
 
+import {Types} from "mongoose";
+
+const { ObjectId } = Types;
+
 export const addRecipeSchema = Yup.object().shape({
     title: Yup.string()
         .required("Recipe title is required.")
@@ -54,4 +58,15 @@ export const addRecipeSchema = Yup.object().shape({
         )
         .min(1, "At least one preparation step is required.")
         .required("Preparation steps are required."),
+})
+
+export const getRecipeSchema = Yup.object().shape({
+    recipeId: Yup.string()
+        .required("Recipe id is required.")
+        .max(100, "Recipe title is too long.")
+        .test(
+            "is-objectid",
+            "Recipe id is not valid.",
+            (value) => ObjectId.isValid(value)
+        ),
 })

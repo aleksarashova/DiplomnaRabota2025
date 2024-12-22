@@ -11,12 +11,15 @@ export const comment = async (req: ExtendedRequest, res: Response) => {
             return;
         }
 
-        const { content } = req.body;
+        const { content, recipeId } = req.body;
 
         const newCommentData: AddCommentDTO = {
             user_id: userId,
             content: content,
+            recipe_id: recipeId,
         }
+
+        console.log(newCommentData);
 
         await addComment(newCommentData);
         res.status(200).json({ message: "Comment added successfully." });

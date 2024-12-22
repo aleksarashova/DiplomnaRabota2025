@@ -4,22 +4,21 @@ import "./comments.css";
 import { CgProfile } from "react-icons/cg";
 import { MdAddComment } from "react-icons/md";
 
-import { Link } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import { AddCommentPopup } from "../../../popups/actions/add-comment/addCommentPopup";
 import AddCommentMessage from "../../../popups/messages/addCommentMessage";
 
 import {useNavigate} from "react-router-dom";
 import {addComment} from "./requests";
 import CommentError from "../../../popups/errors/AddCommentError";
+import {RecipeData} from "../singlepage/types";
 
+type CommentsInfoProps = {
+    recipeData: RecipeData | null;
+};
 
-const CommentsSection = () => {
-    //vzimame gi ot bazata
-    const comments = [
-        "lajdb",
-        "qoufweifbw",
-        "qqffqbqefwq"
-    ];
+const CommentsSection = ({recipeData}: CommentsInfoProps) => {
+    const comments = recipeData?.comments;
 
     const [visibilityAddCommentPopup, setVisibilityAddCommentPopup] = useState(false);
     const [visibilityAddCommentMessage, setVisibilityAddCommentMessage] = useState(false);
@@ -37,6 +36,12 @@ const CommentsSection = () => {
         setVisibilityCommentErrorPopup(false);
     }
 
+    const { recipeId } = useParams();
+
+    if(!recipeId) {
+        console.error("No recipe id is found in the url.");
+    }
+
     const handleAddComment = async (content: string) => {
         const accessToken = localStorage.getItem("accessToken");
 
@@ -47,12 +52,13 @@ const CommentsSection = () => {
         }
 
         try {
-            const data = await addComment(content, accessToken);
+            const data = await addComment(content, accessToken, recipeId || "");
 
             console.log("Backend Response:", data);
 
             setVisibilityAddCommentPopup(false);
             setVisibilityAddCommentMessage(true);
+            window.location.reload();
         } catch (error) {
             console.error("Error during adding comment:", error);
 
@@ -86,17 +92,18 @@ const CommentsSection = () => {
             </div>
             <div className="comments">
                 {
-                    comments.map((comment, index) => (
+                    comments?.map((comment, index) => (
                         <div key={index} className="comment">
                             <div className="commentAuthor-commentDate-Single">
                                 <div className="commentAuthor">
                                     <Link to="/profile" className="profileLinkComments">
-                                        <CgProfile className="profileIcon" /> Aleksa Rashova
+                                        <CgProfile className="profileIcon" />
+                                        {comment.author.username}
                                     </Link>
                                 </div>
-                                <div className="commentDate">03-12-2024</div>
+                                <div className="commentDate">{comment.date}</div>
                             </div>
-                            <div className="commentContent">{comment}</div>
+                            <div className="commentContent">{comment.content}</div>
                         </div>
                     ))
                 }

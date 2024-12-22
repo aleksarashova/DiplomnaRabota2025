@@ -3,14 +3,15 @@ import "./more-info.css";
 
 import { IoFootsteps } from "react-icons/io5";
 import { RiKnifeFill } from "react-icons/ri";
+import {RecipeData} from "../singlepage/types";
 
-const RecipePreparation = () => {
+type PrepInfoProps = {
+    recipeData: RecipeData | null;
+};
+
+const RecipePreparation = ({recipeData}: PrepInfoProps) => {
     //ot bazata
-    const steps : string[] = [
-        "Step 1",
-        "Step 2",
-        "Step 3"
-    ]
+    const steps= recipeData?.preparation_steps;
     return (
         <details className="collapsible-preparation" open>
             <summary className="collapsible-summary">
@@ -21,7 +22,7 @@ const RecipePreparation = () => {
             <div className="collapsibleContent">
                 <ul className="steps-to-prepare">
                     {
-                        steps.map(step => (
+                        steps?.map(step => (
                             <details className="collapsible-steps" open>
                                 <summary className="collapsible-summary">
                                     <h1 className="Steps">

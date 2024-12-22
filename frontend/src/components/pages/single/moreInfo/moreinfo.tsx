@@ -2,13 +2,22 @@ import React from "react";
 
 import RecipeProducts from "./products";
 import RecipePreparation from "./preparation";
+import {RecipeData} from "../singlepage/types";
 
-const MoreRecipeInfo = () => {
+type MoreRecipeInfoProps = {
+    recipeData: RecipeData | null;
+};
+
+const MoreRecipeInfo = ({recipeData}: MoreRecipeInfoProps) => {
 
     return (
         <div className="moreInfo">
-            <RecipeProducts />
-            <RecipePreparation />
+            <RecipeProducts
+                recipeData={recipeData}
+            />
+            <RecipePreparation
+                recipeData={recipeData}
+            />
         </div>
     );
 }

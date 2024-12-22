@@ -1,7 +1,7 @@
 .commonInfoImageWrapper {
     display: flex;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: space-between;
     margin: 150px 150px 0;
     background-color: whitesmoke;
     height: 600px;

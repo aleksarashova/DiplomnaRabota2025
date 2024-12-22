@@ -1,6 +1,6 @@
 import {Schema, Types, Model, model} from "mongoose";
 
-interface CommentInterface {
+export interface CommentInterface {
     author: Types.ObjectId;
     date: Date;
     content: string;

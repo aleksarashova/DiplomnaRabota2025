@@ -2,15 +2,14 @@ import React from "react";
 import "./more-info.css";
 
 import { FaShoppingBasket, FaTags } from "react-icons/fa";
+import {RecipeData} from "../singlepage/types";
 
-const RecipeProducts = () => {
-    //ot bazata
-    const products = [
-        "sugar",
-        "flour",
-        "milk",
-        "eggs",
-    ];
+type ProductsInfoProps = {
+    recipeData: RecipeData | null;
+};
+
+const RecipeProducts = ({recipeData}: ProductsInfoProps) => {
+    const products = recipeData?.products;
 
     return (
         <details className="collapsible-products" open>
@@ -22,7 +21,7 @@ const RecipeProducts = () => {
             <div className="collapsibleContent">
                 <ul className="products-list">
                     {
-                        products.map((product, index) => (
+                        products?.map((product, index) => (
                             <li key={index} className="product">
                                 <div className="productName">
                                     <FaTags className="productIcon"/> {product}

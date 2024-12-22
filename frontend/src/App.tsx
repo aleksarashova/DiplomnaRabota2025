@@ -23,7 +23,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="/forgot-password" element={<ForgotPasswordPage />}></Route>
         <Route path="/reset-password" element={<ResetPasswordPage />}></Route>
-        <Route path="/singleview/:recipe-id" element={<SingleView />}></Route>
+        <Route path="/singleview/:recipeId" element={<SingleView />}></Route>
         <Route path="/verify-profile/:email" element={<VerifyProfileForm />}></Route>
         <Route path="/send-verification-email" element={<SendEmailForm />}></Route>
         <Route path="/add-recipe" element={<AddRecipePage />}></Route>

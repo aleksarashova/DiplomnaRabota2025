@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./common-info.css";
 
-import { Link } from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 
 import FoodImage from "../../../images/altImage.png";
 
@@ -12,23 +12,25 @@ import { MdOutlineMenuBook } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { ImStarFull } from "react-icons/im";
 
+import {RecipeData} from "../singlepage/types";
+
 type CommonRecipeInfoProps = {
+    recipeData: RecipeData | null;
     onCommentClick: () => void;
-}
+};
 
-const CommonRecipeInfo = ({ onCommentClick } : CommonRecipeInfoProps) => {
-
-    //sus zaqvka do bazata proverqvame dali mu e lubima receptata i dali q e laiknal
+const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps) => {
     const [isFavourite, setIsFavourite] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
+    const navigateTo = useNavigate();
 
     const handleAddFavourites = () => {
-        setIsFavourite(prevState => !prevState);
-    }
+        setIsFavourite((prevState) => !prevState);
+    };
 
     const handleLikeRecipe = () => {
-        setIsLiked(prevState => !prevState);
-    }
+        setIsLiked((prevState) => !prevState);
+    };
 
     return (
         <div className="commonInfoImageWrapper">
@@ -41,19 +43,20 @@ const CommonRecipeInfo = ({ onCommentClick } : CommonRecipeInfoProps) => {
                     )}
                 </button>
                 <div className="likes-comments-single">
-                    <div><FaHeart /> 256</div>
-                    <div><FaComment /> 42</div>
+                    <div><FaHeart /> {recipeData?.likes}</div>
+                    <div><FaComment /> {recipeData?.comments?.length}</div>
                 </div>
-                <div className="recipeTitleSingle">Recipe Title Example</div>
+                <div className="recipeTitleSingle">{recipeData?.title}</div>
                 <div className="recipeAuthorSingle">
                     <Link to="/profile" className="profileLink">
-                        <CgProfile className="profileIcon" /> Aleksa Rashova
+                        <CgProfile className="profileIcon" />
+                        {recipeData?.author}
                     </Link>
                 </div>
-                <div className="recipeDateOfPostingSingle"><FaRegCalendarAlt /> 03-12-2024</div>
-                <div className="recipeCategorySingle"><MdOutlineMenuBook /> category</div>
-                <div className="recipeTimeSingle"><FaHourglassHalf /> 1 hour</div>
-                <div className="recipeServingsSingle"><PiForkKnifeFill /> 6 servings</div>
+                <div className="recipeDateOfPostingSingle"><MdOutlineMenuBook />{recipeData?.date}</div>
+                <div className="recipeCategorySingle"><MdOutlineMenuBook />{recipeData?.category}</div>
+                <div className="recipeTimeSingle"><FaHourglassHalf />{recipeData?.time_for_cooking}</div>
+                <div className="recipeServingsSingle"><PiForkKnifeFill />{recipeData?.servings}</div>
                 <div className="leave-like-comment">
                     <button className="leaveLike" onClick={handleLikeRecipe}>
                         {isLiked ? (

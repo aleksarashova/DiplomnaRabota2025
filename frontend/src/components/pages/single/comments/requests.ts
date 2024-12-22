@@ -1,4 +1,4 @@
-export const addComment = async (content: string, accessToken: string) => {
+export const addComment = async (content: string, accessToken: string, recipeId: string):Promise<string> => {
     try {
         const response = await fetch("http://localhost:8000/api/comments/add-comment", {
             method: "POST",
@@ -6,7 +6,7 @@ export const addComment = async (content: string, accessToken: string) => {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
             },
-            body: JSON.stringify(content),
+            body: JSON.stringify({content, recipeId}),
         });
 
         const data = await response.json();
@@ -16,7 +16,7 @@ export const addComment = async (content: string, accessToken: string) => {
             throw new Error(errorMessage);
         }
 
-        return data;
+        return data.message;
     } catch (error) {
         console.error("Error during adding comment:", error);
         throw error;

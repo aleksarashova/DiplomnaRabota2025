@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
 import { AnyObjectSchema } from "yup";
+import { Request, Response, NextFunction } from "express";
 
 export const validateRequest = (schema: AnyObjectSchema) => async (
     req: Request,
@@ -7,13 +7,15 @@ export const validateRequest = (schema: AnyObjectSchema) => async (
     next: NextFunction
 ) => {
     try {
-        await schema.validate(req.body, { abortEarly: false });
+        const data = req.method === "GET" ? req.query : req.body;
+
+        await schema.validate(data, { abortEarly: false });
 
         next();
     } catch (error) {
         const validationErrors = (error as any).inner.map((e: any) => ({
             field: e.path,
-            message: e.message
+            message: e.message,
         }));
 
         const formattedErrors = validationErrors.map((e: any) => e.message);
