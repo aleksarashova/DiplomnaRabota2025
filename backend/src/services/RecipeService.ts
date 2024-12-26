@@ -110,7 +110,9 @@ export const getRecipeData = async (id: string): Promise<GetExtendedRecipeDTO> =
         });
 
         const commentsWithAuthors = await Promise.all(
-            comments.map(async (comment) => {
+            comments
+                .filter(comment => comment.is_approved)
+                .map(async (comment) => {
                 const commentAuthor = await User.findById(comment.author).select('username');
 
                 const now = new Date();
@@ -158,7 +160,7 @@ export const getRecipeData = async (id: string): Promise<GetExtendedRecipeDTO> =
             date: recipe.date.toISOString().split('T')[0],
             category: category.name,
             likes: recipe.likes,
-            comments_number: comments.length,
+            comments_number: commentsWithAuthors.length,
             image: recipe.image,
             time_for_cooking: recipe.time_for_cooking,
             servings: recipe.servings,
