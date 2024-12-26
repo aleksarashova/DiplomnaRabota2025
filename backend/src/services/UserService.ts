@@ -279,3 +279,28 @@ export const removeRecipeFromFavouritesList = async (recipeId: string, userId: s
         throw new Error("Unknown error while removing recipe from favourites list.");
     }
 }
+
+export const checkIsRecipeFavourite = async (recipeId: string, userId: string) => {
+    try {
+        const user = await findUserById(userId);
+
+        if (!user) {
+            throw new Error('User not found.');
+        }
+
+        const recipe = await findRecipeById(recipeId);
+
+        if(!recipe) {
+            throw new Error("Recipe not found.");
+        }
+
+        return user.favourites.includes(recipe._id!);
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while checking is recipe favourite.");
+    }
+}
+
+

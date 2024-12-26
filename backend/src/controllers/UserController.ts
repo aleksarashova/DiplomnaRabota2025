@@ -8,7 +8,7 @@ import {
     updateUserLoggedIn,
     updateUserProfile,
     getUserProfileData,
-    updateUserVerified, addRecipeToFavouritesList, removeRecipeFromFavouritesList
+    updateUserVerified, addRecipeToFavouritesList, removeRecipeFromFavouritesList, checkIsRecipeFavourite
 } from "../services/UserService";
 import { sendVerificationEmail, validateVerificationCode, deleteRecord } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
@@ -237,6 +237,30 @@ export const removeRecipeFromFavourites = async(req: ExtendedRequest, res:Respon
         res.status(200).json("Successfully removed recipe from the user's favourites list.");
     } catch(error) {
         console.error("Error during removing recipe from favourites:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const getIsRecipeFavourite = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const recipeId = req.query.recipeId as string;
+
+        const isFavourite = await checkIsRecipeFavourite(recipeId, userId);
+        res.status(200).json({isFavourite: isFavourite});
+    } catch(error) {
+        console.error("Error during checking is recipe in favourites:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});

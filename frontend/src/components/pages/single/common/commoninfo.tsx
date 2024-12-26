@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./common-info.css";
 
 import {Link, useNavigate, useParams} from "react-router-dom";
@@ -13,7 +13,7 @@ import { CgProfile } from "react-icons/cg";
 import { ImStarFull } from "react-icons/im";
 
 import {RecipeData} from "../singlepage/types";
-import {addRecipeToFavourites, removeRecipeFromFavourites} from "./requests";
+import {addRecipeToFavourites, getIsRecipeFavourite, removeRecipeFromFavourites} from "./requests";
 
 type CommonRecipeInfoProps = {
     recipeData: RecipeData | null;
@@ -26,6 +26,29 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
     const navigateTo = useNavigate();
 
     const { recipeId } = useParams();
+
+    const getIsRecipeFavouriteAndLiked = async() => {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+            console.error("No access token found.");
+            navigateTo("/login");
+            return;
+        }
+
+        if(!recipeId) {
+            console.error("No recipe found.");
+            navigateTo("/");
+            return;
+        }
+
+        try {
+            const isFavouriteRecipe = await getIsRecipeFavourite(recipeId, accessToken);
+            setIsFavourite(isFavouriteRecipe);
+        } catch (error) {
+            console.error("Failed to check favourite status:", error);
+        }
+    }
 
     const handleAddOrRemoveFavourites = async () => {
         const accessToken = localStorage.getItem("accessToken");
@@ -60,6 +83,10 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
     const handleLikeRecipe = () => {
         setIsLiked((prevState) => !prevState);
     }
+
+    useEffect(() => {
+        getIsRecipeFavouriteAndLiked();
+    }, []);
 
     return (
         <div className="commonInfoImageWrapper">
