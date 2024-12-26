@@ -6,7 +6,7 @@ import User from "../models/User";
 import {AddRecipeDTO, GetExtendedRecipeDTO, GetRecipeDTO} from "../DTOs/RecipeDTOs";
 import { getCategoryIdByName } from "./CategoryService";
 import Category from "../models/Category";
-import {date} from "yup";
+import {findUserById} from "./UserService";
 
 export const addRecipe = async (recipeData: AddRecipeDTO, userId: string) => {
     try {
@@ -27,8 +27,17 @@ export const addRecipe = async (recipeData: AddRecipeDTO, userId: string) => {
             image: "image"
         };
 
+        const author = await findUserById(userId);
+
+        if(!author) {
+            throw new Error("User not found when trying to add a recipe.");
+        }
+
         const newRecipe: HydratedDocument<RecipeInterface> = new Recipe(recipe);
         await newRecipe.save();
+        author.recipes.push(newRecipe._id);
+        await author.save();
+        return newRecipe;
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);

@@ -22,16 +22,16 @@ const RecipePreparation = ({recipeData}: PrepInfoProps) => {
             <div className="collapsibleContent">
                 <ul className="steps-to-prepare">
                     {
-                        steps?.map(step => (
+                        steps?.map((step, index) => (
                             <details className="collapsible-steps" open>
                                 <summary className="collapsible-summary">
                                     <h1 className="Steps">
-                                        <RiKnifeFill /> {step}<span className="expand-symbol"></span>
+                                        <RiKnifeFill /> Step {index + 1}<span className="expand-symbol"></span>
                                     </h1>
                                 </summary>
                                 <div className="collapsibleContent">
                                     <div className="step-description">
-                                        First you have to mix the eggs with the salt.
+                                        {step}
                                     </div>
                                 </div>
                             </details>

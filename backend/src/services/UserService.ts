@@ -3,6 +3,7 @@ import User, {UserInterface} from "../models/User";
 
 import bcrypt from 'bcryptjs';
 import {RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
+import {RecipeInterface} from "../models/Recipe";
 
 export const hashPassword = async (password: string) => {
     try {

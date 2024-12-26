@@ -27,7 +27,7 @@ export const makeRecipe = async (req: ExtendedRequest, res: Response) => {
         }
 
         const newRecipe = await addRecipe(req.body, userId);
-        res.status(201).json({ message: "Recipe created successfully", user: newRecipe });
+        res.status(201).json({ message: "Recipe created successfully", recipe: newRecipe });
     } catch (error) {
         console.error("Error during making recipe:", error);
 
