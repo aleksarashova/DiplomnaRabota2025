@@ -48,21 +48,31 @@ export const addRecipe = async (recipeData: AddRecipeDTO, userId: string) => {
 
 export const getAllRecipesData = async (): Promise<GetRecipeDTO[]> => {
     try {
-        const recipesRaw = await Recipe.find()
+        const recipesRaw = await Recipe.find({ is_approved: true })
             .populate("author", "username")
             .populate("category", "name");
 
-        const recipes: GetRecipeDTO[] = recipesRaw.map(recipe => ({
-            id: recipe._id.toString(),
-            title: recipe.title,
-            author: (recipe.author as any)?.username || "Unknown",
-            is_approved: recipe.is_approved,
-            date: recipe.date.toISOString().split("T")[0],
-            category: (recipe.category as any)?.name || "Uncategorized",
-            likes: recipe.likes,
-            comments: recipe.comments.length,
-            image: recipe.image || undefined,
-        }));
+        const recipes: GetRecipeDTO[] = [];
+
+        for (const recipe of recipesRaw) {
+            const comments = await Comment.find({
+                '_id': { $in: recipe.comments },
+            });
+
+            const approvedComments = comments.filter(comment => comment.is_approved);
+
+            recipes.push({
+                id: recipe._id.toString(),
+                title: recipe.title,
+                author: (recipe.author as any)?.username || "Unknown",
+                is_approved: recipe.is_approved,
+                date: recipe.date.toISOString().split("T")[0],
+                category: (recipe.category as any)?.name || "Uncategorized",
+                likes: recipe.likes,
+                comments: approvedComments.length,
+                image: recipe.image || undefined,
+            });
+        }
 
         return recipes;
     } catch (error) {
