@@ -13,7 +13,13 @@ import { CgProfile } from "react-icons/cg";
 import { ImStarFull } from "react-icons/im";
 
 import {RecipeData} from "../singlepage/types";
-import {addRecipeToFavourites, getIsRecipeFavourite, removeRecipeFromFavourites} from "./requests";
+import {
+    addRecipeToFavourites, addRecipeToLiked,
+    getIsRecipeFavourite,
+    getIsRecipeLiked,
+    removeRecipeFromFavourites,
+    removeRecipeFromLiked
+} from "./requests";
 
 type CommonRecipeInfoProps = {
     recipeData: RecipeData | null;
@@ -44,7 +50,9 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
 
         try {
             const isFavouriteRecipe = await getIsRecipeFavourite(recipeId, accessToken);
+            const isLikedRecipe = await getIsRecipeLiked(recipeId, accessToken);
             setIsFavourite(isFavouriteRecipe);
+            setIsLiked(isLikedRecipe);
         } catch (error) {
             console.error("Failed to check favourite status:", error);
         }
@@ -77,11 +85,35 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
             console.error("Failed to update favourites:", error);
             setIsFavourite((prevState) => !prevState);
         }
-    };
+    }
 
+    const handleAddOrRemoveLiked = async () => {
+        const accessToken = localStorage.getItem("accessToken");
 
-    const handleLikeRecipe = () => {
+        if (!accessToken) {
+            console.error("No access token found.");
+            navigateTo("/login");
+            return;
+        }
+
+        if(!recipeId) {
+            console.error("No recipe found.");
+            navigateTo("/");
+            return;
+        }
+
         setIsLiked((prevState) => !prevState);
+
+        try {
+            if (!isLiked) {
+                await addRecipeToLiked(recipeId, accessToken);
+            } else {
+                await removeRecipeFromLiked(recipeId, accessToken);
+            }
+        } catch (error) {
+            console.error("Failed to update liked:", error);
+            setIsFavourite((prevState) => !prevState);
+        }
     }
 
     useEffect(() => {
@@ -114,7 +146,7 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
                 <div className="recipeTimeSingle"><FaHourglassHalf />{recipeData?.time_for_cooking}</div>
                 <div className="recipeServingsSingle"><PiForkKnifeFill />{recipeData?.servings}</div>
                 <div className="leave-like-comment">
-                    <button className="leaveLike" onClick={handleLikeRecipe}>
+                    <button className="leaveLike" onClick={handleAddOrRemoveLiked}>
                         {isLiked ? (
                             <VscHeartFilled className="likeIconFull" />
                         ) : (

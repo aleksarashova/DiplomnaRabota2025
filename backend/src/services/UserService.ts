@@ -249,6 +249,34 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
     }
 }
 
+export const addRecipeToLikedList = async (recipeId: string, userId: string) => {
+    try {
+        const user = await findUserById(userId);
+
+        if (!user) {
+            throw new Error('User not found.');
+        }
+
+        const recipe = await findRecipeById(recipeId);
+
+        if(!recipe) {
+            throw new Error("Recipe not found.");
+        }
+
+        if(user.liked.includes(recipe._id!)) {
+            throw new Error("Recipe already in liked of this user.")
+        }
+
+        user.liked.push(recipe._id!);
+        await user.save();
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while adding recipe to liked list.");
+    }
+}
+
 export const removeRecipeFromFavouritesList = async (recipeId: string, userId: string) => {
     try {
         const user = await findUserById(userId);
@@ -280,6 +308,37 @@ export const removeRecipeFromFavouritesList = async (recipeId: string, userId: s
     }
 }
 
+export const removeRecipeFromLikedList = async (recipeId: string, userId: string) => {
+    try {
+        const user = await findUserById(userId);
+
+        if (!user) {
+            throw new Error('User not found.');
+        }
+
+        const recipe = await findRecipeById(recipeId);
+
+        if(!recipe) {
+            throw new Error("Recipe not found.");
+        }
+
+        if(!user.liked.includes(recipe._id!)) {
+            throw new Error("Recipe is not in liked of this user.")
+        }
+
+        await User.updateOne(
+            { _id: user._id },
+            { $pull: { liked: recipe._id } }
+        );
+
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while removing recipe from favourites list.");
+    }
+}
+
 export const checkIsRecipeFavourite = async (recipeId: string, userId: string) => {
     try {
         const user = await findUserById(userId);
@@ -300,6 +359,29 @@ export const checkIsRecipeFavourite = async (recipeId: string, userId: string) =
             throw new Error(error.message);
         }
         throw new Error("Unknown error while checking is recipe favourite.");
+    }
+}
+
+export const checkIsRecipeLiked = async (recipeId: string, userId: string) => {
+    try {
+        const user = await findUserById(userId);
+
+        if (!user) {
+            throw new Error('User not found.');
+        }
+
+        const recipe = await findRecipeById(recipeId);
+
+        if(!recipe) {
+            throw new Error("Recipe not found.");
+        }
+
+        return user.liked.includes(recipe._id!);
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while checking is recipe liked.");
     }
 }
 

@@ -8,7 +8,11 @@ import {
     updateUserLoggedIn,
     updateUserProfile,
     getUserProfileData,
-    updateUserVerified, addRecipeToFavouritesList, removeRecipeFromFavouritesList, checkIsRecipeFavourite
+    updateUserVerified,
+    addRecipeToFavouritesList,
+    removeRecipeFromFavouritesList,
+    checkIsRecipeFavourite,
+    addRecipeToLikedList, removeRecipeFromLikedList, checkIsRecipeLiked
 } from "../services/UserService";
 import { sendVerificationEmail, validateVerificationCode, deleteRecord } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
@@ -222,6 +226,30 @@ export const addRecipeToFavourites = async(req: ExtendedRequest, res:Response) =
     }
 }
 
+export const addRecipeToLiked = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const { recipeId } = req.body;
+
+        await addRecipeToLikedList(recipeId, userId);
+        res.status(200).json("Successfully added recipe in the user's liked list.");
+    } catch(error) {
+        console.error("Error during adding recipe to liked:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
 export const removeRecipeFromFavourites = async(req: ExtendedRequest, res:Response) => {
     try {
         const userId = req.userId as string;
@@ -246,6 +274,30 @@ export const removeRecipeFromFavourites = async(req: ExtendedRequest, res:Respon
     }
 }
 
+export const removeRecipeFromLiked = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const { recipeId } = req.body;
+
+        await removeRecipeFromLikedList(recipeId, userId);
+        res.status(200).json("Successfully removed recipe from the user's liked list.");
+    } catch(error) {
+        console.error("Error during removing recipe from liked:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
 export const getIsRecipeFavourite = async(req: ExtendedRequest, res:Response) => {
     try {
         const userId = req.userId as string;
@@ -261,6 +313,30 @@ export const getIsRecipeFavourite = async(req: ExtendedRequest, res:Response) =>
         res.status(200).json({isFavourite: isFavourite});
     } catch(error) {
         console.error("Error during checking is recipe in favourites:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const getIsRecipeLiked = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const recipeId = req.query.recipeId as string;
+
+        const isLiked = await checkIsRecipeLiked(recipeId, userId);
+        res.status(200).json({isLiked: isLiked});
+    } catch(error) {
+        console.error("Error during checking is recipe in liked:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});
