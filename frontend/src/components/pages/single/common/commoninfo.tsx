@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import "./common-info.css";
 
 import {Link, useNavigate, useParams} from "react-router-dom";
@@ -13,6 +13,7 @@ import { CgProfile } from "react-icons/cg";
 import { ImStarFull } from "react-icons/im";
 
 import {RecipeData} from "../singlepage/types";
+import {addRecipeToFavourites, removeRecipeFromFavourites} from "./requests";
 
 type CommonRecipeInfoProps = {
     recipeData: RecipeData | null;
@@ -24,18 +25,46 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
     const [isLiked, setIsLiked] = useState(false);
     const navigateTo = useNavigate();
 
-    const handleAddFavourites = () => {
+    const { recipeId } = useParams();
+
+    const handleAddOrRemoveFavourites = async () => {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+            console.error("No access token found.");
+            navigateTo("/login");
+            return;
+        }
+
+        if(!recipeId) {
+            console.error("No recipe found.");
+            navigateTo("/");
+            return;
+        }
+
         setIsFavourite((prevState) => !prevState);
+
+        try {
+            if (!isFavourite) {
+                await addRecipeToFavourites(recipeId, accessToken);
+            } else {
+                await removeRecipeFromFavourites(recipeId, accessToken);
+            }
+        } catch (error) {
+            console.error("Failed to update favourites:", error);
+            setIsFavourite((prevState) => !prevState);
+        }
     };
+
 
     const handleLikeRecipe = () => {
         setIsLiked((prevState) => !prevState);
-    };
+    }
 
     return (
         <div className="commonInfoImageWrapper">
             <div className="commonInfoSingle">
-                <button className="saveToFavourites" onClick={handleAddFavourites}>
+                <button className="saveToFavourites" onClick={handleAddOrRemoveFavourites}>
                     {isFavourite ? (
                         <ImStarFull className="favouritesIconFull" />
                     ) : (

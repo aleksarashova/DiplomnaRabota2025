@@ -8,7 +8,7 @@ import {
     updateUserLoggedIn,
     updateUserProfile,
     getUserProfileData,
-    updateUserVerified
+    updateUserVerified, addRecipeToFavouritesList, removeRecipeFromFavouritesList
 } from "../services/UserService";
 import { sendVerificationEmail, validateVerificationCode, deleteRecord } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
@@ -189,6 +189,54 @@ export const getMyProfileData = async (req: ExtendedRequest, res: Response) => {
         res.status(200).json({ user: userData });
     } catch (error) {
         console.error("Error during getting profile data:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const addRecipeToFavourites = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const { recipeId } = req.body;
+
+        await addRecipeToFavouritesList(recipeId, userId);
+        res.status(200).json("Successfully added recipe in the user's favourites list.");
+    } catch(error) {
+        console.error("Error during adding recipe to favourites:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const removeRecipeFromFavourites = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const { recipeId } = req.body;
+
+        await removeRecipeFromFavouritesList(recipeId, userId);
+        res.status(200).json("Successfully removed recipe from the user's favourites list.");
+    } catch(error) {
+        console.error("Error during removing recipe from favourites:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});

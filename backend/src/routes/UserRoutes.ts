@@ -7,7 +7,7 @@ import {
     deleteProfile,
     getMyProfileData,
     verify,
-    resendEmail
+    resendEmail, addRecipeToFavourites, removeRecipeFromFavourites
 } from "../controllers/UserController";
 import {validateRequest} from "../middlewares/RequestValidationMiddleware";
 import {profileUpdateSchema, userLoginSchema, userRegisterSchema} from "../validationSchemas/UserValidation";
@@ -27,5 +27,7 @@ router.post("/delete-profile", checkAuthentication, deleteProfile);
 router.get("/my-profile-data", checkAuthentication, getMyProfileData);
 router.post("/verify-profile", verify);
 router.post("/resend-verification-email", checkEmailForSendingAVerificationCode, resendEmail);
+router.post("/add-recipe-to-favourites", checkAuthentication, addRecipeToFavourites);
+router.post("/remove-recipe-from-favourites", checkAuthentication, removeRecipeFromFavourites);
 
 export default router;

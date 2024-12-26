@@ -4,6 +4,7 @@ import User, {UserInterface} from "../models/User";
 import bcrypt from 'bcryptjs';
 import {RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 import {RecipeInterface} from "../models/Recipe";
+import {findRecipeById} from "./RecipeService";
 
 export const hashPassword = async (password: string) => {
     try {
@@ -217,5 +218,64 @@ export const getUserProfileData = async (id: string) => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while getting the user profile data.");
+    }
+}
+
+export const addRecipeToFavouritesList = async (recipeId: string, userId: string) => {
+    try {
+        const user = await findUserById(userId);
+
+        if (!user) {
+            throw new Error('User not found.');
+        }
+
+        const recipe = await findRecipeById(recipeId);
+
+        if(!recipe) {
+            throw new Error("Recipe not found.");
+        }
+
+        if(user.favourites.includes(recipe._id!)) {
+            throw new Error("Recipe already in favourites of this user.")
+        }
+
+        user.favourites.push(recipe._id!);
+        await user.save();
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while adding recipe to favourites list.");
+    }
+}
+
+export const removeRecipeFromFavouritesList = async (recipeId: string, userId: string) => {
+    try {
+        const user = await findUserById(userId);
+
+        if (!user) {
+            throw new Error('User not found.');
+        }
+
+        const recipe = await findRecipeById(recipeId);
+
+        if(!recipe) {
+            throw new Error("Recipe not found.");
+        }
+
+        if(!user.favourites.includes(recipe._id!)) {
+            throw new Error("Recipe is not in favourites of this user.")
+        }
+
+        await User.updateOne(
+            { _id: user._id },
+            { $pull: { favourites: recipe._id } }
+        );
+
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while removing recipe from favourites list.");
     }
 }
