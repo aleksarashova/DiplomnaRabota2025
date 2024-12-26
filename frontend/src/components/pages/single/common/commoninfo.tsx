@@ -110,6 +110,8 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
             } else {
                 await removeRecipeFromLiked(recipeId, accessToken);
             }
+
+            window.location.reload();
         } catch (error) {
             console.error("Failed to update liked:", error);
             setIsFavourite((prevState) => !prevState);

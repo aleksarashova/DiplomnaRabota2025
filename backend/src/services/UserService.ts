@@ -269,6 +269,9 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string) => 
 
         user.liked.push(recipe._id!);
         await user.save();
+
+        recipe.likes += 1;
+        await recipe.save();
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -299,7 +302,6 @@ export const removeRecipeFromFavouritesList = async (recipeId: string, userId: s
             { _id: user._id },
             { $pull: { favourites: recipe._id } }
         );
-
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -331,6 +333,8 @@ export const removeRecipeFromLikedList = async (recipeId: string, userId: string
             { $pull: { liked: recipe._id } }
         );
 
+        recipe.likes -= 1;
+        await recipe.save();
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
