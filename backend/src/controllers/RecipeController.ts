@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
-import {addRecipe, getAllRecipesData, getRecipeData} from "../services/RecipeService";
+import {addRecipe, getAllApprovedRecipesData, getAllRecipesData, getRecipeData} from "../services/RecipeService";
 import {GetExtendedRecipeDTO} from "../DTOs/RecipeDTOs";
 
 export const getAllRecipes = async (req: Request, res: Response) => {
@@ -9,6 +9,21 @@ export const getAllRecipes = async (req: Request, res: Response) => {
         res.status(200).json({ recipes: recipes });
     } catch (error) {
         console.error("Error during trying to get all recipes:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: "Internal server error." });
+        }
+    }
+}
+
+export const getAllApprovedRecipes = async (req: Request, res: Response) => {
+    try {
+        const recipes = await getAllApprovedRecipesData();
+        res.status(200).json({ recipes: recipes });
+    } catch (error) {
+        console.error("Error during trying to get all approved recipes:", error);
 
         if (error instanceof Error) {
             res.status(400).json({ message: error.message });

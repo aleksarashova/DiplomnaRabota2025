@@ -83,6 +83,45 @@ export const getAllRecipesData = async (): Promise<GetRecipeDTO[]> => {
     }
 }
 
+export const getAllApprovedRecipesData = async (): Promise<GetRecipeDTO[]> => {
+    try {
+        const recipesRaw = await Recipe.find({ is_approved: true })
+            .populate("author", "username")
+            .populate("category", "name");
+
+        const recipes: GetRecipeDTO[] = [];
+
+        for (const recipe of recipesRaw) {
+            const comments = await Comment.find({
+                '_id': { $in: recipe.comments },
+            });
+
+            const approvedComments = comments.filter(comment => comment.is_approved);
+
+            recipes.push({
+                id: recipe._id.toString(),
+                title: recipe.title,
+                author: (recipe.author as any)?.username || "Unknown",
+                is_approved: recipe.is_approved,
+                date: recipe.date.toISOString().split("T")[0],
+                category: (recipe.category as any)?.name || "Uncategorized",
+                likes: recipe.likes,
+                comments: approvedComments.length,
+                image: recipe.image || undefined,
+            });
+
+            recipes.filter(recipe => recipe.is_approved);
+        }
+
+        return recipes;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting all recipes.");
+    }
+}
+
 export const findRecipeById = async(id: string) => {
     try {
         return await Recipe.findOne({_id: id});

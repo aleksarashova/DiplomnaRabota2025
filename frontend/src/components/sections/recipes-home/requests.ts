@@ -1,7 +1,7 @@
 import { Recipe } from "./types";
 
 export const getAllApprovedRecipes = async (): Promise<Recipe[]> => {
-    const response = await fetch("http://localhost:8000/api/recipes/get-all", {
+    const response = await fetch("http://localhost:8000/api/recipes/get-all-approved", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -13,5 +13,5 @@ export const getAllApprovedRecipes = async (): Promise<Recipe[]> => {
         throw new Error(data.message || "Failed to fetch recipes");
     }
 
-    return data.recipes.filter((recipe: Recipe) => recipe.is_approved);
+    return data.recipes;
 }
