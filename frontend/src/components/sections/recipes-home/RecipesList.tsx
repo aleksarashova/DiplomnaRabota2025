@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import FoodImage from "../../images/altImage.png";
 import { FaComment, FaHeart } from "react-icons/fa";
 import { validateJWT } from "../../pages/authCheck";
+import {TiDocumentAdd} from "react-icons/ti";
+import {MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight} from "react-icons/md";
 
 interface RecipesListProps {
     selectedCategory: string | null;
@@ -40,7 +42,11 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
         <div className="recipes-list-section">
             {isLoggedIn && (
                 <Link to="/add-recipe" className="link-for-recipe-creation">
-                    <p className="recipe-creation-caption">Create your own recipe here</p>
+                    <p className="recipe-creation-caption">
+                        <MdOutlineKeyboardDoubleArrowRight className="arrow"/>
+                        Create your own recipe here
+                        <MdOutlineKeyboardDoubleArrowLeft className="arrow"/>
+                    </p>
                 </Link>
             )}
             <div className="recipes-list">
@@ -74,6 +80,13 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
                     ))
                 ) : (
                     <p className="noRecipesMessage">No recipes available. Please check back later!</p>
+                )}
+                {isLoggedIn && (
+                    <Link to="/add-recipe">
+                        <div className="add-recipe">
+                            <TiDocumentAdd className="addRecipeIcon"/>
+                        </div>
+                    </Link>
                 )}
             </div>
         </div>
