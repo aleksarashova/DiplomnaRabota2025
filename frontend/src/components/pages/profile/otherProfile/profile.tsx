@@ -23,7 +23,7 @@ const Profile = () => {
         setIsLoggedIn(!!isValid);
 
         if (isValid) {
-            //get the data of the particular user
+            //get the data of the particular user - tva mi ostava
         } else {
             navigateTo("/login");
         }
@@ -64,7 +64,7 @@ const Profile = () => {
                 RECIPES OF THIS AUTHOR:
             </div>
             <div className="recipes-list-profile">
-                <RecipesList/>
+                <RecipesList selectedCategory={null}/>
                 {/*must add a variable for the user id - if missed then show all recipes (for the homepage)*/}
             </div>
             <div className="rateThisAuthor">

@@ -30,6 +30,7 @@ const validateJWT = (token: string | null): boolean => {
 
 const HomePage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
@@ -39,10 +40,10 @@ const HomePage = () => {
 
     return (
         <div className="homepage-body">
-            <Sidebar />
+            <Sidebar setSelectedCategory={setSelectedCategory}/>
             <Header isLoggedIn={isLoggedIn} isProfilePage={false} isHomePage={true}/>
             <div className="content">
-                <RecipesList />
+                <RecipesList selectedCategory={selectedCategory}/>
             </div>
             <Footer />
         </div>

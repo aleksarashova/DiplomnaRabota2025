@@ -55,7 +55,9 @@
     font-weight: bolder;
 }
 
-.categoryButton:hover {
+.categoryButton:hover,
+.categoryButton.active
+{
     color: white;
     background-color: #282828;
 }
