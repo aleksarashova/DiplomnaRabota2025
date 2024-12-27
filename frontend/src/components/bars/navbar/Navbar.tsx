@@ -8,15 +8,14 @@ import { MdAppRegistration } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import SearchBar from "../searchbar/searchbar";
 
-import { TiDocumentAdd } from "react-icons/ti";
-
 interface NavbarProps {
     isLoggedIn: boolean;
     isProfilePage: boolean;
     isHomePage: boolean;
+    setSearchText?: (text: string) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isProfilePage, isHomePage }) => {
+const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isProfilePage, isHomePage, setSearchText }) => {
     const navbarClass = isHomePage
         ? "navbar-home"
         : "navbar-home navbar-default";
@@ -31,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isProfilePage, isHomePage }
         <nav className={navbarClass}>
             {isHomePage && (
                 <div className="search-bar-nav">
-                    <SearchBar />
+                    <SearchBar setSearchText={setSearchText}/>
                 </div>
             )}
 

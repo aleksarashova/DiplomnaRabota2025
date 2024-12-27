@@ -7,16 +7,17 @@ interface NavbarProps {
     isLoggedIn: boolean;
     isProfilePage: boolean;
     isHomePage: boolean;
+    setSearchText?: (text: string) => void;
 }
 
-const Header: React.FC<NavbarProps> = ({ isLoggedIn, isProfilePage, isHomePage }) => {
+const Header: React.FC<NavbarProps> = ({ isLoggedIn, isProfilePage, isHomePage, setSearchText }) => {
 
     return (
         <div className="header">
             { isHomePage &&
                 <h1 className="siteTitle">CookeryPlace</h1>
             }
-            <Navbar isLoggedIn={isLoggedIn} isProfilePage={isProfilePage} isHomePage={isHomePage}/>
+            <Navbar isLoggedIn={isLoggedIn} isProfilePage={isProfilePage} isHomePage={isHomePage} setSearchText={setSearchText} />
         </div>
     );
 }

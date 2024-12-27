@@ -11,9 +11,10 @@ import {validateJWT} from "../../pages/authCheck";
 
 interface RecipesListProps {
     selectedCategory: string | null;
+    searchText?: string;
 }
 
-const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory }) => {
+const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText = "" }: RecipesListProps) => {
     const [recipes, setRecipes] = useState<Recipe[] | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
@@ -34,11 +35,14 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory }) => {
         fetchRecipes();
     }, []);
 
-    const filteredRecipes = recipes
-        ? selectedCategory
-            ? recipes.filter((recipe) => recipe.category === selectedCategory)
-            : recipes
-        : [];
+    const filteredRecipes = recipes?.filter((recipe) => {
+        const matchesCategory =
+            selectedCategory === null || recipe.category === selectedCategory;
+        const matchesSearch =
+            searchText.trim() === "" ||
+            recipe.title.toLowerCase().includes(searchText.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
 
     return (
         <div className="recipes-list-section">
@@ -50,7 +54,7 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory }) => {
                 </Link>
             )}
             <div className="recipes-list">
-                {filteredRecipes.length > 0 ? (
+                {filteredRecipes && filteredRecipes.length > 0 ? (
                     filteredRecipes.map((recipe) => (
                         <div key={recipe.id} className="recipe">
                             <Link to={`/singleview/${recipe.id}`} className="recipeLink">
