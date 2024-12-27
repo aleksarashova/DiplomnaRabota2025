@@ -7,7 +7,7 @@ import { Recipe } from "./types";
 import { Link } from "react-router-dom";
 import FoodImage from "../../images/altImage.png";
 import { FaComment, FaHeart } from "react-icons/fa";
-import {validateJWT} from "../../pages/authCheck";
+import { validateJWT } from "../../pages/authCheck";
 
 interface RecipesListProps {
     selectedCategory: string | null;
@@ -19,43 +19,33 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     useEffect(() => {
-        const token = localStorage.getItem("accessToken");
-        const isValid = token && validateJWT(token);
-        setIsLoggedIn(!!isValid);
-
         const fetchRecipes = async () => {
+            const token = localStorage.getItem("accessToken");
+            const isValid = token && validateJWT(token);
+            setIsLoggedIn(!!isValid);
+
             try {
-                const recipesData = await getAllApprovedRecipes();
+                const recipesData = await getAllApprovedRecipes(selectedCategory, searchText);
                 setRecipes(recipesData);
             } catch (error) {
                 console.error("Error getting recipes:", error);
+                setRecipes([]);
             }
         };
 
         fetchRecipes();
-    }, []);
-
-    const filteredRecipes = recipes?.filter((recipe) => {
-        const matchesCategory =
-            selectedCategory === null || recipe.category === selectedCategory;
-        const matchesSearch =
-            searchText.trim() === "" ||
-            recipe.title.toLowerCase().includes(searchText.toLowerCase());
-        return matchesCategory && matchesSearch;
-    });
+    }, [selectedCategory, searchText]);
 
     return (
         <div className="recipes-list-section">
             {isLoggedIn && (
                 <Link to="/add-recipe" className="link-for-recipe-creation">
-                    <p className="recipe-creation-caption">
-                        Create your own recipe here
-                    </p>
+                    <p className="recipe-creation-caption">Create your own recipe here</p>
                 </Link>
             )}
             <div className="recipes-list">
-                {filteredRecipes && filteredRecipes.length > 0 ? (
-                    filteredRecipes.map((recipe) => (
+                {recipes && recipes.length > 0 ? (
+                    recipes.map((recipe) => (
                         <div key={recipe.id} className="recipe">
                             <Link to={`/singleview/${recipe.id}`} className="recipeLink">
                                 <img
@@ -88,6 +78,6 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
             </div>
         </div>
     );
-};
+}
 
 export default RecipesList;

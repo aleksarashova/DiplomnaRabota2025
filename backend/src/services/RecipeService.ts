@@ -83,9 +83,30 @@ export const getAllRecipesData = async (): Promise<GetRecipeDTO[]> => {
     }
 }
 
-export const getAllApprovedRecipesData = async (): Promise<GetRecipeDTO[]> => {
+interface FilterParams {
+    category?: string;
+    searchText?: string;
+}
+
+export const getAllApprovedRecipesData = async (filterParams: FilterParams): Promise<GetRecipeDTO[]> => {
+    const { category, searchText } = filterParams;
+
     try {
-        const recipesRaw = await Recipe.find({ is_approved: true })
+        const queryConditions: any = { is_approved: true };
+
+        if (category) {
+            const categoryDoc = await Category.findOne({ name: category }); // Adjust field name if necessary
+            if (!categoryDoc) {
+                throw new Error(`Category "${category}" not found.`);
+            }
+            queryConditions.category = categoryDoc._id;
+        }
+
+        if (searchText) {
+            queryConditions.title = { $regex: searchText, $options: "i" };
+        }
+
+        const recipesRaw = await Recipe.find(queryConditions)
             .populate("author", "username")
             .populate("category", "name");
 
@@ -93,7 +114,7 @@ export const getAllApprovedRecipesData = async (): Promise<GetRecipeDTO[]> => {
 
         for (const recipe of recipesRaw) {
             const comments = await Comment.find({
-                '_id': { $in: recipe.comments },
+                _id: { $in: recipe.comments },
             });
 
             const approvedComments = comments.filter(comment => comment.is_approved);
@@ -109,8 +130,6 @@ export const getAllApprovedRecipesData = async (): Promise<GetRecipeDTO[]> => {
                 comments: approvedComments.length,
                 image: recipe.image || undefined,
             });
-
-            recipes.filter(recipe => recipe.is_approved);
         }
 
         return recipes;
@@ -118,7 +137,7 @@ export const getAllApprovedRecipesData = async (): Promise<GetRecipeDTO[]> => {
         if (error instanceof Error) {
             throw new Error(error.message);
         }
-        throw new Error("Unknown error while getting all recipes.");
+        throw new Error("Unknown error while getting all approved recipes.");
     }
 }
 

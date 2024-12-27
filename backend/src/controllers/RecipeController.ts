@@ -20,8 +20,11 @@ export const getAllRecipes = async (req: Request, res: Response) => {
 
 export const getAllApprovedRecipes = async (req: Request, res: Response) => {
     try {
-        const recipes = await getAllApprovedRecipesData();
-        res.status(200).json({ recipes: recipes });
+        const category = typeof req.query.category === "string" ? req.query.category : undefined;
+        const searchText = typeof req.query.searchText === "string" ? req.query.searchText : undefined;
+
+        const recipes = await getAllApprovedRecipesData({ category, searchText });
+        res.status(200).json({ recipes });
     } catch (error) {
         console.error("Error during trying to get all approved recipes:", error);
 
