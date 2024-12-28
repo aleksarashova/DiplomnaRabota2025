@@ -122,6 +122,9 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
         getIsRecipeFavouriteAndLiked();
     }, []);
 
+    const recipeImagePath = recipeData?.image ? `http://localhost:8000${recipeData.image}` : FoodImage;
+    console.log(recipeImagePath);
+
     return (
         <div className="commonInfoImageWrapper">
             <div className="commonInfoSingle">
@@ -160,7 +163,7 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
                     </button>
                 </div>
             </div>
-            <img src={FoodImage} alt="No photo" className="recipeImageSingle" />
+            <img src={recipeImagePath} alt="No photo" className="recipeImageSingle" />
         </div>
     );
 }
