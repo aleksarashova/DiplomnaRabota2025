@@ -50,11 +50,6 @@ export const addRecipeSchema = Yup.object().shape({
             "is-array",
             "Products must be an array.",
             (value) => Array.isArray(value)
-        )
-        .test(
-            "non-empty-items",
-            "Each product should be a valid string in the format 'name(quantity)'",
-            (value) => Array.isArray(value) && value.every((item) => typeof item === 'string' && item.trim().length > 0)
         ),
     preparation_steps: Yup.mixed()
         .transform((value) => {
@@ -72,11 +67,6 @@ export const addRecipeSchema = Yup.object().shape({
             "is-array",
             "Preparation steps must be an array.",
             (value) => Array.isArray(value)
-        )
-        .test(
-            "non-empty-items",
-            "Each preparation step must be a non-empty string.",
-            (value) => Array.isArray(value) && value.every((item) => typeof item === 'string' && item.trim().length > 0)
         ),
 })
 

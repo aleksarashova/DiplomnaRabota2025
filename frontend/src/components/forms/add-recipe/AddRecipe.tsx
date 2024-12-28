@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import RecipeCreationError from "../../popups/errors/RecipeCreationError";
 import RecipeCreationSuccessfulMessage from "../../popups/messages/RecipeCreationSuccessfulMessage";
 import { addRecipe, getAllCategories } from "./requests";
+import preparation from "../../pages/single/moreInfo/preparation";
 
 const AddRecipeForm = () => {
     const [categories, setCategories] = useState<string[] | null>(null);
@@ -102,8 +103,12 @@ const AddRecipeForm = () => {
         formData.append("time_for_cooking", (e.target as HTMLFormElement).timeForCooking.value);
         formData.append("servings", (e.target as HTMLFormElement).servings.value);
         const productsAsArrayOfStrings = products.map(product => `${product.name} (${product.quantity})`);
-        formData.append("products", JSON.stringify(productsAsArrayOfStrings));
-        formData.append("preparation_steps", JSON.stringify(steps));
+        if(products.length != 0) {
+            formData.append("products", JSON.stringify(productsAsArrayOfStrings));
+        }
+        if(steps.length != 0) {
+            formData.append("preparation_steps", JSON.stringify(steps));
+        }
 
         if (image) {
             formData.append("image", image);
