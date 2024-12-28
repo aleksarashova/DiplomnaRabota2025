@@ -44,7 +44,14 @@ export const makeRecipe = async (req: ExtendedRequest, res: Response) => {
             return;
         }
 
-        const newRecipe = await addRecipe(req.body, userId);
+        const imagePath = req.file?.path || null;
+
+        const newRecipeData = {
+            ...req.body,
+            image: imagePath, 
+        };
+
+        const newRecipe = await addRecipe(newRecipeData, userId);
         res.status(201).json({ message: "Recipe created successfully", recipe: newRecipe });
     } catch (error) {
         console.error("Error during making recipe:", error);
