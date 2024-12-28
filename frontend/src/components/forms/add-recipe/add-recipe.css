@@ -53,13 +53,33 @@
     background-color: whitesmoke;
 }
 
+.recipeFormInputImageLabel {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-size: 16px;
+}
+
+.recipeFormInputImageLabel:hover {
+    background-color: #45a049;
+}
+
+.recipeFormInputImageLabel:active {
+    background-color: #3e8e41;
+}
+
+
 .recipeFormInputTitle,
 .recipeFormInputTime,
 .recipeFormInputServings,
 .recipeFormInputCategory,
 .recipeFormInputProduct,
 .recipeFormInputQuantity,
-.recipeFormInputStep
+.recipeFormInputStep,
+.recipeFormInputImage
 {
     border: none;
     background: transparent;
@@ -147,11 +167,12 @@
 .addRecipeButton {
     margin-left: auto;
     margin-right: 20px;
-    width: 150px;
-    height: 40px;
+    width: 180px;
+    height: 60px;
     background: cornflowerblue;
     border: 1px solid grey;
     border-radius: 5px;
     font-weight: bolder;
+    font-size: 18px;
     color: white;
 }

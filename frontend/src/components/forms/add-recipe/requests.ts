@@ -1,5 +1,3 @@
-import {AddRecipeFormData} from "./types";
-
 export const getAllCategories = async () => {
     try {
         const response = await fetch("http://localhost:8000/api/categories/get-all", {
@@ -23,15 +21,14 @@ export const getAllCategories = async () => {
     }
 }
 
-export const addRecipe = async (formData: AddRecipeFormData, accessToken: string) => {
+export const addRecipe = async (formData: FormData, accessToken: string) => {
     try {
         const response = await fetch("http://localhost:8000/api/recipes/add-recipe", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
             },
-            body: JSON.stringify(formData),
+            body: formData,
         });
 
         const data = await response.json();

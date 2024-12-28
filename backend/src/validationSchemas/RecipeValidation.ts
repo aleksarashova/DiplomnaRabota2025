@@ -36,13 +36,14 @@ export const addRecipeSchema = Yup.object().shape({
         .max(100, "Servings must not exceed 100."),
     products: Yup.array()
         .of(
-            Yup.string()
-                .required("Each product must be a valid string.")
-                .test(
-                    "not-blank",
-                    "Product name cannot consist only of spaces or be empty.",
-                    (value) => !!value && value.trim().length > 0
-                )
+            Yup.object().shape({
+                name: Yup.string()
+                    .required("Product name is required.")
+                    .test("not-blank", "Product name cannot consist only of spaces or be empty.", (value) => !!value && value.trim().length > 0),
+                quantity: Yup.string()
+                    .required("Product quantity is required.")
+                    .test("not-blank", "Quantity cannot consist only of spaces or be empty.", (value) => !!value && value.trim().length > 0),
+            })
         )
         .min(1, "At least one product is required.")
         .required("Products are required."),

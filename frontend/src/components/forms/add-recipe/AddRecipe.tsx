@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import "../form.css";
 import "./add-recipe.css";
-
 import { useNavigate } from "react-router-dom";
-
 import RecipeCreationError from "../../popups/errors/RecipeCreationError";
 import RecipeCreationSuccessfulMessage from "../../popups/messages/RecipeCreationSuccessfulMessage";
-
 import { addRecipe, getAllCategories } from "./requests";
-import { AddRecipeFormData } from "./types";
-import { registerUser } from "../register/requests";
 
 const AddRecipeForm = () => {
     const [categories, setCategories] = useState<string[] | null>(null);
@@ -19,6 +14,7 @@ const AddRecipeForm = () => {
     const [step, setStep] = useState<string>("");
     const [products, setProducts] = useState<{ name: string; quantity: string }[]>([]);
     const [steps, setSteps] = useState<string[]>([]);
+    const [image, setImage] = useState<File | null>(null);
 
     const [visibilityRecipeCreationErrorPopup, setVisibilityRecipeCreationErrorPopup] = useState(false);
     const [visibilitySuccessfulRecipeCreation, setVisibilitySuccessfulRecipeCreation] = useState(false);
@@ -82,6 +78,13 @@ const AddRecipeForm = () => {
         setSteps((prev) => prev.filter((_, i) => i !== index));
     }
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setImage(file);
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -93,16 +96,22 @@ const AddRecipeForm = () => {
             return;
         }
 
-        const formData: AddRecipeFormData = {
-            title: (e.target as HTMLFormElement).recipeTitle.value,
-            category: selectedCategory || "",
-            time_for_cooking: (e.target as HTMLFormElement).timeForCooking.value,
-            servings: (e.target as HTMLFormElement).servings.value,
-            products: products.map(product => `${product.name} (${product.quantity})`),
-            preparation_steps: steps
-        };
+        const formData = new FormData();
+        formData.append("title", (e.target as HTMLFormElement).recipeTitle.value);
+        formData.append("category", selectedCategory || "");
+        formData.append("time_for_cooking", (e.target as HTMLFormElement).timeForCooking.value);
+        formData.append("servings", (e.target as HTMLFormElement).servings.value);
+        products.forEach((product, index) => {
+            formData.append(`product_${index + 1}_name`, product.name);
+            formData.append(`product_${index + 1}_quantity`, product.quantity);
+        });
+        formData.append("preparation_steps", JSON.stringify(steps));
 
-        console.log("Recipe Data to Submit:", formData);
+        if (image) {
+            formData.append("image", image);
+        }
+
+        console.log("Form Data to Submit:", formData);
 
         try {
             const data = await addRecipe(formData, accessToken);
@@ -207,6 +216,20 @@ const AddRecipeForm = () => {
                         </button>
                     </div>
 
+                    <div className="addRecipeFormInputBox">
+                        <p className="recipeFormInputImage">Upload image for your recipe</p>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            onChange={handleImageChange}
+                            accept="image/jpeg, image/png, image/jpg"
+                            style={{ display: 'none' }}
+                        />
+                        <label htmlFor="fileInput" className="recipeFormInputImageLabel">
+                            {image ? image.name : "Choose file..."}
+                        </label>
+                    </div>
+
                     <h3 className="productListTitle">Product list:</h3>
                     <ol className="productList">
                         {products.map((item, index) => (
@@ -262,7 +285,7 @@ const AddRecipeForm = () => {
                 />
             )}
         </div>
-    )
+    );
 }
 
 export default AddRecipeForm;

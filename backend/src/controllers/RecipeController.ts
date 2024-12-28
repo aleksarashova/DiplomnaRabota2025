@@ -48,7 +48,7 @@ export const makeRecipe = async (req: ExtendedRequest, res: Response) => {
 
         const newRecipeData = {
             ...req.body,
-            image: imagePath, 
+            image: imagePath,
         };
 
         const newRecipe = await addRecipe(newRecipeData, userId);

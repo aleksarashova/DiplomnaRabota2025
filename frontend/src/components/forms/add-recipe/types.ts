@@ -5,4 +5,5 @@ export interface AddRecipeFormData {
     servings: number,
     products: string[],
     preparation_steps: string[],
+    image: File | null;
 }
