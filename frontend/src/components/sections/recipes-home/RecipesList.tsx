@@ -60,7 +60,7 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
                                 <Link to={`/singleview/${recipe.id}`} className="recipeLink">
                                     <img
                                         src={recipeImagePath}
-                                        alt={recipe.title}
+                                        alt="No photo"
                                         className="recipeImage"
                                     />
                                 </Link>
