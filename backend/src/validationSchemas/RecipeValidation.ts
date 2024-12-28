@@ -20,7 +20,7 @@ export const addRecipeSchema = Yup.object().shape({
             "is-valid-category",
             "Invalid recipe category.",
             async (value) => {
-                const categoryNames = await getAllCategoryNames(); 
+                const categoryNames = await getAllCategoryNames();
                 return categoryNames.includes(value || "");
             }
         ),
@@ -34,31 +34,50 @@ export const addRecipeSchema = Yup.object().shape({
         .required("Servings are required.")
         .min(1, "Servings must be at least 1.")
         .max(100, "Servings must not exceed 100."),
-    products: Yup.array()
-        .of(
-            Yup.object().shape({
-                name: Yup.string()
-                    .required("Product name is required.")
-                    .test("not-blank", "Product name cannot consist only of spaces or be empty.", (value) => !!value && value.trim().length > 0),
-                quantity: Yup.string()
-                    .required("Product quantity is required.")
-                    .test("not-blank", "Quantity cannot consist only of spaces or be empty.", (value) => !!value && value.trim().length > 0),
-            })
+    products: Yup.mixed()
+        .transform((value) => {
+            if (typeof value === 'string') {
+                try {
+                    return JSON.parse(value);
+                } catch (e) {
+                    return [];
+                }
+            }
+            return value;
+        })
+        .required("Products are required.")
+        .test(
+            "is-array",
+            "Products must be an array.",
+            (value) => Array.isArray(value)
         )
-        .min(1, "At least one product is required.")
-        .required("Products are required."),
-    preparation_steps: Yup.array()
-        .of(
-            Yup.string()
-                .required("Each preparation step must be a valid string.")
-                .test(
-                    "not-blank",
-                    "Preparation step cannot consist only of spaces or be empty.",
-                    (value) => !!value && value.trim().length > 0
-                )
+        .test(
+            "non-empty-items",
+            "Each product should be a valid string in the format 'name(quantity)'",
+            (value) => Array.isArray(value) && value.every((item) => typeof item === 'string' && item.trim().length > 0)
+        ),
+    preparation_steps: Yup.mixed()
+        .transform((value) => {
+            if (typeof value === 'string') {
+                try {
+                    return JSON.parse(value);
+                } catch (e) {
+                    return [];
+                }
+            }
+            return value;
+        })
+        .required("Preparation steps are required.")
+        .test(
+            "is-array",
+            "Preparation steps must be an array.",
+            (value) => Array.isArray(value)
         )
-        .min(1, "At least one preparation step is required.")
-        .required("Preparation steps are required."),
+        .test(
+            "non-empty-items",
+            "Each preparation step must be a non-empty string.",
+            (value) => Array.isArray(value) && value.every((item) => typeof item === 'string' && item.trim().length > 0)
+        ),
 })
 
 export const getRecipeSchema = Yup.object().shape({

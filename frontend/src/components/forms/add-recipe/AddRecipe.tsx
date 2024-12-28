@@ -101,10 +101,8 @@ const AddRecipeForm = () => {
         formData.append("category", selectedCategory || "");
         formData.append("time_for_cooking", (e.target as HTMLFormElement).timeForCooking.value);
         formData.append("servings", (e.target as HTMLFormElement).servings.value);
-        products.forEach((product, index) => {
-            formData.append(`product_${index + 1}_name`, product.name);
-            formData.append(`product_${index + 1}_quantity`, product.quantity);
-        });
+        const productsAsArrayOfStrings = products.map(product => `${product.name} (${product.quantity})`);
+        formData.append("products", JSON.stringify(productsAsArrayOfStrings));
         formData.append("preparation_steps", JSON.stringify(steps));
 
         if (image) {
@@ -112,6 +110,11 @@ const AddRecipeForm = () => {
         }
 
         console.log("Form Data to Submit:", formData);
+        console.log("FormData contents:");
+        formData.forEach((value, key) => {
+            console.log(`${key}:`, value);
+        });
+
 
         try {
             const data = await addRecipe(formData, accessToken);

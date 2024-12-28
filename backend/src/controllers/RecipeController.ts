@@ -46,9 +46,14 @@ export const makeRecipe = async (req: ExtendedRequest, res: Response) => {
 
         const imagePath = req.file?.path || null;
 
+        const products = req.body.products ? JSON.parse(req.body.products) : [];
+        const preparation_steps = req.body.preparation_steps ? JSON.parse(req.body.preparation_steps) : [];
+
         const newRecipeData = {
             ...req.body,
             image: imagePath,
+            products,
+            preparation_steps,
         };
 
         const newRecipe = await addRecipe(newRecipeData, userId);
