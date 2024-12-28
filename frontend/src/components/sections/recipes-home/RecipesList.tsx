@@ -38,6 +38,8 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
         fetchRecipes();
     }, [selectedCategory, searchText]);
 
+
+
     return (
         <div className="recipes-list-section">
             {isLoggedIn && (

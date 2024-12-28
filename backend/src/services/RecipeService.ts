@@ -120,6 +120,9 @@ export const getAllApprovedRecipesData = async (filterParams: FilterParams): Pro
 
             const approvedComments = comments.filter(comment => comment.is_approved);
 
+            const imageName = recipe.image ? path.basename(recipe.image) : undefined;
+            const imagePath = imageName ? `/uploads/recipes/${imageName}` : undefined;
+
             recipes.push({
                 id: recipe._id.toString(),
                 title: recipe.title,
@@ -129,7 +132,7 @@ export const getAllApprovedRecipesData = async (filterParams: FilterParams): Pro
                 category: (recipe.category as any)?.name || "Uncategorized",
                 likes: recipe.likes,
                 comments: approvedComments.length,
-                image: recipe.image || undefined,
+                image: imagePath,
             });
         }
 
