@@ -24,7 +24,7 @@ export const addRecipe = async (recipeData: AddRecipeDTO, userId: string) => {
             preparation_steps: recipeData.preparation_steps,
             likes: 0,
             comments: [],
-            image: "image"
+            image: recipeData.image,
         };
 
         const author = await findUserById(userId);

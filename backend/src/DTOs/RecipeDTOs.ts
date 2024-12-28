@@ -7,6 +7,7 @@ export interface AddRecipeDTO {
     servings: number;
     products: string[];
     preparation_steps: string[];
+    image: string;
 }
 
 export interface GetRecipeDTO {
