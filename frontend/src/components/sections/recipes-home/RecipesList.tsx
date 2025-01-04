@@ -4,7 +4,7 @@ import "./recipes.css";
 import { getAllApprovedRecipes } from "./requests";
 import { Recipe } from "./types";
 
-import { Link } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import FoodImage from "../../images/altImage.png";
 import { FaComment, FaHeart } from "react-icons/fa";
 import { validateJWT } from "../../pages/authCheck";
@@ -20,6 +20,9 @@ interface RecipesListProps {
 const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText = "", author }: RecipesListProps) => {
     const [recipes, setRecipes] = useState<Recipe[] | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+    const location = useLocation();
+    const isHomePage = location.pathname === "/";
 
     useEffect(() => {
         const fetchRecipes = async () => {
@@ -41,7 +44,7 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
 
     return (
         <div className="recipes-list-section">
-            {isLoggedIn && (
+            {isLoggedIn && isHomePage && (
                 <Link to="/add-recipe" className="link-for-recipe-creation">
                     <p className="recipe-creation-caption">
                         <MdOutlineKeyboardDoubleArrowRight className="arrow" />
@@ -87,7 +90,7 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
                 ) : (
                     <p className="noRecipesMessage">No recipes available. Please check back later!</p>
                 )}
-                {isLoggedIn && (
+                {isLoggedIn && isHomePage && (
                     <Link to="/add-recipe">
                         <div className="add-recipe">
                             <TiDocumentAdd className="addRecipeIcon" />
