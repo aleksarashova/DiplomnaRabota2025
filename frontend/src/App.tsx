@@ -27,7 +27,7 @@ function App() {
         <Route path="/verify-profile/:email" element={<VerifyProfileForm />}></Route>
         <Route path="/send-verification-email" element={<SendEmailForm />}></Route>
         <Route path="/add-recipe" element={<AddRecipePage />}></Route>
-        <Route path="/profile" element={<Profile />}></Route>
+        <Route path="/profile/:username" element={<Profile />}></Route>
         <Route path="/myProfile" element={<MyProfile />}></Route>
       </Routes>
     </div>

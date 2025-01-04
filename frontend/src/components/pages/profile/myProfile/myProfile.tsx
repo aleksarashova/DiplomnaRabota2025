@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './my-profile.css';
 
-import profileImage from '../../../images/altImage.png';
-
 import DeleteAccountPopup from '../../../popups/actions/delete-acc/deleteAccountPopup';
 import EditAccountPopup from '../../../popups/actions/edit-profile/editProfileInfoPopup';
 

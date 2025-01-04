@@ -228,10 +228,10 @@ export const getUserProfileData = async (id: string) => {
 
 export const getOtherUserProfileData = async (username: string) => {
     try {
-        const user: UserInterface | null = await findUserByUsername(username);
+        const user = await findUserByUsername(username);
 
         if (!user) {
-            throw new Error('User not found');
+            throw new Error('User not found ddjwjd');
         }
 
         const imageName = user.image ? path.basename(user.image) : undefined;

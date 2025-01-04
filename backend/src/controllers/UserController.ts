@@ -217,7 +217,7 @@ export const getProfileData = async (req: ExtendedRequest, res: Response) => {
             return;
         }
 
-        const { username } = req.body;
+        const username = req.query.username as string;
 
         const userData: OtherUserProfileDTO = await getOtherUserProfileData(username);
         res.status(200).json({ user: userData });

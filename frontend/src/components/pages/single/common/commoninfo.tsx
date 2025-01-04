@@ -130,40 +130,40 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
             <div className="commonInfoSingle">
                 <button className="saveToFavourites" onClick={handleAddOrRemoveFavourites}>
                     {isFavourite ? (
-                        <ImStarFull className="favouritesIconFull" />
+                        <ImStarFull className="favouritesIconFull"/>
                     ) : (
-                        <ImStarFull className="favouritesIconEmpty" />
+                        <ImStarFull className="favouritesIconEmpty"/>
                     )}
                 </button>
                 <div className="likes-comments-single">
-                    <div><FaHeart /> {recipeData?.likes}</div>
-                    <div><FaComment /> {recipeData?.comments?.length}</div>
+                    <div><FaHeart/> {recipeData?.likes}</div>
+                    <div><FaComment/> {recipeData?.comments?.length}</div>
                 </div>
                 <div className="recipeTitleSingle">{recipeData?.title}</div>
                 <div className="recipeAuthorSingle">
-                    <Link to="/profile" className="profileLink">
-                        <CgProfile className="profileIcon" />
+                    <Link to={`/profile/${recipeData?.author}`} className="profileLink">
+                        <CgProfile className="profileIcon"/>
                         {recipeData?.author}
                     </Link>
                 </div>
-                <div className="recipeDateOfPostingSingle"><MdOutlineMenuBook />{recipeData?.date}</div>
-                <div className="recipeCategorySingle"><MdOutlineMenuBook />{recipeData?.category}</div>
-                <div className="recipeTimeSingle"><FaHourglassHalf />{recipeData?.time_for_cooking}</div>
-                <div className="recipeServingsSingle"><PiForkKnifeFill />{recipeData?.servings}</div>
+                <div className="recipeDateOfPostingSingle"><MdOutlineMenuBook/>{recipeData?.date}</div>
+                <div className="recipeCategorySingle"><MdOutlineMenuBook/>{recipeData?.category}</div>
+                <div className="recipeTimeSingle"><FaHourglassHalf/>{recipeData?.time_for_cooking}</div>
+                <div className="recipeServingsSingle"><PiForkKnifeFill/>{recipeData?.servings}</div>
                 <div className="leave-like-comment">
                     <button className="leaveLike" onClick={handleAddOrRemoveLiked}>
                         {isLiked ? (
-                            <VscHeartFilled className="likeIconFull" />
+                            <VscHeartFilled className="likeIconFull"/>
                         ) : (
-                            <VscHeartFilled className="likeIconEmpty" />
+                            <VscHeartFilled className="likeIconEmpty"/>
                         )}
                     </button>
                     <button className="leaveComment" onClick={onCommentClick}>
-                        <FaRegComment className="commentIcon" />
+                        <FaRegComment className="commentIcon"/>
                     </button>
                 </div>
             </div>
-            <img src={recipeImagePath} alt="No photo" className="recipeImageSingle" />
+            <img src={recipeImagePath} alt="No photo" className="recipeImageSingle"/>
         </div>
     );
 }

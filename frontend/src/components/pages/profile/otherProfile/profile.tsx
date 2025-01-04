@@ -11,35 +11,75 @@ import RecipesList from '../../../sections/recipes-home/RecipesList';
 import Footer from "../../../sections/footer/Footer";
 import Header from "../../../sections/header/Header";
 import {validateJWT} from "../../authCheck";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {getOtherUserDataRequest} from "./requests";
+import {OtherUserData} from "./types";
+import altImage from "../../../images/altImage.png";
 
 const Profile = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [userData, setUserData] = useState<OtherUserData | null>(null);
     const navigateTo = useNavigate();
 
-    useEffect(() => {
-        const token = localStorage.getItem("accessToken");
-        const isValid = token && validateJWT(token);
-        setIsLoggedIn(!!isValid);
+    const { username } = useParams();
 
-        if (isValid) {
-            //get the data of the particular user - tva mi ostava
-        } else {
-            navigateTo("/login");
-        }
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = localStorage.getItem("accessToken");
+            const isValid = token && validateJWT(token);
+            setIsLoggedIn(!!isValid);
+
+            if (isValid) {
+                try {
+                    await getOtherUserData();
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+            } else {
+                navigateTo("/login");
+            }
+        };
+
+        fetchData();
     }, []);
 
+    const getOtherUserData = async () => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            console.error('No access token found.');
+            navigateTo('/login');
+            return;
+        }
+
+        try {
+            const data = await getOtherUserDataRequest(accessToken, username || "");
+            console.log('Backend Response:', data);
+            setUserData(data.user);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+
+            if (error instanceof Error && error.message.includes('401')) {
+                navigateTo('/login');
+            }
+        }
+    }
 
     if (!isLoggedIn) {
         return null;
     }
+
+    const userImagePath = userData?.image ? `http://localhost:8000${userData.image}` : altImage;
+    console.log(userImagePath);
+
+    const name = userData?.first_name + " " + userData?.last_name;
+    const usernameFull = "@" + userData?.username;
 
     return (
         <div className="profileWrapper">
             <Header isLoggedIn={isLoggedIn} isProfilePage={false} isHomePage={false}/>
             <div className="commonProfileInfo">
                 <div className="photo-rating-wrapper">
-                    <img src={profileImage} alt="No photo" className="profilePhoto"/>
+                    <img src={userImagePath} alt="Profile Photo" className="profilePhoto"/>
                     <div className="rating">
                         <FaRegStar className="star-rating"/>
                         <FaRegStar className="star-rating"/>
@@ -49,14 +89,11 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className="profileNamesBio">
-                    <div className="nameProfile">Aleksa Rashova</div>
-                    <div className="usernameProfile">@aleksarashova</div>
+                    <div className="nameProfile">{name}</div>
+                    <div className="usernameProfile">{usernameFull}</div>
                     <div className="profileBio">
                         <div className="bioTitle">BIO</div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ornare pretium sagittis. Donec
-                        lacinia efficitur metus id auctor. Nullam vitae dictum eros. Etiam vehicula ex rhoncus velit
-                        gravida, sit amet malesuada orci viverra. In sed nibh tincidunt, pellentesque massa et, dictum
-                        elit. Nullam varius turpis sapien, ac lacinia velit feugiat nec
+                        {userData?.bio}
                     </div>
                 </div>
             </div>
