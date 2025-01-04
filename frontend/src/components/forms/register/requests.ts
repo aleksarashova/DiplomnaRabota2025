@@ -1,13 +1,8 @@
-import { RegisterFormData } from "./types";
-
-export const registerUser = async (formData: RegisterFormData) => {
+export const registerUser = async (formData: FormData) => {
     try {
         const response = await fetch("http://localhost:8000/api/users/register", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
+            body: formData,
         });
 
         const data = await response.json();

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import RecipeCreationError from "../../popups/errors/RecipeCreationError";
 import RecipeCreationSuccessfulMessage from "../../popups/messages/RecipeCreationSuccessfulMessage";
 import { addRecipe, getAllCategories } from "./requests";
-import preparation from "../../pages/single/moreInfo/preparation";
 
 const AddRecipeForm = () => {
     const [categories, setCategories] = useState<string[] | null>(null);

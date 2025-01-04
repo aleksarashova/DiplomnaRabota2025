@@ -6,7 +6,6 @@ import "../loading.css";
 import { useNavigate, Link } from "react-router-dom";
 
 import { registerUser } from "./requests";
-import { RegisterFormData } from "./types";
 
 import RegisterError from "../../popups/errors/RegisterError";
 import RegisterSuccessfulMessage from "../../popups/messages/RegisterSuccessfulMessage";
@@ -78,16 +77,19 @@ const RegisterForm = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const formData: RegisterFormData = {
-            first_name: firstNameRef.current?.value || "",
-            last_name: lastNameRef.current?.value || "",
-            email: emailRef.current?.value || "",
-            username: usernameRef.current?.value || "",
-            password: passwordRef.current?.value || "",
-            admin_code: adminCodeRef.current?.value || "",
-        };
+        const formData = new FormData();
+        formData.append("first_name", firstNameRef.current?.value || "");
+        formData.append("last_name", lastNameRef.current?.value || "");
+        formData.append("email", emailRef.current?.value || "");
+        formData.append("username", usernameRef.current?.value || "");
+        formData.append("password", passwordRef.current?.value || "");
+        formData.append("admin_code", adminCodeRef.current?.value || "");
 
         console.log("Form Data Submitted:", formData);
+        console.log("FormData contents:");
+        formData.forEach((value, key) => {
+            console.log(`${key}:`, value);
+        });
 
         setIsLoading(true);
 
