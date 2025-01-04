@@ -97,7 +97,7 @@ const CommentsSection = ({recipeData}: CommentsInfoProps) => {
                         <div key={index} className="comment">
                             <div className="commentAuthor-commentDate-Single">
                                 <div className="commentAuthor">
-                                    <Link to="/profile" className="profileLinkComments">
+                                    <Link to={`/profile/${comment.author.username}`} className="profileLinkComments">
                                         <CgProfile className="profileIcon" />
                                         {comment.author.username}
                                     </Link>
