@@ -2,7 +2,8 @@ import { Recipe } from "./types";
 
 export const getAllApprovedRecipes = async (
     selectedCategory: string | null = null,
-    searchText: string = ""
+    searchText: string = "",
+    author: string | null = null,
 ): Promise<Recipe[]> => {
     const queryParams = new URLSearchParams();
 
@@ -12,6 +13,10 @@ export const getAllApprovedRecipes = async (
 
     if (searchText.trim() !== "") {
         queryParams.append("searchText", searchText);
+    }
+
+    if(author) {
+        queryParams.append("username", author);
     }
 
     console.log(queryParams);

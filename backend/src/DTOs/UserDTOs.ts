@@ -33,5 +33,4 @@ export interface OtherUserProfileDTO {
     username: string;
     bio: string;
     image?: string;
-    recipes: Types.ObjectId[];
 }

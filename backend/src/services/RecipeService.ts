@@ -87,16 +87,17 @@ export const getAllRecipesData = async (): Promise<GetRecipeDTO[]> => {
 interface FilterParams {
     category?: string;
     searchText?: string;
+    username?: string;
 }
 
 export const getAllApprovedRecipesData = async (filterParams: FilterParams): Promise<GetRecipeDTO[]> => {
-    const { category, searchText } = filterParams;
+    const { category, searchText, username } = filterParams;
 
     try {
         const queryConditions: any = { is_approved: true };
 
         if (category) {
-            const categoryDoc = await Category.findOne({ name: category }); // Adjust field name if necessary
+            const categoryDoc = await Category.findOne({ name: category });
             if (!categoryDoc) {
                 throw new Error(`Category "${category}" not found.`);
             }
@@ -105,6 +106,14 @@ export const getAllApprovedRecipesData = async (filterParams: FilterParams): Pro
 
         if (searchText) {
             queryConditions.title = { $regex: searchText, $options: "i" };
+        }
+
+        if (username) {
+            const user = await User.findOne({username});
+            if (!user) {
+                throw new Error(`User "${username}" not found.`);
+            }
+            queryConditions.author = user._id;
         }
 
         const recipesRaw = await Recipe.find(queryConditions)

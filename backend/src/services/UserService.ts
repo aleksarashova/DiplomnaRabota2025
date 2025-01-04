@@ -243,7 +243,6 @@ export const getOtherUserProfileData = async (username: string) => {
             username: user.username,
             bio: user.bio,
             image: imagePath,
-            recipes: user.recipes,
         };
 
         return userData;

@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./profile.css";
 
-import profileImage from "../../../images/altImage.png";
-
 import { FaRegStar } from "react-icons/fa6";
 
 import RecipesList from '../../../sections/recipes-home/RecipesList';
@@ -101,8 +99,7 @@ const Profile = () => {
                 RECIPES OF THIS AUTHOR:
             </div>
             <div className="recipes-list-profile">
-                <RecipesList selectedCategory={null}/>
-                {/*must add a variable for the user id - if missed then show all recipes (for the homepage)*/}
+                <RecipesList author={username}/>
             </div>
             <div className="rateThisAuthor">
                 <div className="rateThisAuthorTitle">

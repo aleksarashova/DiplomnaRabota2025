@@ -12,11 +12,12 @@ import { TiDocumentAdd } from "react-icons/ti";
 import { MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 
 interface RecipesListProps {
-    selectedCategory: string | null;
+    selectedCategory?: string | null;
     searchText?: string;
+    author?: string;
 }
 
-const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText = "" }: RecipesListProps) => {
+const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText = "", author }: RecipesListProps) => {
     const [recipes, setRecipes] = useState<Recipe[] | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
@@ -27,7 +28,7 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
             setIsLoggedIn(!!isValid);
 
             try {
-                const recipesData = await getAllApprovedRecipes(selectedCategory, searchText);
+                const recipesData = await getAllApprovedRecipes(selectedCategory, searchText, author);
                 setRecipes(recipesData);
             } catch (error) {
                 console.error("Error getting recipes:", error);
