@@ -84,6 +84,10 @@ const RegisterForm = () => {
         formData.append("username", usernameRef.current?.value || "");
         formData.append("password", passwordRef.current?.value || "");
         formData.append("admin_code", adminCodeRef.current?.value || "");
+        
+        if (image) {
+            formData.append("image", image);
+        }
 
         console.log("Form Data Submitted:", formData);
         console.log("FormData contents:");
