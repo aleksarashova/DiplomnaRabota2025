@@ -13,6 +13,7 @@ export interface UserInterface {
     recipes: Types.ObjectId[];
     favourites: Types.ObjectId[];
     liked: Types.ObjectId[];
+    image: string;
 }
 
 type UserModel = Model<UserInterface>;
@@ -29,7 +30,8 @@ const UserSchema: Schema = new Schema<UserInterface, UserModel>({
     is_logged_in: { type: Boolean },
     recipes: { type: [Schema.Types.ObjectId], ref: "Recipe" },
     favourites: { type: [Schema.Types.ObjectId], ref: "Recipe" },
-    liked: { type: [Schema.Types.ObjectId], ref: "Recipe" }
+    liked: { type: [Schema.Types.ObjectId], ref: "Recipe" },
+    image: { type: String }
 }, {collection: 'users'});
 
 const User: UserModel = model<UserInterface, UserModel>('User', UserSchema);

@@ -22,10 +22,11 @@ import {
     checkEmailForSendingAVerificationCode,
     checkUniquenessRegister
 } from "../middlewares/UserMiddleware";
+import {uploadProfileImage} from "../middlewares/UploadsMiddleware";
 
 const router: Router = express.Router();
 
-router.post("/register", validateRequest(userRegisterSchema), checkUniquenessRegister, register);
+router.post("/register", uploadProfileImage.single("image"), validateRequest(userRegisterSchema), checkUniquenessRegister, register);
 router.post("/login", validateRequest(userLoginSchema), checkCredentialsLogin, login);
 router.post("/update-profile", validateRequest(profileUpdateSchema), checkAuthentication, updateProfile);
 router.post("/delete-profile", checkAuthentication, deleteProfile);

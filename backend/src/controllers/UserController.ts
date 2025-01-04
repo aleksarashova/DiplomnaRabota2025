@@ -20,10 +20,16 @@ import { UpdateUserDTO, UserProfileDTO } from "../DTOs/UserDTOs";
 
 export const register = async (req: Request, res: Response) => {
     try {
-        const newUser = await createUser(req.body);
+        const imagePath = req.file?.path || null;
+
+        const newUserData = {
+            ...req.body,
+            image: imagePath,
+        };
+        const newUser = await createUser(newUserData);
 
         const {email} = req.body;
-        await sendVerificationEmail(email);
+        // await sendVerificationEmail(email);
 
         res.status(201).json({ message: "User registered successfully.", user: newUser });
     } catch (error) {

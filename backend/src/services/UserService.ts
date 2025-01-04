@@ -3,7 +3,6 @@ import User, {UserInterface} from "../models/User";
 
 import bcrypt from 'bcryptjs';
 import {RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
-import {RecipeInterface} from "../models/Recipe";
 import {findRecipeById} from "./RecipeService";
 
 export const hashPassword = async (password: string) => {
@@ -48,6 +47,7 @@ export const createUser = async (userData: RegisterUserDTO) => {
             recipes: [],
             favourites: [],
             liked: [],
+            image: userData.image,
         };
 
         const newUser: HydratedDocument<UserInterface> = new User(user);

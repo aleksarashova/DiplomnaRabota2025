@@ -7,6 +7,7 @@ export interface RegisterUserDTO {
     username: string;
     password: string;
     admin_code?: string;
+    image: string;
 }
 
 export interface UpdateUserDTO {
