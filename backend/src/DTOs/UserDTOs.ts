@@ -23,4 +23,5 @@ export interface UserProfileDTO {
     email: string;
     password_placeholder: string;
     bio: string;
+    image?: string;
 }

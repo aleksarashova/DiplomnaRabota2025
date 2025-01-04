@@ -15,8 +15,9 @@ import Header from '../../../sections/header/Header';
 import Footer from '../../../sections/footer/Footer';
 
 import { validateJWT } from '../../authCheck';
+import altImage from "../../../images/altImage.png";
 
-const Profile = () => {
+const MyProfile = () => {
     const [visibilityDeleteAccountPopup, setVisibilityDeleteAccountPopup] = useState(false);
     const [visibilityEditAccountPopup, setVisibilityEditAccountPopup] = useState(false);
     const [currentFieldForEdit, setCurrentFieldForEdit] = useState('');
@@ -129,12 +130,15 @@ const Profile = () => {
         return null;
     }
 
+    const userImagePath = userData?.image ? `http://localhost:8000${userData.image}` : altImage;
+    console.log(userImagePath);
+
     return (
         <div className="myProfileWrapper">
             <Header isLoggedIn={isLoggedIn} isProfilePage={true} isHomePage={false} />
             <div className="myProfileInfoBox">
                 <div className="my-photo-wrapper">
-                    <img src={profileImage} alt="No photo" className="myProfilePhoto" />
+                    <img src={userImagePath} alt="Profile Picture" className="myProfilePhoto" />
                     <button className="editMyProfileButton">Edit</button>
                 </div>
                 <div className="myProfileData">
@@ -242,4 +246,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default MyProfile;

@@ -5,6 +5,7 @@ export type UserData = {
     email: string;
     password_placeholder: string;
     bio: string;
+    image: string;
 }
 
 export type EditAcc = {

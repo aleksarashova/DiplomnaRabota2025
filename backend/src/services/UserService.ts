@@ -4,6 +4,7 @@ import User, {UserInterface} from "../models/User";
 import bcrypt from 'bcryptjs';
 import {RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 import {findRecipeById} from "./RecipeService";
+import path from "path";
 
 export const hashPassword = async (password: string) => {
     try {
@@ -203,6 +204,9 @@ export const getUserProfileData = async (id: string) => {
             throw new Error('User not found');
         }
 
+        const imageName = user.image ? path.basename(user.image) : undefined;
+        const imagePath = imageName ? `/uploads/profile/${imageName}` : undefined;
+
         const userData: UserProfileDTO = {
             first_name: user.first_name,
             last_name: user.last_name,
@@ -210,6 +214,7 @@ export const getUserProfileData = async (id: string) => {
             username: user.username,
             password_placeholder: "********",
             bio: user.bio,
+            image: imagePath,
         };
 
         return userData;
