@@ -14,11 +14,16 @@ import RegisterSuccessfulMessage from "../../popups/messages/RegisterSuccessfulM
 import { FaUser, FaLock, FaUserSecret } from "react-icons/fa";
 import { MdOutlineDriveFileRenameOutline, MdEmail } from "react-icons/md";
 
+import altImage from "../../images/altImage.png";
+
 const RegisterForm = () => {
     const [visibilityRegisterErrorPopup, setVisibilityRegisterErrorPopup] = useState(false);
     const [visibilitySuccessfulRegisterPopup, setVisibilitySuccessfulRegisterPopup] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
+    const [image, setImage] = useState<File | null>(null);
+    const [previewImage, setPreviewImage] = useState<string>(altImage);
+    const [showOptions, setShowOptions] = useState(false);
 
     const firstNameRef = useRef<HTMLInputElement>(null);
     const lastNameRef = useRef<HTMLInputElement>(null);
@@ -44,6 +49,29 @@ const RegisterForm = () => {
         const email = emailRef.current?.value;
         if (email) {
             navigateTo(`/verify-profile/${encodeURIComponent(email)}`);
+        }
+    }
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setImage(file);
+            setPreviewImage(URL.createObjectURL(file));
+            setShowOptions(false);
+        }
+    }
+
+    const handleRemoveImage = () => {
+        setImage(null);
+        setPreviewImage(altImage);
+        setShowOptions(false);
+    }
+
+    const handleImageClick = () => {
+        if (image) {
+            setShowOptions((prev) => !prev);
+        } else {
+            document.getElementById("fileInput")?.click();
         }
     }
 
@@ -86,9 +114,42 @@ const RegisterForm = () => {
                 <div className="form-content">
                     <form onSubmit={handleSubmit}>
                         <h1 className="form-title">Sign up</h1>
+                        <div className="profile-picture-container" onClick={handleImageClick}>
+                            <img
+                                src={previewImage}
+                                alt="Profile Picture"
+                                className="profile-picture"
+                            />
+                            <input
+                                type="file"
+                                id="fileInput"
+                                onChange={handleImageChange}
+                                accept="image/jpeg, image/png, image/jpg"
+                                style={{display: "none"}}
+                            />
+                            {showOptions && image && (
+                                <div className="image-options">
+                                    <button
+                                        type="button"
+                                        className="change-button"
+                                        onClick={() => document.getElementById("fileInput")?.click()}
+                                    >
+                                        Change
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="remove-button"
+                                        onClick={handleRemoveImage}
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
                         <div className="form-input-box">
                             <div className="form-icon">
-                                <MdOutlineDriveFileRenameOutline />
+                                <MdOutlineDriveFileRenameOutline/>
                             </div>
                             <input
                                 ref={firstNameRef}
@@ -102,7 +163,7 @@ const RegisterForm = () => {
 
                         <div className="form-input-box">
                             <div className="form-icon">
-                                <MdOutlineDriveFileRenameOutline />
+                                <MdOutlineDriveFileRenameOutline/>
                             </div>
                             <input
                                 ref={lastNameRef}
@@ -116,7 +177,7 @@ const RegisterForm = () => {
 
                         <div className="form-input-box">
                             <div className="form-icon">
-                                <MdEmail />
+                                <MdEmail/>
                             </div>
                             <input
                                 ref={emailRef}
@@ -130,7 +191,7 @@ const RegisterForm = () => {
 
                         <div className="form-input-box">
                             <div className="form-icon">
-                                <FaUser />
+                                <FaUser/>
                             </div>
                             <input
                                 ref={usernameRef}
@@ -144,7 +205,7 @@ const RegisterForm = () => {
 
                         <div className="form-input-box">
                             <div className="form-icon">
-                                <FaLock />
+                                <FaLock/>
                             </div>
                             <input
                                 ref={passwordRef}
@@ -158,7 +219,7 @@ const RegisterForm = () => {
 
                         <div className="form-input-box">
                             <div className="form-icon">
-                                <FaUserSecret />
+                                <FaUserSecret/>
                             </div>
                             <input
                                 ref={adminCodeRef}

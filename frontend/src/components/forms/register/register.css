@@ -1,4 +1,51 @@
 #register-wrapper {
     width: 500px;
-    height: 500px;
+    height: 650px;
+}
+
+.profile-picture-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid #ccc;
+}
+
+.image-options {
+    position: absolute;
+    top: 350px;
+    display: flex;
+    gap: 10px;
+}
+
+.change-button,
+.remove-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.remove-button {
+    background-color: #ff4d4f;
+}
+
+.change-button:hover {
+    background-color: #0056b3;
+}
+
+.remove-button:hover {
+    background-color: #d9363e;
 }
