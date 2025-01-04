@@ -2,7 +2,7 @@ import {HydratedDocument} from "mongoose";
 import User, {UserInterface} from "../models/User";
 
 import bcrypt from 'bcryptjs';
-import {RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
+import {OtherUserProfileDTO, RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 import {findRecipeById} from "./RecipeService";
 import path from "path";
 
@@ -223,6 +223,35 @@ export const getUserProfileData = async (id: string) => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while getting the user profile data.");
+    }
+}
+
+export const getOtherUserProfileData = async (username: string) => {
+    try {
+        const user: UserInterface | null = await findUserByUsername(username);
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const imageName = user.image ? path.basename(user.image) : undefined;
+        const imagePath = imageName ? `/uploads/profile/${imageName}` : undefined;
+
+        const userData: OtherUserProfileDTO = {
+            first_name: user.first_name,
+            last_name: user.last_name,
+            username: user.username,
+            bio: user.bio,
+            image: imagePath,
+            recipes: user.recipes,
+        };
+
+        return userData;
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting the other user profile data.");
     }
 }
 

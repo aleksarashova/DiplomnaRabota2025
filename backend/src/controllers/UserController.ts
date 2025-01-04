@@ -12,11 +12,11 @@ import {
     addRecipeToFavouritesList,
     removeRecipeFromFavouritesList,
     checkIsRecipeFavourite,
-    addRecipeToLikedList, removeRecipeFromLikedList, checkIsRecipeLiked
+    addRecipeToLikedList, removeRecipeFromLikedList, checkIsRecipeLiked, getOtherUserProfileData
 } from "../services/UserService";
 import { sendVerificationEmail, validateVerificationCode, deleteRecord } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
-import { UpdateUserDTO, UserProfileDTO } from "../DTOs/UserDTOs";
+import {OtherUserProfileDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -199,6 +199,30 @@ export const getMyProfileData = async (req: ExtendedRequest, res: Response) => {
         res.status(200).json({ user: userData });
     } catch (error) {
         console.error("Error during getting profile data:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const getProfileData = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const { username } = req.body;
+
+        const userData: OtherUserProfileDTO = await getOtherUserProfileData(username);
+        res.status(200).json({ user: userData });
+    } catch (error) {
+        console.error("Error during getting other user data:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});

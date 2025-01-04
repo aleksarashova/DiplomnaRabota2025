@@ -12,7 +12,7 @@ import {
     removeRecipeFromFavourites,
     getIsRecipeFavourite,
     addRecipeToLiked,
-    removeRecipeFromLiked, getIsRecipeLiked
+    removeRecipeFromLiked, getIsRecipeLiked, getProfileData
 } from "../controllers/UserController";
 import {validateRequest} from "../middlewares/RequestValidationMiddleware";
 import {profileUpdateSchema, userLoginSchema, userRegisterSchema} from "../validationSchemas/UserValidation";
@@ -33,6 +33,7 @@ router.post("/delete-profile", checkAuthentication, deleteProfile);
 router.get("/my-profile-data", checkAuthentication, getMyProfileData);
 router.post("/verify-profile", verify);
 router.post("/resend-verification-email", checkEmailForSendingAVerificationCode, resendEmail);
+router.get("/profile-data", checkAuthentication, getProfileData);
 router.post("/add-recipe-to-favourites", checkAuthentication, addRecipeToFavourites);
 router.post("/remove-recipe-from-favourites", checkAuthentication, removeRecipeFromFavourites);
 router.get("/get-is-recipe-favourite", checkAuthentication, getIsRecipeFavourite);

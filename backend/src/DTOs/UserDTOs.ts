@@ -1,4 +1,5 @@
 import { UserInterface } from "../models/User";
+import {Types} from "mongoose";
 
 export interface RegisterUserDTO {
     first_name: string;
@@ -24,4 +25,13 @@ export interface UserProfileDTO {
     password_placeholder: string;
     bio: string;
     image?: string;
+}
+
+export interface OtherUserProfileDTO {
+    first_name: string;
+    last_name: string;
+    username: string;
+    bio: string;
+    image?: string;
+    recipes: Types.ObjectId[];
 }
