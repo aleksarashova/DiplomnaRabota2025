@@ -72,3 +72,27 @@ export const editAccountRequest = async (accessToken: string, formData: EditAcc)
         throw error;
     }
 }
+
+export const editProfilePictureRequest = async (accessToken: string, formData: FormData) => {
+    try {
+        const response = await fetch("http://localhost:8000/api/edit-profile-picture", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`,
+            },
+            body: formData,
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorMessage = data.errors && data.errors.length > 0 ? data.errors[0] : data.message || "An unknown error occurred";
+            throw new Error(errorMessage);
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error during updating profile picture:", error);
+        throw error;
+    }
+}

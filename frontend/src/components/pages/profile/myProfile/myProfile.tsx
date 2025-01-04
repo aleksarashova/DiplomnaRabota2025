@@ -3,11 +3,12 @@ import './my-profile.css';
 
 import DeleteAccountPopup from '../../../popups/actions/delete-acc/deleteAccountPopup';
 import EditAccountPopup from '../../../popups/actions/edit-profile/editProfileInfoPopup';
+import EditProfilePicturePopup from '../../../popups/actions/edit-profile/editProfilePicturePopup';
 
 import { useNavigate } from 'react-router-dom';
 
 import { EditAcc, UserData } from './types';
-import { deleteAccountRequest, editAccountRequest, getUserDataRequest } from './requests';
+import {deleteAccountRequest, editAccountRequest, editProfilePictureRequest, getUserDataRequest} from './requests';
 
 import Header from '../../../sections/header/Header';
 import Footer from '../../../sections/footer/Footer';
@@ -18,10 +19,13 @@ import altImage from "../../../images/altImage.png";
 const MyProfile = () => {
     const [visibilityDeleteAccountPopup, setVisibilityDeleteAccountPopup] = useState(false);
     const [visibilityEditAccountPopup, setVisibilityEditAccountPopup] = useState(false);
+    const [visibilityEditProfilePicturePopup, setVisibilityEditProfilePicturePopup] = useState(false);
     const [currentFieldForEdit, setCurrentFieldForEdit] = useState('');
     const [userData, setUserData] = useState<UserData | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
     const navigateTo = useNavigate();
 
     useEffect(() => {
@@ -65,6 +69,42 @@ const MyProfile = () => {
         }
     }
 
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            setSelectedImage(event.target.files[0]);
+        }
+    }
+
+    const handleEditProfilePicture = async () => {
+        if (!selectedImage) {
+            console.error("No image selected.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("profilePicture", selectedImage);
+
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            console.error('No access token found.');
+            navigateTo('/login');
+            return;
+        }
+
+        try {
+            const data = await editProfilePictureRequest(accessToken, formData);
+            console.log("Profile picture updated successfully:", data);
+            setVisibilityEditProfilePicturePopup(false);
+            window.location.reload();
+        } catch (error) {
+            console.error("Error updating profile picture:", error);
+        }
+    }
+
+    const handleCancelEditProfilePicture = () => {
+        setVisibilityEditProfilePicturePopup(false);
+    }
+
     const handleDeleteAccount = async () => {
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
@@ -87,11 +127,7 @@ const MyProfile = () => {
                 navigateTo('/login');
             }
         }
-    }
-
-    const handleCancelDeleteAccount = () => {
-        setVisibilityDeleteAccountPopup(false);
-    }
+    };
 
     const handleEditAccount = async (input: string): Promise<void> => {
         const accessToken = localStorage.getItem('accessToken');
@@ -120,24 +156,24 @@ const MyProfile = () => {
         }
     }
 
-    const handleCancelEditAccount = () => {
-        setVisibilityEditAccountPopup(false);
-    }
-
     if (!isLoggedIn) {
         return null;
     }
 
     const userImagePath = userData?.image ? `http://localhost:8000${userData.image}` : altImage;
-    console.log(userImagePath);
 
     return (
         <div className="myProfileWrapper">
             <Header isLoggedIn={isLoggedIn} isProfilePage={true} isHomePage={false} />
             <div className="myProfileInfoBox">
                 <div className="my-photo-wrapper">
-                    <img src={userImagePath} alt="Profile Picture" className="myProfilePhoto" />
-                    <button className="editMyProfileButton">Edit</button>
+                    <img src={userImagePath} alt="Profile Picture" className="myProfilePhoto"/>
+                    <button
+                        className="editMyProfileButton"
+                        onClick={() => setVisibilityEditProfilePicturePopup(true)}
+                    >
+                        Edit
+                    </button>
                 </div>
                 <div className="myProfileData">
                     <div className="editField">
@@ -148,7 +184,7 @@ const MyProfile = () => {
                     </div>
 
                     <div className="editField">
-                    <div className="field">
+                        <div className="field">
                             <div className="fieldTitle">Last name</div>
                             <div className="fieldContent">{userData?.last_name}</div>
                         </div>
@@ -175,15 +211,6 @@ const MyProfile = () => {
                             <div className="fieldTitle">Email</div>
                             <div className="fieldContent">{userData?.email}</div>
                         </div>
-                        <button
-                            className="editMyProfileButton"
-                            onClick={() => {
-                                setVisibilityEditAccountPopup(true);
-                                setCurrentFieldForEdit('email');
-                            }}
-                        >
-                            Edit
-                        </button>
                     </div>
 
                     <div className="editField">
@@ -227,19 +254,21 @@ const MyProfile = () => {
 
             {visibilityDeleteAccountPopup && (
                 <DeleteAccountPopup
-                    handleCancelDeleteAccount={handleCancelDeleteAccount}
+                    handleCancelDeleteAccount={() => setVisibilityDeleteAccountPopup(false)}
                     handleDeleteAccount={handleDeleteAccount}
                 />
             )}
 
-            {visibilityEditAccountPopup && (
-                <EditAccountPopup
-                    handleCancelEditAccount={handleCancelEditAccount}
-                    handleEditAccount={handleEditAccount}
-                    fieldToEdit={currentFieldForEdit}
+            {visibilityEditProfilePicturePopup && (
+                <EditProfilePicturePopup
+                    handleCancelEditProfilePicture={handleCancelEditProfilePicture}
+                    handleEditProfilePicture={handleEditProfilePicture}
+                    handleImageChange={handleImageChange}
+                    selectedImage={selectedImage}
                 />
             )}
-            <Footer />
+
+            <Footer/>
         </div>
     );
 };
