@@ -8,8 +8,8 @@
 
 .link-for-recipe-creation {
     text-decoration: none;
-    margin-right: 770px;
-    margin-bottom: 60px;
+    margin-right: 750px;
+    margin-bottom: 40px;
 }
 
 .recipe-creation-caption {
@@ -21,6 +21,14 @@
     justify-content: center;
     align-items: center;
     color: #282828;
+    background-color: #FFE4C4;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.recipe-creation-caption:hover {
+    color: #FFE4C4;
+    background-color: #282828;
 }
 
 .addRecipeIcon {
@@ -28,6 +36,10 @@
     height: 380px;
     color: #282828;
     background-color: transparent;
+}
+
+.addRecipeIcon:hover {
+    color: plum;
 }
 
 .recipes-list {

@@ -75,7 +75,7 @@ export const editAccountRequest = async (accessToken: string, formData: EditAcc)
 
 export const editProfilePictureRequest = async (accessToken: string, formData: FormData) => {
     try {
-        const response = await fetch("http://localhost:8000/api/edit-profile-picture", {
+        const response = await fetch("http://localhost:8000/api/users/edit-profile-picture", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
