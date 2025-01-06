@@ -101,6 +101,10 @@ const MyProfile = () => {
         }
     }
 
+    const handleCancelEditAccount = () => {
+        setVisibilityEditAccountPopup(false);
+    }
+
     const handleCancelEditProfilePicture = () => {
         setVisibilityEditProfilePicturePopup(false);
     }
@@ -259,12 +263,22 @@ const MyProfile = () => {
                 />
             )}
 
+
+
             {visibilityEditProfilePicturePopup && (
                 <EditProfilePicturePopup
                     handleCancelEditProfilePicture={handleCancelEditProfilePicture}
                     handleEditProfilePicture={handleEditProfilePicture}
                     handleImageChange={handleImageChange}
                     selectedImage={selectedImage}
+                />
+            )}
+
+            {visibilityEditAccountPopup && (
+                <EditAccountPopup
+                    handleCancelEditAccount={handleCancelEditAccount}
+                    handleEditAccount={handleEditAccount}
+                    fieldToEdit={currentFieldForEdit}
                 />
             )}
 
