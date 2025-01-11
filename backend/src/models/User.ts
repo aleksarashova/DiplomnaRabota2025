@@ -15,7 +15,7 @@ export interface UserInterface {
     liked: Types.ObjectId[];
     image: string;
     ratings: {
-        userId: Types.ObjectId;
+        raterId: Types.ObjectId;
         rating: number;
     }[];
 }
@@ -37,8 +37,8 @@ const UserSchema: Schema = new Schema<UserInterface, UserModel>({
     liked: { type: [Schema.Types.ObjectId], ref: "Recipe" },
     image: { type: String },
     ratings: [{
-        userId: { type: Schema.Types.ObjectId, ref: "User" },
-        rating: { type: Number, min: 1, max: 5 }  
+        raterId: { type: Schema.Types.ObjectId, ref: "User" },
+        rating: { type: Number, min: 1, max: 5 }
     }],
 }, {collection: 'users'});
 

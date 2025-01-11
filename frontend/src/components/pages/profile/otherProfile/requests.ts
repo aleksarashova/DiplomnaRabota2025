@@ -1,3 +1,5 @@
+import {RateUserData} from "./types";
+
 export const getOtherUserDataRequest = async (accessToken: string, username: string) => {
     try {
         const response = await fetch(`http://localhost:8000/api/users/profile-data?username=${username}`, {
@@ -22,7 +24,7 @@ export const getOtherUserDataRequest = async (accessToken: string, username: str
     }
 }
 
-export const rateUserRequest = async (accessToken: string, rating: number) => {
+export const rateUserRequest = async (accessToken: string, rateData: RateUserData) => {
     try {
         const response = await fetch(`http://localhost:8000/api/users/rate-user`, {
             method: "POST",
@@ -30,7 +32,7 @@ export const rateUserRequest = async (accessToken: string, rating: number) => {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
             },
-            body: JSON.stringify({ rating }),
+            body: JSON.stringify(rateData),
         });
 
         const data = await response.json();

@@ -11,7 +11,7 @@ import Header from "../../../sections/header/Header";
 import {validateJWT} from "../../authCheck";
 import {useNavigate, useParams} from "react-router-dom";
 import {getOtherUserDataRequest, rateUserRequest} from "./requests";
-import {OtherUserData} from "./types";
+import {OtherUserData, RateUserData} from "./types";
 import altImage from "../../../images/altImage.png";
 import {FaStar} from "react-icons/fa";
 
@@ -78,9 +78,15 @@ const Profile = () => {
             return;
         }
 
+        const rateData: RateUserData =  {
+            userBeingRated: username || "",
+            rating: selectedRating,
+        }
+
         try {
-            // const data = await rateUserRequest(accessToken, selectedRating);
+            await rateUserRequest(accessToken, rateData);
             setRating(selectedRating);
+            //window.location.reload();
         } catch (error) {
             console.error('Error rating the author:', error);
 

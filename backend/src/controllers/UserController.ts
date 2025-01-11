@@ -17,7 +17,7 @@ import {
     checkIsRecipeLiked,
     getOtherUserProfileData,
     updateProfilePicture,
-    removeProfilePicture
+    removeProfilePicture, changeUserRating
 } from "../services/UserService";
 import { sendVerificationEmail, validateVerificationCode, deleteRecord } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
@@ -418,6 +418,30 @@ export const deleteProfilePicture = async(req: ExtendedRequest, res:Response) =>
         res.status(200).json("Profile picture deleted successfully.");
     } catch(error) {
         console.error("Error during deleting profile picture:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const rateUser = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const rateData = req.body;
+
+        await changeUserRating(userId, rateData.userBeingRated, rateData.rating);
+        res.status(200).json("User rated successfully.");
+    } catch(error) {
+        console.error("Error during rating author:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});

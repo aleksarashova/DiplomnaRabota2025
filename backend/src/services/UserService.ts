@@ -1,4 +1,4 @@
-import {HydratedDocument} from "mongoose";
+import {HydratedDocument, Types} from "mongoose";
 import User, {UserInterface} from "../models/User";
 
 import bcrypt from 'bcryptjs';
@@ -50,6 +50,7 @@ export const createUser = async (userData: RegisterUserDTO) => {
             favourites: [],
             liked: [],
             image: userData.image,
+            ratings: [],
         };
 
         const newUser: HydratedDocument<UserInterface> = new User(user);
@@ -483,4 +484,31 @@ export const removeProfilePicture = async(userId: string) => {
     }
 }
 
+export const changeUserRating = async (userIdOfRater: string, usernameOfUserBeingRated: string, rating: number) => {
+    try {
+        const userBeingRated = await findUserByUsername(usernameOfUserBeingRated);
+
+        if (!userBeingRated) {
+            throw new Error('User not found.');
+        }
+
+        const existingRating = userBeingRated.ratings.find(r => r.raterId.toString() === userIdOfRater);
+
+        if (existingRating) {
+            existingRating.rating = rating;
+            console.log(`Updated rating from user ${userIdOfRater} to ${rating}`);
+        } else {
+            const raterObjectId = new Types.ObjectId(userIdOfRater);
+            userBeingRated.ratings.push({ raterId: raterObjectId, rating });
+            console.log(`Added new rating from user ${userIdOfRater} with rating ${rating}`);
+        }
+
+        await userBeingRated.save();
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while updating rating.");
+    }
+}
 

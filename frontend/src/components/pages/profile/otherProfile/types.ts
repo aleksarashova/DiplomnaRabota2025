@@ -6,3 +6,8 @@ export type OtherUserData = {
     image: string;
     recipes: string[];
 }
+
+export type RateUserData = {
+    userBeingRated: string;
+    rating: number;
+}

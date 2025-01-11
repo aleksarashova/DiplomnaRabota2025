@@ -12,7 +12,7 @@ import {
     removeRecipeFromFavourites,
     getIsRecipeFavourite,
     addRecipeToLiked,
-    removeRecipeFromLiked, getIsRecipeLiked, getProfileData, editProfilePicture, deleteProfilePicture
+    removeRecipeFromLiked, getIsRecipeLiked, getProfileData, editProfilePicture, deleteProfilePicture, rateUser
 } from "../controllers/UserController";
 import {validateRequest} from "../middlewares/RequestValidationMiddleware";
 import {profileUpdateSchema, userLoginSchema, userRegisterSchema} from "../validationSchemas/UserValidation";
@@ -42,5 +42,6 @@ router.get("/get-is-recipe-favourite", checkAuthentication, getIsRecipeFavourite
 router.post("/add-recipe-to-liked", checkAuthentication, addRecipeToLiked);
 router.post("/remove-recipe-from-liked", checkAuthentication, removeRecipeFromLiked);
 router.get("/get-is-recipe-liked", checkAuthentication, getIsRecipeLiked);
+router.post("/rate-user", checkAuthentication, rateUser);
 
 export default router;
