@@ -12,7 +12,7 @@ import {
     removeRecipeFromFavourites,
     getIsRecipeFavourite,
     addRecipeToLiked,
-    removeRecipeFromLiked, getIsRecipeLiked, getProfileData, editProfilePicture
+    removeRecipeFromLiked, getIsRecipeLiked, getProfileData, editProfilePicture, deleteProfilePicture
 } from "../controllers/UserController";
 import {validateRequest} from "../middlewares/RequestValidationMiddleware";
 import {profileUpdateSchema, userLoginSchema, userRegisterSchema} from "../validationSchemas/UserValidation";
@@ -30,6 +30,7 @@ router.post("/register", uploadProfileImage.single("image"), validateRequest(use
 router.post("/login", validateRequest(userLoginSchema), checkCredentialsLogin, login);
 router.post("/update-profile", validateRequest(profileUpdateSchema), checkAuthentication, updateProfile);
 router.post("/edit-profile-picture", uploadProfileImage.single("image"), checkAuthentication, editProfilePicture);
+router.post("/delete-profile-picture", checkAuthentication, deleteProfilePicture);
 router.post("/delete-profile", checkAuthentication, deleteProfile);
 router.get("/my-profile-data", checkAuthentication, getMyProfileData);
 router.post("/verify-profile", verify);

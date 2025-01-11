@@ -448,4 +448,25 @@ export const updateProfilePicture = async(userId: string, imagePath: string | nu
     }
 }
 
+export const removeProfilePicture = async(userId: string) => {
+    try {
+        const user = await findUserById(userId);
+
+        if (!user) {
+            throw new Error('User not found.');
+        }
+
+        const oldImagePath = user.image;
+        user.image = "";
+        await user.save();
+
+        await deleteFile(oldImagePath);
+    }  catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while updating profile picture.");
+    }
+}
+
 
