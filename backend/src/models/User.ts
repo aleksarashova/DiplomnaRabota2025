@@ -14,6 +14,10 @@ export interface UserInterface {
     favourites: Types.ObjectId[];
     liked: Types.ObjectId[];
     image: string;
+    ratings: {
+        userId: Types.ObjectId;
+        rating: number;
+    }[];
 }
 
 type UserModel = Model<UserInterface>;
@@ -31,7 +35,11 @@ const UserSchema: Schema = new Schema<UserInterface, UserModel>({
     recipes: { type: [Schema.Types.ObjectId], ref: "Recipe" },
     favourites: { type: [Schema.Types.ObjectId], ref: "Recipe" },
     liked: { type: [Schema.Types.ObjectId], ref: "Recipe" },
-    image: { type: String }
+    image: { type: String },
+    ratings: [{
+        userId: { type: Schema.Types.ObjectId, ref: "User" },
+        rating: { type: Number, min: 1, max: 5 }  
+    }],
 }, {collection: 'users'});
 
 const User: UserModel = model<UserInterface, UserModel>('User', UserSchema);
