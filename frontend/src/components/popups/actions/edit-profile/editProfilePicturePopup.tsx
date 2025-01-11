@@ -6,6 +6,7 @@ type EditProfilePicturePopupProps = {
     handleCancelEditProfilePicture: () => void;
     handleEditProfilePicture: () => void;
     handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleRemoveImage: () => void;
     selectedImage: File | null;
 };
 
@@ -14,6 +15,7 @@ const EditProfilePicturePopup = ({
          handleCancelEditProfilePicture,
          handleEditProfilePicture,
          handleImageChange,
+         handleRemoveImage,
          selectedImage,
      }: EditProfilePicturePopupProps) => {
     return (
@@ -34,6 +36,7 @@ const EditProfilePicturePopup = ({
                     <div className="popupButtons">
                         <button onClick={handleCancelEditProfilePicture} className="cancelDeleteButton">Cancel</button>
                         <button onClick={handleEditProfilePicture} className="confirmEditButton">Save</button>
+                        <button onClick={handleRemoveImage} className="setDefaultButton">Reset</button>
                     </div>
                 </div>
             </div>

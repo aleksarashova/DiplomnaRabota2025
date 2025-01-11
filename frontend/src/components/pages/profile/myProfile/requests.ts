@@ -96,3 +96,26 @@ export const editProfilePictureRequest = async (accessToken: string, formData: F
         throw error;
     }
 }
+
+export const deleteProfilePictureRequest = async (accessToken: string) => {
+    try {
+        const response = await fetch("http://localhost:8000/api/users/delete-profile-picture", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`,
+            },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorMessage = data.errors && data.errors.length > 0 ? data.errors[0] : data.message || "An unknown error occurred";
+            throw new Error(errorMessage);
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error during deleting profile picture:", error);
+        throw error;
+    }
+}

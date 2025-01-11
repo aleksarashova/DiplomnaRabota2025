@@ -8,7 +8,13 @@ import EditProfilePicturePopup from '../../../popups/actions/edit-profile/editPr
 import { useNavigate } from 'react-router-dom';
 
 import { EditAcc, UserData } from './types';
-import {deleteAccountRequest, editAccountRequest, editProfilePictureRequest, getUserDataRequest} from './requests';
+import {
+    deleteAccountRequest,
+    deleteProfilePictureRequest,
+    editAccountRequest,
+    editProfilePictureRequest,
+    getUserDataRequest
+} from './requests';
 
 import Header from '../../../sections/header/Header';
 import Footer from '../../../sections/footer/Footer';
@@ -71,7 +77,27 @@ const MyProfile = () => {
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
-            setSelectedImage(event.target.files[0]);
+            const file = event.target.files[0];
+            setSelectedImage(file);
+        }
+    }
+
+    const handleRemoveImage = async () => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            console.error('No access token found.');
+            navigateTo('/login');
+            return;
+        }
+
+        try {
+            const data = await deleteProfilePictureRequest(accessToken);
+            console.log("Profile picture deleted successfully:", data);
+            setSelectedImage(null);
+            setVisibilityEditProfilePicturePopup(false);
+            window.location.reload();
+        } catch (error) {
+            console.error("Error deleting profile picture:", error);
         }
     }
 
@@ -270,6 +296,7 @@ const MyProfile = () => {
                     handleCancelEditProfilePicture={handleCancelEditProfilePicture}
                     handleEditProfilePicture={handleEditProfilePicture}
                     handleImageChange={handleImageChange}
+                    handleRemoveImage={handleRemoveImage}
                     selectedImage={selectedImage}
                 />
             )}
