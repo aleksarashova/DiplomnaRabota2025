@@ -27,6 +27,11 @@ export interface UserProfileDTO {
     image?: string;
 }
 
+export interface Rating {
+    raterId: Types.ObjectId;
+    rating: number;
+}
+
 export interface OtherUserProfileDTO {
     first_name: string;
     last_name: string;
@@ -34,4 +39,6 @@ export interface OtherUserProfileDTO {
     bio: string;
     image?: string;
     isOwnProfile: boolean;
+    ratings: Rating[];
+    averageRating: number;
 }

@@ -237,17 +237,28 @@ export const getOtherUserProfileData = async (username: string, userId: string) 
         const user = await findUserByUsername(username);
 
         if (!user) {
-            throw new Error('User not found ddjwjd');
+            throw new Error('User not found');
         }
 
         const profileUserId = user._id.toString();
 
         let isOwnProfile = false;
 
-        if(profileUserId === userId) {
-            console.log("User is opening his own profile.");
+        if (profileUserId === userId) {
+            console.log("User is opening their own profile.");
             isOwnProfile = true;
         }
+
+        const ratings = user.ratings || [];
+
+        let averageRating = 0;
+        if (ratings.length > 0) {
+            const totalRating = ratings.reduce((sum, ratingObj) => sum + ratingObj.rating, 0);
+            averageRating = totalRating / ratings.length;
+        }
+
+        const roundedRating = Math.round(averageRating);
+        const finalRating = Math.min(Math.max(roundedRating, 1), 5);
 
         const imageName = user.image ? path.basename(user.image) : undefined;
         const imagePath = imageName ? `/uploads/profile/${imageName}` : undefined;
@@ -259,11 +270,13 @@ export const getOtherUserProfileData = async (username: string, userId: string) 
             bio: user.bio,
             image: imagePath,
             isOwnProfile: isOwnProfile,
+            ratings: ratings,
+            averageRating: finalRating,
         };
 
         return userData;
-    } catch(error) {
-        if(error instanceof Error) {
+    } catch (error) {
+        if (error instanceof Error) {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while getting the other user profile data.");
