@@ -163,7 +163,11 @@ export const updateUserProfile = async(updatedUserData: UpdateUserDTO) => {
             throw new Error("User ID is required.");
         }
         if (!updatedUserData.field || !updatedUserData.value) {
-            throw new Error("Both field and value are required for updating the profile.");
+            if(updatedUserData.field != "bio") {
+                throw new Error("Both field and value are required for updating the profile.");
+            } else {
+                updatedUserData.value = "";
+            }
         }
 
         const user = await findUserById(updatedUserData.user_id);

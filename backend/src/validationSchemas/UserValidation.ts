@@ -76,7 +76,6 @@ export const profileUpdateSchema = Yup.object({
                     );
             case "bio":
                 return Yup.string()
-                    .required("Bio is required")
                     .max(250, "Bio must not exceed 250 characters");
             default:
                 return Yup.mixed().notRequired();
