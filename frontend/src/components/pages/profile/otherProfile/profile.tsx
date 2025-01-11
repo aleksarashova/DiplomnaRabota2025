@@ -10,14 +10,16 @@ import Footer from "../../../sections/footer/Footer";
 import Header from "../../../sections/header/Header";
 import {validateJWT} from "../../authCheck";
 import {useNavigate, useParams} from "react-router-dom";
-import {getOtherUserDataRequest} from "./requests";
+import {getOtherUserDataRequest, rateUserRequest} from "./requests";
 import {OtherUserData} from "./types";
 import altImage from "../../../images/altImage.png";
+import {FaStar} from "react-icons/fa";
 
 const Profile = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [userData, setUserData] = useState<OtherUserData | null>(null);
     const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
+    const [rating, setRating] = useState<number>(0);
 
     const navigateTo = useNavigate();
 
@@ -68,6 +70,26 @@ const Profile = () => {
         }
     }
 
+    const handleRating = async (selectedRating: number) => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            console.error('No access token found.');
+            navigateTo('/login');
+            return;
+        }
+
+        try {
+            // const data = await rateUserRequest(accessToken, selectedRating);
+            setRating(selectedRating);
+        } catch (error) {
+            console.error('Error rating the author:', error);
+
+            if (error instanceof Error && error.message.includes('401')) {
+                navigateTo('/login');
+            }
+        }
+    }
+
     if (!isLoggedIn) {
         return null;
     }
@@ -108,18 +130,18 @@ const Profile = () => {
                 <RecipesList author={username}/>
             </div>
             { !isOwnProfile && (
-            <div className="rateThisAuthor">
-                <div className="rateThisAuthorTitle">
-                    RATE THIS AUTHOR
-                </div>
-                    <div className="stars">
-                        <FaRegStar className="star-form"/>
-                        <FaRegStar className="star-form"/>
-                        <FaRegStar className="star-form"/>
-                        <FaRegStar className="star-form"/>
-                        <FaRegStar className="star-form"/>
+                <div className="rateThisAuthor">
+                    <div className="rateThisAuthorTitle">
+                        RATE THIS AUTHOR
                     </div>
-            </div>
+                    <div className="stars">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <span key={star} onClick={() => handleRating(star)}>
+                                {rating >= star ? <FaStar className="star-form-filled"/> : <FaRegStar className="star-form"/>}
+                            </span>
+                        ))}
+                    </div>
+                </div>
             )}
             <Footer/>
         </div>
