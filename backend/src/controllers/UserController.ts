@@ -12,7 +12,7 @@ import {
     addRecipeToFavouritesList,
     removeRecipeFromFavouritesList,
     checkIsRecipeFavourite,
-    addRecipeToLikedList, removeRecipeFromLikedList, checkIsRecipeLiked, getOtherUserProfileData
+    addRecipeToLikedList, removeRecipeFromLikedList, checkIsRecipeLiked, getOtherUserProfileData, updateProfilePicture
 } from "../services/UserService";
 import { sendVerificationEmail, validateVerificationCode, deleteRecord } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
@@ -367,6 +367,30 @@ export const getIsRecipeLiked = async(req: ExtendedRequest, res:Response) => {
         res.status(200).json({isLiked: isLiked});
     } catch(error) {
         console.error("Error during checking is recipe in liked:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const editProfilePicture = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const imagePath = req.file?.path || null;
+
+        await updateProfilePicture(userId, imagePath);
+        res.status(200).json("Profile picture updated successfully.");
+    } catch(error) {
+        console.error("Error during editing profile picture:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});

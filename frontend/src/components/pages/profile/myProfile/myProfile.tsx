@@ -82,7 +82,7 @@ const MyProfile = () => {
         }
 
         const formData = new FormData();
-        formData.append("profilePicture", selectedImage);
+        formData.append("image", selectedImage);
 
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {

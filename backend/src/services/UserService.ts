@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import {OtherUserProfileDTO, RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 import {findRecipeById} from "./RecipeService";
 import path from "path";
+import {deleteFile} from "./FileService";
 
 export const hashPassword = async (password: string) => {
     try {
@@ -419,6 +420,31 @@ export const checkIsRecipeLiked = async (recipeId: string, userId: string) => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while checking is recipe liked.");
+    }
+}
+
+export const updateProfilePicture = async(userId: string, imagePath: string | null) => {
+    try {
+        if (!imagePath) {
+            throw new Error("Image path is missing.");
+        }
+
+        const user = await findUserById(userId);
+
+        if (!user) {
+            throw new Error('User not found.');
+        }
+
+        const oldImagePath = user.image;
+        user.image = imagePath;
+        await user.save();
+
+        await deleteFile(oldImagePath);
+    }  catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while updating profile picture.");
     }
 }
 
