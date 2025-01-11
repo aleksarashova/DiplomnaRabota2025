@@ -17,6 +17,8 @@ import altImage from "../../../images/altImage.png";
 const Profile = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [userData, setUserData] = useState<OtherUserData | null>(null);
+    const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
+
     const navigateTo = useNavigate();
 
     const { username } = useParams();
@@ -53,6 +55,7 @@ const Profile = () => {
             const data = await getOtherUserDataRequest(accessToken, username || "");
             console.log('Backend Response:', data);
             setUserData(data.user);
+            setIsOwnProfile(data.user.isOwnProfile);
         } catch (error) {
             console.error('Error fetching user data:', error);
 
@@ -101,18 +104,20 @@ const Profile = () => {
             <div className="recipes-list-profile">
                 <RecipesList author={username}/>
             </div>
+            { !isOwnProfile && (
             <div className="rateThisAuthor">
                 <div className="rateThisAuthorTitle">
                     RATE THIS AUTHOR
                 </div>
-                <div className="stars">
-                    <FaRegStar className="star-form"/>
-                    <FaRegStar className="star-form"/>
-                    <FaRegStar className="star-form"/>
-                    <FaRegStar className="star-form"/>
-                    <FaRegStar className="star-form"/>
-                </div>
+                    <div className="stars">
+                        <FaRegStar className="star-form"/>
+                        <FaRegStar className="star-form"/>
+                        <FaRegStar className="star-form"/>
+                        <FaRegStar className="star-form"/>
+                        <FaRegStar className="star-form"/>
+                    </div>
             </div>
+            )}
             <Footer/>
         </div>
     );
