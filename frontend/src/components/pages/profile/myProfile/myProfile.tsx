@@ -168,6 +168,13 @@ const MyProfile = () => {
             return;
         }
 
+        if (input === currentFieldValue) {
+            console.log('No change detected. Skipping request.');
+            setVisibilityEditAccountPopup(false);
+            return;
+        }
+
+
         const formData: EditAcc = {
             field: currentFieldForEdit,
             value: input,
