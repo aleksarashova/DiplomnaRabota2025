@@ -231,12 +231,21 @@ export const getUserProfileData = async (id: string) => {
     }
 }
 
-export const getOtherUserProfileData = async (username: string) => {
+export const getOtherUserProfileData = async (username: string, userId: string) => {
     try {
         const user = await findUserByUsername(username);
 
         if (!user) {
             throw new Error('User not found ddjwjd');
+        }
+
+        const profileUserId = user._id.toString();
+
+        let isOwnProfile = false;
+
+        if(profileUserId === userId) {
+            console.log("User is opening his own profile.");
+            isOwnProfile = true;
         }
 
         const imageName = user.image ? path.basename(user.image) : undefined;
@@ -248,6 +257,7 @@ export const getOtherUserProfileData = async (username: string) => {
             username: user.username,
             bio: user.bio,
             image: imagePath,
+            isOwnProfile: isOwnProfile,
         };
 
         return userData;

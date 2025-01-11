@@ -224,7 +224,7 @@ export const getProfileData = async (req: ExtendedRequest, res: Response) => {
 
         const username = req.query.username as string;
 
-        const userData: OtherUserProfileDTO = await getOtherUserProfileData(username);
+        const userData: OtherUserProfileDTO = await getOtherUserProfileData(username, userId);
         res.status(200).json({ user: userData });
     } catch (error) {
         console.error("Error during getting other user data:", error);

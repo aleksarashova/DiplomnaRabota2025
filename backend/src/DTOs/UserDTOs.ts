@@ -33,4 +33,5 @@ export interface OtherUserProfileDTO {
     username: string;
     bio: string;
     image?: string;
+    isOwnProfile: boolean;
 }
