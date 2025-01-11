@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../../common.css";
 import "./edit-account-popup.css";
 
@@ -6,13 +6,17 @@ type EditAccountPopupProps = {
     handleCancelEditAccount: () => void;
     handleEditAccount: (input: string) => void;
     fieldToEdit: string;
+    currentValue: string;
 }
 
-const EditAccountPopup = ({handleCancelEditAccount, handleEditAccount, fieldToEdit} : EditAccountPopupProps) => {
-    const inputValueRef = useRef<HTMLTextAreaElement>(null);
+const EditAccountPopup = ({handleCancelEditAccount, handleEditAccount, fieldToEdit, currentValue} : EditAccountPopupProps) => {
+    const [inputValue, setInputValue] = useState(currentValue);
+
+    useEffect(() => {
+        setInputValue(currentValue);
+    }, [currentValue]);
 
     const handleEdit = () => {
-        const inputValue = inputValueRef.current?.value || "";
         handleEditAccount(inputValue);
     }
 
@@ -22,8 +26,9 @@ const EditAccountPopup = ({handleCancelEditAccount, handleEditAccount, fieldToEd
                 <div className="popupTitle">Edit {fieldToEdit}</div>
                 <div className="popupContent">
                     <textarea
-                        ref={inputValueRef}
+                        value={inputValue}
                         placeholder={`New ${fieldToEdit}`}
+                        onChange={(e) => setInputValue(e.target.value)}
                         className="edit-input"
                     />
                     <div className="popupButtons">

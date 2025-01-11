@@ -27,6 +27,7 @@ const MyProfile = () => {
     const [visibilityEditAccountPopup, setVisibilityEditAccountPopup] = useState(false);
     const [visibilityEditProfilePicturePopup, setVisibilityEditProfilePicturePopup] = useState(false);
     const [currentFieldForEdit, setCurrentFieldForEdit] = useState('');
+    const [currentFieldValue, setCurrentFieldValue] = useState('');
     const [userData, setUserData] = useState<UserData | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -230,6 +231,7 @@ const MyProfile = () => {
                             onClick={() => {
                                 setVisibilityEditAccountPopup(true);
                                 setCurrentFieldForEdit('username');
+                                setCurrentFieldValue(userData?.username || "");
                             }}
                         >
                             Edit
@@ -271,6 +273,7 @@ const MyProfile = () => {
                             onClick={() => {
                                 setVisibilityEditAccountPopup(true);
                                 setCurrentFieldForEdit('bio');
+                                setCurrentFieldValue(userData?.bio || "");
                             }}
                         >
                             Edit
@@ -306,6 +309,7 @@ const MyProfile = () => {
                     handleCancelEditAccount={handleCancelEditAccount}
                     handleEditAccount={handleEditAccount}
                     fieldToEdit={currentFieldForEdit}
+                    currentValue={currentFieldValue}
                 />
             )}
 
