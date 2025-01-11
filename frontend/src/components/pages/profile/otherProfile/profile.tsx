@@ -32,6 +32,9 @@ const Profile = () => {
             if (isValid) {
                 try {
                     await getOtherUserData();
+                    if(isOwnProfile) {
+                        navigateTo("/myProfile");
+                    }
                 } catch (error) {
                     console.error("Error fetching user data:", error);
                 }
@@ -41,7 +44,7 @@ const Profile = () => {
         };
 
         fetchData();
-    }, []);
+    }, [isOwnProfile]);
 
     const getOtherUserData = async () => {
         const accessToken = localStorage.getItem('accessToken');
