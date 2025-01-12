@@ -254,13 +254,13 @@ export const getOtherUserProfileData = async (username: string, userId: string) 
         const userRating = ratings.find((ratingObj) => ratingObj.raterId.toString() === userId)?.rating || null;
 
         let averageRating = 0;
+        let finalRating = 0;
         if (ratings.length > 0) {
             const totalRating = ratings.reduce((sum, ratingObj) => sum + ratingObj.rating, 0);
             averageRating = totalRating / ratings.length;
+            const roundedRating = Math.round(averageRating);
+            finalRating = Math.min(Math.max(roundedRating, 1), 5);
         }
-
-        const roundedRating = Math.round(averageRating);
-        const finalRating = Math.min(Math.max(roundedRating, 1), 5);
 
         const imageName = user.image ? path.basename(user.image) : undefined;
         const imagePath = imageName ? `/uploads/profile/${imageName}` : undefined;
