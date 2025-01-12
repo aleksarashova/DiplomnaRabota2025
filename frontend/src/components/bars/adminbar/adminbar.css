@@ -78,8 +78,7 @@
     margin-left: 80px;
 }
 
-.show-to-do,
-.show-to-do-categories
+.show-to-do
 {
     display: flex;
     flex-direction: row;
@@ -95,13 +94,7 @@
     margin-left: 40px;
 }
 
-.show-to-do-categories {
-    margin-left: 0;
-    margin-top: 35px;
-}
-
-.show-to-do:hover,
-.show-to-do-categories:hover
+.show-to-do:hover
 {
     background-color: #0056b3;
     color: lightblue;
