@@ -84,8 +84,21 @@
     font-weight: bolder;
 }
 
+.star-form-smaller {
+    font-size: 25px;
+    color: black;
+    font-weight: bolder;
+}
+
 .star-form-filled {
     font-size: xxx-large;
+    color: orange;
+    border: black;
+    font-weight: bolder;
+}
+
+.star-form-filled-smaller {
+    font-size: 25px;
     color: orange;
     border: black;
     font-weight: bolder;

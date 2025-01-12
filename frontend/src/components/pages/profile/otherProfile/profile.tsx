@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import "./profile.css";
 
 import { FaRegStar } from "react-icons/fa6";
 
 import RecipesList from '../../../sections/recipes-home/RecipesList';
-
 
 import Footer from "../../../sections/footer/Footer";
 import Header from "../../../sections/header/Header";
@@ -21,6 +20,7 @@ const Profile = () => {
     const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
     const [averageRating, setAverageRating] = useState<number>(0);
     const [userRating, setUserRating] = useState<number | null>(null);
+    const ratingSectionRef = useRef<HTMLDivElement | null>(null);
 
     const navigateTo = useNavigate();
 
@@ -98,6 +98,10 @@ const Profile = () => {
         }
     }
 
+    const handleScrollToRating = () => {
+        ratingSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
     if (!isLoggedIn) {
         return null;
     }
@@ -118,9 +122,9 @@ const Profile = () => {
                         {[1, 2, 3, 4, 5].map((star) => (
                             <span key={star}>
                                 {averageRating >= star ? (
-                                    <FaStar className="star-form-filled"/>
+                                    <FaStar onClick={handleScrollToRating} className="star-form-filled-smaller"/>
                                 ) : (
-                                    <FaRegStar className="star-form"/>
+                                    <FaRegStar onClick={handleScrollToRating} className="star-form-smaller"/>
                                 )}
                             </span>
                         ))}
@@ -150,7 +154,7 @@ const Profile = () => {
                             <div>RATE THIS AUTHOR</div>
                         )}
                     </div>
-                    <div className="stars">
+                    <div ref={ratingSectionRef}  className="stars">
                         {[1, 2, 3, 4, 5].map((star) => (
                             <span key={star} onClick={() => handleRating(star)}>
                                 {userRating && userRating >= star ? (
