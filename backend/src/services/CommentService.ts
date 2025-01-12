@@ -38,3 +38,14 @@ export const addComment = async(commentData: AddCommentDTO) => {
         throw new Error("Unknown error while adding comment.");
     }
 }
+
+export const getNumberOfUnapprovedComments = async() => {
+    try {
+        return await Comment.countDocuments({ is_approved: false });
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting number of unapproved comments.");
+    }
+}
