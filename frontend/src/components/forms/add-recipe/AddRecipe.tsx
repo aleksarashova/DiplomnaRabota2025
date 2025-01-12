@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import RecipeCreationError from "../../popups/errors/RecipeCreationError";
 import RecipeCreationSuccessfulMessage from "../../popups/messages/RecipeCreationSuccessfulMessage";
 import { addRecipe, getAllCategories } from "./requests";
+import {validateJWT} from "../../pages/authCheck";
 
 const AddRecipeForm = () => {
     const [categories, setCategories] = useState<string[] | null>(null);
@@ -37,8 +38,14 @@ const AddRecipeForm = () => {
     }
 
     const getCategories = async () => {
+        const accessToken = localStorage.getItem("accessToken");
+        const isValid = accessToken && validateJWT(accessToken);
+
+        if (!isValid) {
+            navigateTo("/login");
+        }
         try {
-            const data = await getAllCategories();
+            const data = await getAllCategories(accessToken!);
             console.log("Backend Response:", data);
             setCategories(data.categories);
         } catch (error) {
