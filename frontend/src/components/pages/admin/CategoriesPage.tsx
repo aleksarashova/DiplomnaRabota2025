@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./categories.css";
 
-import {addCategory, getAllCategoriesForAdmin} from "../../bars/adminbar/requests";
+import {addCategory, deleteCategory, getAllCategoriesForAdmin} from "../../bars/adminbar/requests";
 
 import { FaPlus } from "react-icons/fa";
 import {AddCategoryPopup} from "../../popups/actions/add-category/AddCategoryPopup";
@@ -64,6 +64,29 @@ const CategoriesPage = () => {
         setVisibilityAddCategoryPopup(false);
     }
 
+    const handleDeleteCategory = async(category: string) => {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+            console.error("No access token found.");
+            navigateTo("/login");
+            return;
+        }
+
+        try {
+            await deleteCategory(category, accessToken);
+            window.location.reload();
+        } catch (error) {
+            console.error("Error during deleting category:", error);
+
+            if (error instanceof Error) {
+                if (error.message.includes("401")) {
+                    navigateTo("/login");
+                }
+            }
+        }
+    }
+
     return (
         <div className="admin-page-categories">
             <div className="categoriesSection">
@@ -72,7 +95,7 @@ const CategoriesPage = () => {
                     categories.map((category) => (
                         <div key={category} className="category-admin-page">
                             <p className="categoryValue"> {category} </p>
-                            <button className="deleteCategoryButton">DELETE</button>
+                            <button onClick={() => handleDeleteCategory(category)} className="deleteCategoryButton">DELETE</button>
                         </div>
                     ))}
                 <p onClick={() => setVisibilityAddCategoryPopup(true)} className="addNewCategory"><FaPlus /> Add new</p>
