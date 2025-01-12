@@ -251,6 +251,8 @@ export const getOtherUserProfileData = async (username: string, userId: string) 
 
         const ratings = user.ratings || [];
 
+        const userRating = ratings.find((ratingObj) => ratingObj.raterId.toString() === userId)?.rating || null;
+
         let averageRating = 0;
         if (ratings.length > 0) {
             const totalRating = ratings.reduce((sum, ratingObj) => sum + ratingObj.rating, 0);
@@ -270,7 +272,7 @@ export const getOtherUserProfileData = async (username: string, userId: string) 
             bio: user.bio,
             image: imagePath,
             isOwnProfile: isOwnProfile,
-            ratings: ratings,
+            currentUserRating: userRating,
             averageRating: finalRating,
         };
 

@@ -11,7 +11,7 @@ import Header from "../../../sections/header/Header";
 import {validateJWT} from "../../authCheck";
 import {useNavigate, useParams} from "react-router-dom";
 import {getOtherUserDataRequest, rateUserRequest} from "./requests";
-import {OtherUserData, RateUserData} from "./types";
+import {OtherUserData, RateUserData, Rating} from "./types";
 import altImage from "../../../images/altImage.png";
 import {FaStar} from "react-icons/fa";
 
@@ -19,7 +19,8 @@ const Profile = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [userData, setUserData] = useState<OtherUserData | null>(null);
     const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
-    const [rating, setRating] = useState<number>(0);
+    const [averageRating, setAverageRating] = useState<number>(0);
+    const [userRating, setUserRating] = useState<number | null>(null);
 
     const navigateTo = useNavigate();
 
@@ -61,6 +62,8 @@ const Profile = () => {
             console.log('Backend Response:', data);
             setUserData(data.user);
             setIsOwnProfile(data.user.isOwnProfile);
+            setAverageRating(data.user.averageRating);
+            setUserRating(data.user.currentUserRating);
         } catch (error) {
             console.error('Error fetching user data:', error);
 
@@ -85,8 +88,7 @@ const Profile = () => {
 
         try {
             await rateUserRequest(accessToken, rateData);
-            setRating(selectedRating);
-            //window.location.reload();
+            window.location.reload();
         } catch (error) {
             console.error('Error rating the author:', error);
 
@@ -113,11 +115,15 @@ const Profile = () => {
                 <div className="photo-rating-wrapper">
                     <img src={userImagePath} alt="Profile Photo" className="profilePhoto"/>
                     <div className="rating">
-                        <FaRegStar className="star-rating"/>
-                        <FaRegStar className="star-rating"/>
-                        <FaRegStar className="star-rating"/>
-                        <FaRegStar className="star-rating"/>
-                        <FaRegStar className="star-rating"/>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <span key={star}>
+                                {averageRating >= star ? (
+                                    <FaStar className="star-form-filled"/>
+                                ) : (
+                                    <FaRegStar className="star-form"/>
+                                )}
+                            </span>
+                        ))}
                     </div>
                 </div>
                 <div className="profileNamesBio">
@@ -138,12 +144,20 @@ const Profile = () => {
             { !isOwnProfile && (
                 <div className="rateThisAuthor">
                     <div className="rateThisAuthorTitle">
-                        RATE THIS AUTHOR
+                        {userRating !== null ? (
+                            <div>YOU HAVE RATED THIS AUTHOR</div>
+                        ) : (
+                            <div>RATE THIS AUTHOR</div>
+                        )}
                     </div>
                     <div className="stars">
                         {[1, 2, 3, 4, 5].map((star) => (
                             <span key={star} onClick={() => handleRating(star)}>
-                                {rating >= star ? <FaStar className="star-form-filled"/> : <FaRegStar className="star-form"/>}
+                                {userRating && userRating >= star ? (
+                                    <FaStar className="star-form-filled"/>
+                                ) : (
+                                    <FaRegStar className="star-form"/>
+                                )}
                             </span>
                         ))}
                     </div>

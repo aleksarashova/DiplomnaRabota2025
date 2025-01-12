@@ -11,3 +11,8 @@ export type RateUserData = {
     userBeingRated: string;
     rating: number;
 }
+
+export type Rating = {
+    raterId: string;
+    rating: number;
+}
