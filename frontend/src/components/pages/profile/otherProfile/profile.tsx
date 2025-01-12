@@ -21,6 +21,7 @@ const Profile = () => {
     const [averageRating, setAverageRating] = useState<number>(0);
     const [userRating, setUserRating] = useState<number | null>(null);
     const ratingSectionRef = useRef<HTMLDivElement | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const navigateTo = useNavigate();
 
@@ -28,6 +29,8 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
+            window.scrollTo(0, 0);
             const token = localStorage.getItem("accessToken");
             const isValid = token && validateJWT(token);
             setIsLoggedIn(!!isValid);
@@ -44,6 +47,7 @@ const Profile = () => {
             } else {
                 navigateTo("/login");
             }
+            setLoading(false);
         };
 
         fetchData();
@@ -104,6 +108,10 @@ const Profile = () => {
 
     if (!isLoggedIn) {
         return null;
+    }
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
     const userImagePath = userData?.image ? `http://localhost:8000${userData.image}` : altImage;
