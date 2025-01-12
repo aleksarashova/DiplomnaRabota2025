@@ -14,6 +14,7 @@ import MyProfile from "./components/pages/profile/myProfile/myProfile";
 import Profile from "./components/pages/profile/otherProfile/profile";
 import AddRecipePage from "./components/pages/add-recipe/AddRecipe";
 import AdminPage from "./components/pages/admin/AdminPage";
+import CategoriesPage from "./components/pages/admin/CategoriesPage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/profile/:username" element={<Profile />}></Route>
         <Route path="/myProfile" element={<MyProfile />}></Route>
         <Route path="/admin" element={<AdminPage />}></Route>
+        <Route path="/admin/categories" element={<CategoriesPage />}></Route>
       </Routes>
     </div>
   );

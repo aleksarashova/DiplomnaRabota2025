@@ -6,7 +6,7 @@ import { MdOutlinePendingActions } from "react-icons/md";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import {getAllCategories} from "../sidebar/requests";
 import {getNumberOfPendingComments, getNumberOfPendingRecipes} from "./requests";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Adminbar = () => {
     const [numberOfPendingRecipes, setNumberOfPendingRecipes] = useState<number>(0);
@@ -56,7 +56,9 @@ const Adminbar = () => {
                 </div>
                 <div className="to-do-section">
                     <p className="admin-task-title"><MdOutlinePendingActions className="pending-icon"/> MANAGE CATEGORIES </p>
-                    <p className="show-to-do"><FaLongArrowAltRight className="show-to-do-arrow"/>view</p>
+                    <Link to="/admin/categories" className="linkToCategories">
+                        <p className="show-to-do"><FaLongArrowAltRight className="show-to-do-arrow"/>view</p>
+                    </Link>
                 </div>
             </div>
         </div>

@@ -1,0 +1,71 @@
+.admin-page-categories {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.categoriesSection {
+    min-width: 600px;
+    width: fit-content;
+    min-height: 500px;
+    height: fit-content;
+    background-color: whitesmoke;
+    border-radius: 30px;
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 50px;
+    padding: 0 30px;
+}
+
+.category-admin-page {
+    font-size: 35px;
+    font-family: "Century Schoolbook", sans-serif;
+    margin-top: 0;
+    padding-bottom: 20px;
+    width: 100%;
+    border-bottom: 1px solid grey;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.categoryValue {
+    padding: 0;
+    margin: 0 0 0 20px;
+}
+
+.deleteCategoryButton {
+    margin-right: 20px;
+    width: 100px;
+    height: 30px;
+    color: red;
+    background-color: transparent;
+    border: none;
+    font-weight: bolder;
+    font-family: "Bell MT", sans-serif;
+    font-size: 20px;
+}
+
+.categoriesTitleAdmin {
+    font-family: "Bell MT", sans-serif;
+    color: grey;
+    align-self: center;
+    font-size: 60px;
+    padding: 0;
+    margin-bottom: 0;
+    width: 100%;
+    border-bottom: 1px solid gray;
+}
+
+.addNewCategory {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+}

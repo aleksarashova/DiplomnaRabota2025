@@ -1,0 +1,51 @@
+.addCategoryPopup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: whitesmoke;
+    width: 400px;
+    height: 160px;
+    padding: 30px 30px 40px;
+    border-radius: 30px;
+}
+
+#buttonsAddCategory {
+    align-self: flex-end;
+    gap: 15px;
+}
+
+.cancelAddCategoryButton {
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    font-weight: bold;
+}
+
+.confirmAddCategoryButton {
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    color: white;
+    background-color: green;
+    font-weight: bold;
+}
+
+.category-input {
+    border: 1px solid grey;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 20px;
+    width: 300px;
+    height: 30px;
+    resize: none;
+    text-align: left;
+    vertical-align: top;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.category-input:hover {
+    border: 1px solid black;
+}

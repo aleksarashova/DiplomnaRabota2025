@@ -100,3 +100,7 @@
     color: lightblue;
     font-size: 22px;
 }
+
+.linkToCategories {
+    text-decoration: none;
+}
