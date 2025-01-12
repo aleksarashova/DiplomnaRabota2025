@@ -1,6 +1,12 @@
 import { Request, Response } from "express";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
-import {addRecipe, getAllApprovedRecipesData, getAllRecipesData, getRecipeData} from "../services/RecipeService";
+import {
+    addRecipe,
+    getAllApprovedRecipesData,
+    getAllRecipesData,
+    getNumberOfUnapprovedRecipes,
+    getRecipeData
+} from "../services/RecipeService";
 import {GetExtendedRecipeDTO} from "../DTOs/RecipeDTOs";
 
 export const getAllRecipes = async (req: Request, res: Response) => {
@@ -86,6 +92,28 @@ export const getRecipe = async (req: ExtendedRequest, res: Response) => {
         res.status(200).json({ recipe: recipeData });
     } catch (error) {
         console.error("Error during getting recipe data:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const getNumberOfPendingRecipes = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const number = await getNumberOfUnapprovedRecipes();
+        res.status(200).json(number);
+    } catch (error) {
+        console.error("Error during getting number of unpproved recipes:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});

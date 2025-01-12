@@ -16,7 +16,15 @@ export const getNumberOfPendingRecipes = async (accessToken: string): Promise<nu
         throw new Error(errorMessage);
     }
 
-    return data;
+    if (typeof data === "object" && "number" in data) {
+        return data.number;
+    }
+
+    if (typeof data === "number") {
+        return data;
+    }
+
+    throw new Error("Unexpected response format.");
 }
 
 export const getNumberOfPendingComments = async (accessToken: string): Promise<number> => {

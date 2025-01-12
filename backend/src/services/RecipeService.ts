@@ -261,3 +261,15 @@ export const getRecipeData = async (id: string): Promise<GetExtendedRecipeDTO> =
         throw new Error("Unknown error while getting the recipe data.");
     }
 }
+
+export const getNumberOfUnapprovedRecipes = async() => {
+    try {
+        return await Recipe.countDocuments({ is_approved: false });
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting number of unapproved recipes.");
+    }
+}
+
