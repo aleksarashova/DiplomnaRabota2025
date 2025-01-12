@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 
 import Header from "../../sections/header/Header";
-import ForgotPasswordForm from "../../forms/forgot-password/ForgotPasswordForm";
 import Footer from "../../sections/footer/Footer";
 import {useNavigate} from "react-router-dom";
 import {validateJWT} from "../authCheck";
