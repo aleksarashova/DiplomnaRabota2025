@@ -2,29 +2,32 @@
     width: 100vw;
     height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    overflow-y: auto;
+    padding: 0;
 }
 
 .categoriesSection {
-    min-width: 600px;
-    width: fit-content;
-    max-width: 800px;
-    min-height: 500px;
-    height: fit-content;
-    background-color: whitesmoke;
-    border-radius: 30px;
-    border: 2px solid black;
     display: flex;
+    min-width: 800px;
+    min-height: 500px;
+    width: fit-content;
+    height: auto;
+    margin: 50px auto;
+    padding: 0 20px;
+    background: whitesmoke;
+    color: black;
+    box-shadow: 0 0 30px black;
+    border-radius: 2%;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 50px;
-    padding: 0 30px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    overflow-y: auto;
+    align-items: flex-start;
     overflow-x: hidden;
+    overflow-y: visible;
+    gap: 30px;
 }
+
 
 .category-admin-page {
     font-size: 35px;
