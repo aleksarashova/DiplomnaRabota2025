@@ -4,9 +4,9 @@ import "./adminbar.css";
 import { FcViewDetails } from "react-icons/fc";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { FaLongArrowAltRight } from "react-icons/fa";
-import {getAllCategories} from "../sidebar/requests";
 import {getNumberOfPendingComments, getNumberOfPendingRecipes} from "./requests";
 import {Link, useNavigate} from "react-router-dom";
+import {validateJWT} from "../../pages/authCheck";
 
 const Adminbar = () => {
     const [numberOfPendingRecipes, setNumberOfPendingRecipes] = useState<number>(0);
@@ -16,20 +16,26 @@ const Adminbar = () => {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const accessToken = localStorage.getItem('accessToken');
-            if (!accessToken) {
-                console.error('No access token found.');
-                navigateTo('/login');
-                return;
+            const accessToken = localStorage.getItem("accessToken");
+            const isValid = accessToken && validateJWT(accessToken);
+
+            if (!isValid) {
+                navigateTo("/login");
             }
 
             try {
-                const numberRecipes = await getNumberOfPendingRecipes(accessToken);
+                const numberRecipes = await getNumberOfPendingRecipes(accessToken!);
                 setNumberOfPendingRecipes(numberRecipes);
-                const numberComments = await getNumberOfPendingComments(accessToken);
+                const numberComments = await getNumberOfPendingComments(accessToken!);
                 setNumberOfPendingComments(numberComments);
             } catch (error) {
                 console.error("Error getting categories:", error);
+
+                if (error instanceof Error) {
+                    if (error.message.includes("401")) {
+                        navigateTo("/login");
+                    }
+                }
             }
         };
 

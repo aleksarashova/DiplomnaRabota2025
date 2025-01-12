@@ -56,11 +56,12 @@ export const getNumberOfPendingComments = async (accessToken: string): Promise<n
     throw new Error("Unexpected response format.");
 }
 
-export const getAllCategoriesForAdmin = async (): Promise<string[]> => {
+export const getAllCategoriesForAdmin = async (accessToken: string): Promise<string[]> => {
     const response = await fetch(`http://localhost:8000/api/categories/get-all`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
         },
     });
     const data = await response.json();
@@ -76,11 +77,12 @@ export const getAllCategoriesForAdmin = async (): Promise<string[]> => {
     return data.categories;
 }
 
-export const addCategory = async(category: string) => {
+export const addCategory = async(category: string, accessToken: string) => {
     const response = await fetch(`http://localhost:8000/api/categories/add-new`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
         },
         body: JSON.stringify({category}),
     });

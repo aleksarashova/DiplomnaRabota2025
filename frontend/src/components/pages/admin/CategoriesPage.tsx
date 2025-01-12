@@ -6,6 +6,7 @@ import {addCategory, getAllCategoriesForAdmin} from "../../bars/adminbar/request
 import { FaPlus } from "react-icons/fa";
 import {AddCategoryPopup} from "../../popups/actions/add-category/AddCategoryPopup";
 import {useNavigate} from "react-router-dom";
+import {validateJWT} from "../authCheck";
 
 const CategoriesPage = () => {
     const [categories, setCategories] = useState<string[] | null>(null);
@@ -14,9 +15,16 @@ const CategoriesPage = () => {
     const navigateTo = useNavigate();
 
     useEffect(() => {
+        const accessToken = localStorage.getItem("accessToken");
+        const isValid = accessToken && validateJWT(accessToken);
+
+        if (!isValid) {
+            navigateTo("/login");
+        }
+
         const fetchCategories = async () => {
             try {
-                const categories = await getAllCategoriesForAdmin();
+                const categories = await getAllCategoriesForAdmin(accessToken!);
                 setCategories(categories);
             } catch (error) {
                 console.error("Error getting categories:", error);
@@ -36,12 +44,19 @@ const CategoriesPage = () => {
         }
 
         try {
-            const data = await addCategory(category);
+            const data = await addCategory(category, accessToken);
 
             console.log("Backend Response:", data);
             setVisibilityAddCategoryPopup(false);
+            window.location.reload();
         } catch (error) {
             console.error("Error during adding category:", error);
+
+            if (error instanceof Error) {
+                if (error.message.includes("401")) {
+                    navigateTo("/login");
+                }
+            }
         }
     }
 
