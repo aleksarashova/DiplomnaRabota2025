@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./sidebar.css";
 
 import { getAllCategories } from "./requests";
+import {validateJWT} from "../../pages/authCheck";
+import {useNavigate} from "react-router-dom";
 
 interface SidebarProps {
     setSelectedCategory: (category: string | null) => void;
@@ -11,10 +13,18 @@ const Sidebar: React.FC<SidebarProps> = ({ setSelectedCategory }) => {
     const [categories, setCategories] = useState<string[] | null>(null);
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+    const navigateTo = useNavigate();
+
     useEffect(() => {
+        const accessToken = localStorage.getItem("accessToken");
+        const isValid = accessToken && validateJWT(accessToken);
+
+        if (!isValid) {
+            navigateTo("/login");
+        }
         const fetchCategories = async () => {
             try {
-                const categories = await getAllCategories();
+                const categories = await getAllCategories(accessToken!);
                 setCategories(categories);
             } catch (error) {
                 console.error("Error getting categories:", error);
