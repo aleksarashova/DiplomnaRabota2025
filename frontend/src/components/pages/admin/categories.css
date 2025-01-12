@@ -9,6 +9,7 @@
 .categoriesSection {
     min-width: 600px;
     width: fit-content;
+    max-width: 800px;
     min-height: 500px;
     height: fit-content;
     background-color: whitesmoke;
@@ -19,6 +20,10 @@
     justify-content: flex-start;
     gap: 50px;
     padding: 0 30px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .category-admin-page {
@@ -37,6 +42,11 @@
 .categoryValue {
     padding: 0;
     margin: 0 0 0 20px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 380px;
+    text-align: justify;
 }
 
 .deleteCategoryButton {

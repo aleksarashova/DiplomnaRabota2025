@@ -16,6 +16,23 @@ const createCategory = async (name : string) => {
     }
 }
 
+export const removeCategory = async (name : string) => {
+    try {
+        const deletedCategory = await Category.findOneAndDelete({ name: name });
+
+        if (!deletedCategory) {
+            throw new Error("Category not found.");
+        }
+
+        console.log(`Category ${name} deleted successfully.`);
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while deleting category.");
+    }
+}
+
 export const getAllCategoryNames = async () => {
     try {
         const categories = await Category.find({}, { name: 1, _id: 0 }); 
