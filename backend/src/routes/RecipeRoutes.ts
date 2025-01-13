@@ -8,7 +8,7 @@ import {
     getAllRecipes,
     getRecipe,
     getAllApprovedRecipes,
-    getNumberOfPendingRecipes
+    getNumberOfPendingRecipes, getAllUnapprovedRecipes
 } from "../controllers/RecipeController";
 
 import {uploadRecipeImage} from "../middlewares/UploadsMiddleware";
@@ -18,6 +18,7 @@ const router: Router = express.Router();
 
 router.get("/get-all", getAllRecipes);
 router.get("/get-all-approved", getAllApprovedRecipes);
+router.get("/get-all-unapproved", checkAuthentication, getAllUnapprovedRecipes);
 router.post("/add-recipe", uploadRecipeImage.single("image"), validateRequest(addRecipeSchema), checkAuthentication, makeRecipe);
 router.get("/get-recipe-data", validateRequest(getRecipeSchema), checkAuthentication, getRecipe);
 router.get("/number-of-unapproved", checkAuthentication, getNumberOfPendingRecipes);

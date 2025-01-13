@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import "./categories.css";
 
-import {addCategory, deleteCategory, getAllCategoriesForAdmin} from "../../bars/adminbar/requests";
+import {addCategory, deleteCategory, getAllCategoriesForAdmin} from "../../../bars/adminbar/requests";
 
 import { FaPlus } from "react-icons/fa";
-import {AddCategoryPopup} from "../../popups/actions/add-category/AddCategoryPopup";
+import {AddCategoryPopup} from "../../../popups/actions/add-category/AddCategoryPopup";
 import {useNavigate} from "react-router-dom";
-import {validateJWT} from "../authCheck";
+import {validateJWT} from "../../authCheck";
 
 const CategoriesPage = () => {
     const [categories, setCategories] = useState<string[] | null>(null);

@@ -154,6 +154,46 @@ export const getAllApprovedRecipesData = async (filterParams: FilterParams): Pro
     }
 }
 
+export const getAllUnapprovedRecipesData = async (): Promise<GetRecipeDTO[]> => {
+    try {
+        const recipesRaw = await Recipe.find({ is_approved: false })
+            .populate("author", "username")
+            .populate("category", "name");
+
+        const recipes: GetRecipeDTO[] = [];
+
+        for (const recipe of recipesRaw) {
+            const comments = await Comment.find({
+                _id: { $in: recipe.comments },
+            });
+
+            const approvedComments = comments.filter(comment => comment.is_approved);
+
+            const imageName = recipe.image ? path.basename(recipe.image) : undefined;
+            const imagePath = imageName ? `/uploads/recipes/${imageName}` : undefined;
+
+            recipes.push({
+                id: recipe._id.toString(),
+                title: recipe.title,
+                author: (recipe.author as any)?.username || "Unknown",
+                is_approved: recipe.is_approved,
+                date: recipe.date.toISOString().split("T")[0],
+                category: (recipe.category as any)?.name || "Uncategorized",
+                likes: recipe.likes,
+                comments: approvedComments.length,
+                image: imagePath,
+            });
+        }
+
+        return recipes;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting all unapproved recipes.");
+    }
+}
+
 export const findRecipeById = async(id: string) => {
     try {
         return await Recipe.findOne({_id: id});

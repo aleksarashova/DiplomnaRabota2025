@@ -13,8 +13,9 @@ import SingleView from "./components/pages/single/singlepage/singleview";
 import MyProfile from "./components/pages/profile/myProfile/myProfile";
 import Profile from "./components/pages/profile/otherProfile/profile";
 import AddRecipePage from "./components/pages/add-recipe/AddRecipe";
-import AdminPage from "./components/pages/admin/AdminPage";
-import CategoriesPage from "./components/pages/admin/CategoriesPage";
+import AdminPage from "./components/pages/admin/main/AdminPage";
+import CategoriesPage from "./components/pages/admin/categories/CategoriesPage";
+import RecipesPage from "./components/pages/admin/recipes/RecipesPage";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/myProfile" element={<MyProfile />}></Route>
         <Route path="/admin" element={<AdminPage />}></Route>
         <Route path="/admin/categories" element={<CategoriesPage />}></Route>
+        <Route path="/admin/recipes" element={<RecipesPage />}></Route>
       </Routes>
     </div>
   );

@@ -2,7 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     width: calc(80% + 3px);
-    height: 150px;
+    height: 153px;
     position: fixed;
     top: 0;
     align-items: flex-start;

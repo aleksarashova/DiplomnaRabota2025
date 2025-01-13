@@ -1,7 +1,7 @@
 import React from "react";
 import "./adminpage.css";
 
-import Adminbar from "../../bars/adminbar/Adminbar";
+import Adminbar from "../../../bars/adminbar/Adminbar";
 
 const AdminPage = () => {
     return (

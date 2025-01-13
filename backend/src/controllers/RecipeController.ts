@@ -3,7 +3,7 @@ import { ExtendedRequest } from "../middlewares/UserMiddleware";
 import {
     addRecipe,
     getAllApprovedRecipesData,
-    getAllRecipesData,
+    getAllRecipesData, getAllUnapprovedRecipesData,
     getNumberOfUnapprovedRecipes,
     getRecipeData
 } from "../services/RecipeService";
@@ -35,6 +35,21 @@ export const getAllApprovedRecipes = async (req: Request, res: Response) => {
         res.status(200).json({ recipes });
     } catch (error) {
         console.error("Error during trying to get all approved recipes:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: "Internal server error." });
+        }
+    }
+}
+
+export const getAllUnapprovedRecipes = async (req: Request, res: Response) => {
+    try {
+        const recipes = await getAllUnapprovedRecipesData();
+        res.status(200).json({ recipes });
+    } catch (error) {
+        console.error("Error during trying to get all unapproved recipes:", error);
 
         if (error instanceof Error) {
             res.status(400).json({ message: error.message });

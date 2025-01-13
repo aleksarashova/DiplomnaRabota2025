@@ -101,6 +101,8 @@
     font-size: 22px;
 }
 
-.linkToCategories {
+.linkToCategories,
+.linkToRecipes
+{
     text-decoration: none;
 }
