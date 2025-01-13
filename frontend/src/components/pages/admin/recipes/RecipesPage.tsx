@@ -4,7 +4,7 @@ import "./recipespage.css";
 import {Recipe} from "../../../sections/recipes-home/types";
 import {Link, useNavigate} from "react-router-dom";
 import {validateJWT} from "../../authCheck";
-import {getAllUnapprovedRecipes} from "./requests";
+import {approveRecipe, getAllUnapprovedRecipes, rejectRecipe} from "./requests";
 import FoodImage from "../../../images/altImage.png";
 import {FaComment, FaHeart} from "react-icons/fa";
 
@@ -33,6 +33,38 @@ const RecipesPage = () => {
 
         fetchRecipes();
     }, []);
+
+    const handleApproveRecipe = async(recipeId: string) => {
+        const token = localStorage.getItem("accessToken");
+        const isValid = token && validateJWT(token);
+
+        if (!isValid) {
+            navigateTo("/login");
+        }
+
+        try {
+            await approveRecipe(token!, recipeId);
+            window.location.reload();
+        } catch (error) {
+            console.error("Error approving recipe:", error);
+        }
+    }
+
+    const handleRejectRecipe = async(recipeId: string) => {
+        const token = localStorage.getItem("accessToken");
+        const isValid = token && validateJWT(token);
+
+        if (!isValid) {
+            navigateTo("/login");
+        }
+
+        try {
+            await rejectRecipe(token!, recipeId);
+            window.location.reload();
+        } catch (error) {
+            console.error("Error rejecting recipe:", error);
+        }
+    }
 
     return (
         <div className="admin-page-recipes">
@@ -69,8 +101,8 @@ const RecipesPage = () => {
                                     </div>
                                 </div>
                                 <div className="approve-reject-buttons">
-                                    <button id="approve-button">APPROVE</button>
-                                    <button id="reject-button">REJECT</button>
+                                    <button onClick={() => handleApproveRecipe(recipe.id)} id="approve-button">APPROVE</button>
+                                    <button onClick={() => handleRejectRecipe(recipe.id)} id="reject-button">REJECT</button>
                                 </div>
                             </div>
                         );
