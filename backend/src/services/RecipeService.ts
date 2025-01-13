@@ -313,3 +313,40 @@ export const getNumberOfUnapprovedRecipes = async() => {
     }
 }
 
+export const updateRecipeApproved = async(recipeId: string) => {
+    try {
+        const recipe = await findRecipeById(recipeId);
+
+        if (!recipe) {
+            throw new Error(`Recipe with ID "${recipeId}" not found.`);
+        }
+
+        recipe.is_approved = true;
+        await recipe.save();
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while approving recipe.");
+    }
+}
+
+export const updateRecipeRejected = async(recipeId: string) => {
+    try {
+        const recipe = await findRecipeById(recipeId);
+
+        if (!recipe) {
+            throw new Error(`Recipe with ID "${recipeId}" not found.`);
+        }
+
+        await Recipe.deleteOne({ _id: recipeId });
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while rejecting recipe.");
+    }
+}
+
+
+

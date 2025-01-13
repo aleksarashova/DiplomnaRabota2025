@@ -5,7 +5,7 @@ import {
     getAllApprovedRecipesData,
     getAllRecipesData, getAllUnapprovedRecipesData,
     getNumberOfUnapprovedRecipes,
-    getRecipeData
+    getRecipeData, updateRecipeApproved, updateRecipeRejected
 } from "../services/RecipeService";
 import {GetExtendedRecipeDTO} from "../DTOs/RecipeDTOs";
 
@@ -129,6 +129,54 @@ export const getNumberOfPendingRecipes = async (req: ExtendedRequest, res: Respo
         res.status(200).json(number);
     } catch (error) {
         console.error("Error during getting number of unpproved recipes:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const approveRecipe = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const {recipeId} = req.body;
+
+        await updateRecipeApproved(recipeId);
+        res.status(200).json("Successfully approved recipe.");
+    } catch (error) {
+        console.error("Error during approving recipe:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const rejectRecipe = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const userId = req.userId as string;
+
+        if (!userId) {
+            res.status(400).json({ message: "User ID is missing." });
+            return;
+        }
+
+        const {recipeId} = req.body;
+
+        await updateRecipeRejected(recipeId);
+        res.status(200).json("Successfully rejected recipe.");
+    } catch (error) {
+        console.error("Error during rejecting recipe:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});
