@@ -22,7 +22,7 @@ router.get("/get-all-unapproved", checkAuthentication, getAllUnapprovedRecipes);
 router.post("/add-recipe", uploadRecipeImage.single("image"), validateRequest(addRecipeSchema), checkAuthentication, makeRecipe);
 router.get("/get-recipe-data", validateRequest(getRecipeSchema), checkAuthentication, getRecipe);
 router.get("/number-of-unapproved", checkAuthentication, getNumberOfPendingRecipes);
-router.get("/approve", checkAuthentication, approveRecipe);
-router.get("/reject", checkAuthentication, rejectRecipe);
+router.post("/approve", checkAuthentication, approveRecipe);
+router.post("/reject", checkAuthentication, rejectRecipe);
 
 export default router;
