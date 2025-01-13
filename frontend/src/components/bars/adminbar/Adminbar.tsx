@@ -47,26 +47,34 @@ const Adminbar = () => {
             <p className="adminbar-title"> <FcViewDetails className="to-do-list-icon"/> ADMINISTRATOR BOARD </p>
             <div className="admin-to-do-sections">
                 <div className="to-do-section">
-                    <p className="admin-task-title"> <MdOutlinePendingActions className="pending-icon"/> PENDING RECIPES </p>
-                    {numberOfPendingRecipes !==0 && (
-                    <p className="task-number">+ {numberOfPendingRecipes} new</p>
+                    <p className="admin-task-title"><MdOutlinePendingActions className="pending-icon"/> PENDING RECIPES
+                    </p>
+                    {numberOfPendingRecipes !== 0 && (
+                        <p className="task-number">+ {numberOfPendingRecipes} new</p>
                     )}
                     <Link to="/admin/recipes" className="linkToRecipes">
                         <p className="show-to-do"><FaLongArrowAltRight className="show-to-do-arrow"/>view</p>
                     </Link>
                 </div>
                 <div className="to-do-section">
-                    <p className="admin-task-title"><MdOutlinePendingActions className="pending-icon"/> PENDING COMMENTS</p>
-                    {numberOfPendingComments !==0 && (
-                    <p className="task-number">+ {numberOfPendingComments} new</p>
+                    <p className="admin-task-title"><MdOutlinePendingActions className="pending-icon"/> PENDING COMMENTS
+                    </p>
+                    {numberOfPendingComments !== 0 && (
+                        <p className="task-number">+ {numberOfPendingComments} new</p>
                     )}
                     <p className="show-to-do"><FaLongArrowAltRight className="show-to-do-arrow"/>view</p>
                 </div>
                 <div className="to-do-section">
-                    <p className="admin-task-title"><MdOutlinePendingActions className="pending-icon"/> MANAGE CATEGORIES </p>
+                    <p className="admin-task-title"><MdOutlinePendingActions className="pending-icon"/> MANAGE
+                        CATEGORIES </p>
                     <Link to="/admin/categories" className="linkToCategories">
                         <p className="show-to-do"><FaLongArrowAltRight className="show-to-do-arrow"/>view</p>
                     </Link>
+                </div>
+                <div className="to-do-section">
+                    <p className="admin-task-title"><MdOutlinePendingActions className="pending-icon"/> MANAGE
+                        ROLES </p>
+                    <p className="show-to-do"><FaLongArrowAltRight className="show-to-do-arrow"/>view</p>
                 </div>
             </div>
         </div>
