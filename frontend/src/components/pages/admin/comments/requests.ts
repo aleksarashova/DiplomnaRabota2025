@@ -18,14 +18,14 @@ export const getAllUnapprovedComments = async (accessToken: string): Promise<Com
     return data.comments;
 }
 
-export const approveComment = async (accessToken: string, recipeId: string) => {
+export const approveComment = async (accessToken: string, commentId: string) => {
     const response = await fetch(`http://localhost:8000/api/comments/approve`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({recipeId}),
+        body: JSON.stringify({commentId}),
     });
 
     const data = await response.json();

@@ -74,3 +74,49 @@ export const getAllUnapprovedCommentsData = async (): Promise<GetCommentShortDTO
         throw new Error("Unknown error while getting all unapproved comments.");
     }
 }
+
+export const findCommentById = async(id: string) => {
+    try {
+        return await Comment.findOne({_id: id});
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while searching for a comment by id.");
+    }
+}
+
+export const updateCommentApproved = async(commentId: string) => {
+    try {
+        const comment = await findCommentById(commentId);
+
+        if (!comment) {
+            throw new Error(`Comment with ID "${commentId}" not found.`);
+        }
+
+        comment.is_approved = true;
+        await comment.save();
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while approving comment.");
+    }
+}
+
+export const updateCommentRejected = async(commentId: string) => {
+    try {
+        const comment = await findCommentById(commentId);
+
+        if (!comment) {
+            throw new Error(`Comment with ID "${commentId}" not found.`);
+        }
+
+        await Comment.deleteOne({ _id: commentId });
+    } catch(error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while rejecting comment.");
+    }
+}

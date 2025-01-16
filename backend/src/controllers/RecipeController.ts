@@ -94,13 +94,6 @@ export const makeRecipe = async (req: ExtendedRequest, res: Response) => {
 
 export const getRecipe = async (req: ExtendedRequest, res: Response) => {
     try {
-        const userId = req.userId as string;
-
-        if (!userId) {
-            res.status(400).json({ message: "User ID is missing." });
-            return;
-        }
-
         const recipeId = req.query.recipeId as string;
 
         const recipeData: GetExtendedRecipeDTO = await getRecipeData(recipeId);
@@ -118,13 +111,6 @@ export const getRecipe = async (req: ExtendedRequest, res: Response) => {
 
 export const getNumberOfPendingRecipes = async (req: ExtendedRequest, res: Response) => {
     try {
-        const userId = req.userId as string;
-
-        if (!userId) {
-            res.status(400).json({ message: "User ID is missing." });
-            return;
-        }
-
         const number = await getNumberOfUnapprovedRecipes();
         res.status(200).json(number);
     } catch (error) {
@@ -140,13 +126,6 @@ export const getNumberOfPendingRecipes = async (req: ExtendedRequest, res: Respo
 
 export const approveRecipe = async (req: ExtendedRequest, res: Response) => {
     try {
-        const userId = req.userId as string;
-
-        if (!userId) {
-            res.status(400).json({ message: "User ID is missing." });
-            return;
-        }
-
         const {recipeId} = req.body;
 
         await updateRecipeApproved(recipeId);
@@ -164,13 +143,6 @@ export const approveRecipe = async (req: ExtendedRequest, res: Response) => {
 
 export const rejectRecipe = async (req: ExtendedRequest, res: Response) => {
     try {
-        const userId = req.userId as string;
-
-        if (!userId) {
-            res.status(400).json({ message: "User ID is missing." });
-            return;
-        }
-
         const {recipeId} = req.body;
 
         await updateRecipeRejected(recipeId);

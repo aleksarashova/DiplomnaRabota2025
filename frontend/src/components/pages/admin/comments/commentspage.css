@@ -19,3 +19,21 @@
     border-bottom: 2px solid gray;
     width: 100%;
 }
+
+.commentAdminPage {
+    border-bottom: 1px solid gray;
+    padding-bottom: 50px;
+    padding-left: 30px;
+}
+
+.linkToCommentAuthorAdmin {
+    text-decoration: none;
+}
+
+.commentAuthor {
+
+}
+
+.commentContent {
+    max-width: 400px;
+}

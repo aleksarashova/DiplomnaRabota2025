@@ -71,12 +71,12 @@ const CommentsPage = () => {
                 {comments && comments.length > 0 ? (
                     comments.map((comment) => {
                         return (
-                            <div key={comment.id} className="comment">
+                            <div key={comment.id} className="commentAdminPage">
                                 <div className="commentInfo">
-                                    <Link to={`/profile/${comment.author}`}>
+                                    <Link to={`/profile/${comment.author}`} className="linkToCommentAuthorAdmin">
                                         <p className="commentAuthor">{comment.author}</p>
-                                        <p className="commentContent">{comment.content}</p>
                                     </Link>
+                                    <p className="commentContent">{comment.content}</p>
                                 </div>
                                 <div className="approve-reject-buttons">
                                     <button onClick={() => handleApproveComment(comment.id)} id="approve-button">APPROVE</button>
