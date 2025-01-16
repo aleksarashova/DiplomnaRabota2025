@@ -2,7 +2,7 @@ import {HydratedDocument, Types} from "mongoose";
 import User, {UserInterface} from "../models/User";
 
 import bcrypt from 'bcryptjs';
-import {OtherUserProfileDTO, RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
+import {GetAllUsersDTO, OtherUserProfileDTO, RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 import {findRecipeById} from "./RecipeService";
 import path from "path";
 import {deleteFile} from "./FileService";
@@ -526,4 +526,58 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
         throw new Error("Unknown error while updating rating.");
     }
 }
+
+export const getAllUsersData = async () => {
+    try {
+        const users = await User.find({});
+
+        const usersData: GetAllUsersDTO[] = users.map((user) => {
+            const imageName = user.image ? path.basename(user.image) : undefined;
+            const imagePath = imageName ? `/uploads/profile/${imageName}` : undefined;
+
+            return {
+                id: user._id.toString(),
+                username: user.username,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                image: imagePath || "",
+                role: user.role,
+            };
+        });
+
+        return usersData;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting all users data.");
+    }
+}
+
+export const changeUserRole = async (userId: string, newRole: string) => {
+    try {
+        if(newRole !== "admin" && newRole !== "user") {
+            throw new Error("Invalid user role.");
+        }
+
+        const user = await findUserById(userId);
+
+        if(!user) {
+            throw new Error('User not found.');
+        }
+
+        user.role = newRole;
+
+        await user.save();
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while changing user role.");
+    }
+}
+
+
+
+
 

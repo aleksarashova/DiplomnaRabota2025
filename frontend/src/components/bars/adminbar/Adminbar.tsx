@@ -76,7 +76,9 @@ const Adminbar = () => {
                 <div className="to-do-section">
                     <p className="admin-task-title"><MdOutlinePendingActions className="pending-icon"/> MANAGE
                         ROLES </p>
-                    <p className="show-to-do"><FaLongArrowAltRight className="show-to-do-arrow"/>view</p>
+                    <Link to="/admin/roles" className="linkToRoles">
+                        <p className="show-to-do"><FaLongArrowAltRight className="show-to-do-arrow"/>view</p>
+                    </Link>
                 </div>
             </div>
         </div>

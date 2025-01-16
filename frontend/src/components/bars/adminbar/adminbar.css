@@ -103,7 +103,8 @@
 
 .linkToCategories,
 .linkToRecipes,
-.linkToComments
+.linkToComments,
+.linkToRoles
 {
     text-decoration: none;
 }

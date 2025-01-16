@@ -37,3 +37,12 @@ export interface OtherUserProfileDTO {
     currentUserRating: number | null;
     averageRating: number;
 }
+
+export interface GetAllUsersDTO {
+    id: string;
+    username: string;
+    first_name: string;
+    last_name: string;
+    image: string;
+    role: string;
+}

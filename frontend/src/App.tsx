@@ -17,6 +17,7 @@ import AdminPage from "./components/pages/admin/main/AdminPage";
 import CategoriesPage from "./components/pages/admin/categories/CategoriesPage";
 import RecipesPage from "./components/pages/admin/recipes/RecipesPage";
 import CommentsPage from "./components/pages/admin/comments/CommentsPage";
+import RolesPage from "./components/pages/admin/roles/RolesPage";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/admin/categories" element={<CategoriesPage />}></Route>
         <Route path="/admin/recipes" element={<RecipesPage />}></Route>
         <Route path="/admin/comments" element={<CommentsPage />}></Route>
+        <Route path="/admin/roles" element={<RolesPage />}></Route>
       </Routes>
     </div>
   );

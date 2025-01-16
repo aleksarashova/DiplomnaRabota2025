@@ -17,11 +17,11 @@ import {
     checkIsRecipeLiked,
     getOtherUserProfileData,
     updateProfilePicture,
-    removeProfilePicture, changeUserRating
+    removeProfilePicture, changeUserRating, getAllUsersData, changeUserRole
 } from "../services/UserService";
 import { sendVerificationEmail, validateVerificationCode, deleteRecord } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
-import {OtherUserProfileDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
+import {GetAllUsersDTO, OtherUserProfileDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -442,6 +442,39 @@ export const rateUser = async(req: ExtendedRequest, res:Response) => {
         res.status(200).json("User rated successfully.");
     } catch(error) {
         console.error("Error during rating author:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const getAllUsers = async(req: ExtendedRequest, res:Response) => {
+    try {
+
+        const users: GetAllUsersDTO[] = await getAllUsersData();
+        res.status(200).json({users});
+    } catch(error) {
+        console.error("Error during getting all users:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const updateUserRole = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const {userId, newRole} = req.body;
+
+        await changeUserRole(userId, newRole);
+        res.status(200).json({ message: "User role updated successfully." });
+    } catch(error) {
+        console.error("Error during updating user role:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});

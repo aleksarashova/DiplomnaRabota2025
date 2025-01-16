@@ -117,6 +117,7 @@ export const getAllApprovedRecipesData = async (filterParams: FilterParams): Pro
         }
 
         const recipesRaw = await Recipe.find(queryConditions)
+            .sort({ date: -1 })
             .populate("author", "username")
             .populate("category", "name");
 
