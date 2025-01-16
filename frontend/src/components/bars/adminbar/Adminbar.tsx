@@ -62,7 +62,9 @@ const Adminbar = () => {
                     {numberOfPendingComments !== 0 && (
                         <p className="task-number">+ {numberOfPendingComments} new</p>
                     )}
-                    <p className="show-to-do"><FaLongArrowAltRight className="show-to-do-arrow"/>view</p>
+                    <Link to="/admin/comments" className="linkToComments">
+                        <p className="show-to-do"><FaLongArrowAltRight className="show-to-do-arrow"/>view</p>
+                    </Link>
                 </div>
                 <div className="to-do-section">
                     <p className="admin-task-title"><MdOutlinePendingActions className="pending-icon"/> MANAGE

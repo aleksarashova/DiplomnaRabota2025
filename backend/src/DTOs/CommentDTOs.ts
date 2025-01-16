@@ -13,3 +13,9 @@ export interface GetCommentDTO {
     date: string;
     is_approved: boolean;
 }
+
+export interface GetCommentShortDTO {
+    id: string;
+    author: string;
+    content: string;
+}

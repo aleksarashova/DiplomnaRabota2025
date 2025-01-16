@@ -1,4 +1,4 @@
-import { AddCommentDTO } from "../DTOs/CommentDTOs";
+import {AddCommentDTO, GetCommentShortDTO} from "../DTOs/CommentDTOs";
 import Comment, { CommentInterface} from "../models/Comment";
 import { findUserById } from "./UserService";
 
@@ -47,5 +47,30 @@ export const getNumberOfUnapprovedComments = async() => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while getting number of unapproved comments.");
+    }
+}
+
+export const getAllUnapprovedCommentsData = async (): Promise<GetCommentShortDTO[]> => {
+    try {
+        const commentsRaw = await Comment.find({ is_approved: false })
+
+        const comments: GetCommentShortDTO[] = [];
+
+        for(const comment of commentsRaw) {
+            const commentAuthor = await findUserById(comment.author.toString());
+            comments.push({
+               id: comment._id.toString(),
+               author: commentAuthor!.username,
+               content: comment.content,
+            });
+        }
+
+
+        return comments;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting all unapproved comments.");
     }
 }

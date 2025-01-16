@@ -1,7 +1,7 @@
-import { Response } from "express";
+import {Request, Response} from "express";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
 import { AddCommentDTO } from "../DTOs/CommentDTOs";
-import {addComment, getNumberOfUnapprovedComments} from "../services/CommentService";
+import {addComment, getAllUnapprovedCommentsData, getNumberOfUnapprovedComments} from "../services/CommentService";
 
 export const comment = async (req: ExtendedRequest, res: Response) => {
     try {
@@ -52,6 +52,21 @@ export const getNumberOfPendingComments = async (req: ExtendedRequest, res: Resp
             res.status(400).json({message: error.message});
         } else {
             res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const getAllUnapprovedComments = async (req: Request, res: Response) => {
+    try {
+        const comments = await getAllUnapprovedCommentsData();
+        res.status(200).json({ comments });
+    } catch (error) {
+        console.error("Error during trying to get all unapproved comments:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: "Internal server error." });
         }
     }
 }

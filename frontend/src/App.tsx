@@ -16,6 +16,7 @@ import AddRecipePage from "./components/pages/add-recipe/AddRecipe";
 import AdminPage from "./components/pages/admin/main/AdminPage";
 import CategoriesPage from "./components/pages/admin/categories/CategoriesPage";
 import RecipesPage from "./components/pages/admin/recipes/RecipesPage";
+import CommentsPage from "./components/pages/admin/comments/CommentsPage";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/admin" element={<AdminPage />}></Route>
         <Route path="/admin/categories" element={<CategoriesPage />}></Route>
         <Route path="/admin/recipes" element={<RecipesPage />}></Route>
+        <Route path="/admin/comments" element={<CommentsPage />}></Route>
       </Routes>
     </div>
   );

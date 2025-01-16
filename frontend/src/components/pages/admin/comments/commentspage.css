@@ -1,0 +1,21 @@
+.admin-page-comments {
+    width: 100vw;
+    height: 100vh;
+}
+
+.comments-list {
+    width: 100%;
+    padding: 100px calc((100vw - 1290px) / 2);
+    gap: 30px;
+}
+
+.commentsTitleAdmin {
+    font-family: "Bell MT", sans-serif;
+    color: grey;
+    align-self: center;
+    font-size: 60px;
+    margin-bottom: 0;
+    padding: 0 0 0 70px;
+    border-bottom: 2px solid gray;
+    width: 100%;
+}

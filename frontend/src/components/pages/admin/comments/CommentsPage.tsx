@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import "./commentspage.css";
 
 import {Link, useNavigate} from "react-router-dom";
 import {validateJWT} from "../../authCheck";
