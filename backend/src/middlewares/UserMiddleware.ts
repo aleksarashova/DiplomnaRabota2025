@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, {JwtPayload} from "jsonwebtoken";
 
-import {findUserByEmail, findUserByUsername, checkForRightPassword, findUserById} from "../services/UserService";
-import path from "path";
-import {deleteFile} from "../services/FileService";
+import {findUserByEmail, findUserByUsername, checkForRightPassword} from "../services/UserService";
 
 export const checkUniquenessRegister = async (
     req: Request,

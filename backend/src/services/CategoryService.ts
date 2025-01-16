@@ -58,6 +58,18 @@ export const getCategoryIdByName = async (name: string) => {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        throw new Error("Unknown error while getting category id by its name.");
+    }
+}
+
+export const findCategoryByName = async (name : string) => {
+    try {
+        const category: HydratedDocument<CategoryInterface> | null = await Category.findOne({ name });
+        return category;
+    } catch (error) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
         throw new Error("Unknown error while getting category by its name.");
     }
 }

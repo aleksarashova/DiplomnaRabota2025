@@ -16,7 +16,6 @@ import {uploadRecipeImage} from "../middlewares/UploadsMiddleware";
 
 const router: Router = express.Router();
 
-router.get("/get-all", getAllRecipes);
 router.get("/get-all-approved", getAllApprovedRecipes);
 router.get("/get-all-unapproved", checkAuthentication, getAllUnapprovedRecipes);
 router.post("/add-recipe", uploadRecipeImage.single("image"), validateRequest(addRecipeSchema), checkAuthentication, makeRecipe);
