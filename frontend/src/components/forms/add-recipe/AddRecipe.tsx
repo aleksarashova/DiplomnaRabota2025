@@ -38,12 +38,13 @@ const AddRecipeForm = () => {
     }
 
     const getCategories = async () => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
         }
+
         try {
             const data = await getAllCategories(token!);
             console.log("Backend Response:", data);
@@ -94,7 +95,7 @@ const AddRecipeForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid } = validateJWT(token);
 
         if (!isValid) {

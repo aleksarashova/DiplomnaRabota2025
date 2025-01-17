@@ -24,7 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isH
         : "navbar-home navbar-default";
 
     const handleLogOut = () => {
-        localStorage.removeItem("accessToken");
+        sessionStorage.removeItem("accessToken");
     }
 
     return (

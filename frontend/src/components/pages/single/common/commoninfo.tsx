@@ -35,8 +35,8 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
     const { recipeId } = useParams();
 
     const getIsRecipeFavouriteAndLiked = async() => {
-        const token = localStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const token = sessionStorage.getItem("accessToken");
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
@@ -59,7 +59,7 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
     }
 
     const handleAddOrRemoveFavourites = async () => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
@@ -87,7 +87,7 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
     }
 
     const handleAddOrRemoveLiked = async () => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {

@@ -21,7 +21,7 @@ const AdminPage = () => {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {

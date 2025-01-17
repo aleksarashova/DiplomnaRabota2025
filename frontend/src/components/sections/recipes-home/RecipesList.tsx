@@ -28,7 +28,7 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
 
     useEffect(() => {
         const fetchRecipes = async () => {
-            const token = localStorage.getItem("accessToken");
+            const token = sessionStorage.getItem("accessToken");
             const isValid = token && validateJWT(token);
             setIsLoggedIn(!!isValid);
 

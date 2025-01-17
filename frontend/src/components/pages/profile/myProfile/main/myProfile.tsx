@@ -43,7 +43,7 @@ const MyProfile = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = localStorage.getItem("accessToken");
+            const token = sessionStorage.getItem("accessToken");
             const { isValid, role } = validateJWT(token);
             setIsLoggedIn(!!isValid);
             setIsAdmin(role === "admin");
@@ -67,11 +67,12 @@ const MyProfile = () => {
     }, []);
 
     const getUserData = async () => {
-        const token = localStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const token = sessionStorage.getItem("accessToken");
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
+            return;
         }
 
         try {
@@ -95,7 +96,7 @@ const MyProfile = () => {
     }
 
     const handleRemoveImage = async () => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
@@ -122,7 +123,7 @@ const MyProfile = () => {
         const formData = new FormData();
         formData.append("image", selectedImage);
 
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
@@ -148,7 +149,7 @@ const MyProfile = () => {
     }
 
     const handleDeleteAccount = async () => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
@@ -158,8 +159,7 @@ const MyProfile = () => {
         try {
             const data = await deleteAccountRequest(token!);
             console.log('Backend Response:', data);
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
+            sessionStorage.removeItem('accessToken');
             setVisibilityDeleteAccountPopup(false);
             navigateTo("/");
         } catch (error) {
@@ -172,8 +172,8 @@ const MyProfile = () => {
     };
 
     const handleEditAccount = async (input: string): Promise<void> => {
-        const token = localStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const token = sessionStorage.getItem("accessToken");
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");

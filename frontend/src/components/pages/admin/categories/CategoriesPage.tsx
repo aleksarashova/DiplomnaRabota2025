@@ -24,7 +24,7 @@ const CategoriesPage = () => {
     const navigateTo = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
@@ -68,7 +68,7 @@ const CategoriesPage = () => {
     }
 
     const handleAddCategory = async(category: string) => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid} = validateJWT(token);
 
         if (!isValid) {
@@ -101,7 +101,7 @@ const CategoriesPage = () => {
     }
 
     const handleDeleteCategory = async(category: string) => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid } = validateJWT(token);
 
         if (!isValid) {

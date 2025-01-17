@@ -23,7 +23,7 @@ const MyRatingsWindow: React.FC<MyRatingsWindowProps> = ({ author, close }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = localStorage.getItem("accessToken");
+            const token = sessionStorage.getItem("accessToken");
             const isValid = token && validateJWT(token);
 
             if (isValid) {

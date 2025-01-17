@@ -44,7 +44,7 @@ const LoginForm = () => {
 
             console.log("Backend Response:", data);
 
-            localStorage.setItem("accessToken", data.accessToken);
+            sessionStorage.setItem("accessToken", data.accessToken);
 
             navigateTo("/");
         } catch (error) {

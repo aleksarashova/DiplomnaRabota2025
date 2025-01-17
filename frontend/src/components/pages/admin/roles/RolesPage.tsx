@@ -19,7 +19,7 @@ const RolesPage = () => {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const token = localStorage.getItem("accessToken");
+            const token = sessionStorage.getItem("accessToken");
             const { isValid, role } = validateJWT(token);
 
             if (!isValid) {
@@ -54,7 +54,7 @@ const RolesPage = () => {
     }
 
     const handleRoleChange = async (userId: string, newRole: string) => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
@@ -70,7 +70,7 @@ const RolesPage = () => {
                     )
                     : null
             );
-            localStorage.removeItem("accessToken");
+
         } catch (error) {
             console.error("Error updating user role:", error);
         }

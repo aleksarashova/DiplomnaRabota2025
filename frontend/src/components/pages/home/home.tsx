@@ -15,10 +15,16 @@ const HomePage = () => {
     const [searchText, setSearchText] = useState<string>("");
 
     useEffect(() => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
-        setIsLoggedIn(!!isValid);
-        setIsAdmin(role === "admin");
+
+        if (isValid) {
+            setIsLoggedIn(true);
+        }
+
+        if (role === "admin") {
+            setIsAdmin(true);
+        }
     }, []);
 
     return (

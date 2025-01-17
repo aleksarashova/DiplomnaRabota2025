@@ -16,11 +16,12 @@ const Adminbar = () => {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const token = localStorage.getItem("accessToken");
-            const { isValid } = validateJWT(token);
+            const token = sessionStorage.getItem("accessToken");
+            const { isValid, role } = validateJWT(token);
 
             if (!isValid) {
                 navigateTo("/login");
+                return;
             }
 
             try {

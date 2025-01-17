@@ -19,7 +19,7 @@ const CommentsPage = () => {
 
     useEffect(() => {
         const fetchComments = async () => {
-            const token = localStorage.getItem("accessToken");
+            const token = sessionStorage.getItem("accessToken");
             const { isValid, role } = validateJWT(token);
 
             if (!isValid) {
@@ -54,7 +54,7 @@ const CommentsPage = () => {
     }
 
     const handleApproveComment = async(commentId: string) => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid } = validateJWT(token);
 
         if (!isValid) {
@@ -70,7 +70,7 @@ const CommentsPage = () => {
     }
 
     const handleRejectComment = async(commentId: string) => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid } = validateJWT(token);
 
         if (!isValid) {

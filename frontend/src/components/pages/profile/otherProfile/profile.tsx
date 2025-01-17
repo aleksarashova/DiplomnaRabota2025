@@ -33,13 +33,18 @@ const Profile = () => {
             setLoading(true);
             window.scrollTo(0, 0);
 
-            const token = localStorage.getItem("accessToken");
+            const token = sessionStorage.getItem("accessToken");
             const { isValid, role } = validateJWT(token);
-            setIsLoggedIn(!!isValid);
-            setIsAdmin(role === "admin");
 
             if (!isValid) {
                 navigateTo("/login");
+                return;
+            }
+
+            setIsLoggedIn(true);
+
+            if (role === "admin") {
+                setIsAdmin(true);
             }
 
             if (isValid) {
@@ -61,7 +66,7 @@ const Profile = () => {
     }, [isOwnProfile]);
 
     const getOtherUserData = async () => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
@@ -85,7 +90,7 @@ const Profile = () => {
     }
 
     const handleRating = async (selectedRating: number) => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {

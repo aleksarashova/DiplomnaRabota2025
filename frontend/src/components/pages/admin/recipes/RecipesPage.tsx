@@ -21,7 +21,7 @@ const RecipesPage = () => {
 
     useEffect(() => {
         const fetchRecipes = async () => {
-            const token = localStorage.getItem("accessToken");
+            const token = sessionStorage.getItem("accessToken");
             const { isValid, role } = validateJWT(token);
 
             if (!isValid) {
@@ -56,7 +56,7 @@ const RecipesPage = () => {
     }
 
     const handleApproveRecipe = async(recipeId: string) => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
@@ -72,7 +72,7 @@ const RecipesPage = () => {
     }
 
     const handleRejectRecipe = async(recipeId: string) => {
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
