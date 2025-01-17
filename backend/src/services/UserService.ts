@@ -252,14 +252,7 @@ export const getOtherUserProfileData = async (username: string, userId: string) 
 
         const userRating = ratings.find((ratingObj) => ratingObj.raterId.toString() === userId)?.rating || null;
 
-        let averageRating = 0;
-        let finalRating = 0;
-        if (ratings.length > 0) {
-            const totalRating = ratings.reduce((sum, ratingObj) => sum + ratingObj.rating, 0);
-            averageRating = totalRating / ratings.length;
-            const roundedRating = Math.round(averageRating);
-            finalRating = Math.min(Math.max(roundedRating, 1), 5);
-        }
+        const averageRating = await getAverageRating(user.username);
 
         const imageName = user.image ? path.basename(user.image) : undefined;
         const imagePath = imageName ? `/uploads/profile/${imageName}` : undefined;
@@ -272,7 +265,7 @@ export const getOtherUserProfileData = async (username: string, userId: string) 
             image: imagePath,
             isOwnProfile: isOwnProfile,
             currentUserRating: userRating,
-            averageRating: finalRating,
+            averageRating: averageRating,
         };
 
         return userData;
@@ -573,6 +566,34 @@ export const changeUserRole = async (userId: string, newRole: string) => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while changing user role.");
+    }
+}
+
+export const getAverageRating = async (username: string) => {
+    try {
+        const user = await findUserByUsername(username);
+
+        if(!user) {
+            throw new Error("User not found.");
+        }
+
+        const ratings = user.ratings || [];
+
+        let averageRating = 0;
+        let finalRating = 0;
+        if (ratings.length > 0) {
+            const totalRating = ratings.reduce((sum, ratingObj) => sum + ratingObj.rating, 0);
+            averageRating = totalRating / ratings.length;
+            const roundedRating = Math.round(averageRating);
+            finalRating = Math.min(Math.max(roundedRating, 1), 5);
+        }
+
+        return finalRating;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting overall rating.");
     }
 }
 

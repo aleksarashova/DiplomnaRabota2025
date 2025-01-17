@@ -21,6 +21,7 @@ import MyRecipesWindow from "../myRecipesWindow/MyRecipesWindow";
 import Footer from "../../../../sections/footer/Footer";
 import MyLikedWindow from "../myLikedWindow/myLikedWindow";
 import MyFavouritesWindow from "../myFavouritesWindow/myFavouritesWindow";
+import MyRatingsWindow from "../myRatingsWindow/myRatingsWindow";
 
 const MyProfile = () => {
     const [visibilityDeleteAccountPopup, setVisibilityDeleteAccountPopup] = useState(false);
@@ -348,6 +349,13 @@ const MyProfile = () => {
                 <MyFavouritesWindow
                     author={userData.username}
                     close={setShowMyFavourites}
+                />
+            )}
+
+            {showMyRatings && userData?.username && (
+                <MyRatingsWindow
+                    author={userData.username}
+                    close={setShowMyRatings}
                 />
             )}
 

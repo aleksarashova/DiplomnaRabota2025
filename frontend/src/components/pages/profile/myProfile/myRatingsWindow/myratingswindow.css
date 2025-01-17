@@ -1,0 +1,16 @@
+.myRating {
+    margin-left: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    border-bottom: 1px solid grey;
+    padding-bottom: 30px;
+    padding-left: 30px;
+}
+
+.overallRatingTitle {
+    font-size: 18px;
+    font-family: "Century Schoolbook", sans-serif;
+}

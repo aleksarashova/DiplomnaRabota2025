@@ -3,12 +3,12 @@ import '../profilewindow.css';
 
 import RecipesList from '../../../../sections/recipes-home/RecipesList';
 
-type MyRecipesWindowProps = {
+type MyFavouritesWindowProps = {
     author: string;
     close: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const MyFavouritesWindow: React.FC<MyRecipesWindowProps> = ({ author, close }) => {
+const MyFavouritesWindow: React.FC<MyFavouritesWindowProps> = ({ author, close }) => {
     return (
         <div className="windowOverlay">
             <div className="windowContent">

@@ -17,7 +17,7 @@ import {
     checkIsRecipeLiked,
     getOtherUserProfileData,
     updateProfilePicture,
-    removeProfilePicture, changeUserRating, getAllUsersData, changeUserRole
+    removeProfilePicture, changeUserRating, getAllUsersData, changeUserRole, getAverageRating
 } from "../services/UserService";
 import { sendVerificationEmail, validateVerificationCode, deleteRecord } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
@@ -475,6 +475,23 @@ export const updateUserRole = async(req: ExtendedRequest, res:Response) => {
         res.status(200).json({ message: "User role updated successfully." });
     } catch(error) {
         console.error("Error during updating user role:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const getOverallRating = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const username = req.query.username as string;
+
+        const rating = await getAverageRating(username);
+        res.status(200).json(rating);
+    } catch(error) {
+        console.error("Error during getting overall rating:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});
