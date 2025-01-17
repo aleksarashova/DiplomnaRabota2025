@@ -12,6 +12,8 @@ import {
 import {findRecipeById} from "./RecipeService";
 import path from "path";
 import {deleteFile} from "./FileService";
+import Recipe from "../models/Recipe";
+import Comment from "../models/Comment";
 
 export const hashPassword = async (password: string) => {
     try {
@@ -70,6 +72,21 @@ export const createUser = async (userData: RegisterUserDTO) => {
 
 export const deleteUser = async (id: string) => {
     try {
+        const user = await User.findById(id);
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        await Recipe.deleteMany({ author: id });
+
+        await Comment.deleteMany({ author: id });
+
+        await User.updateMany(
+            { "ratings.raterId": id },
+            { $pull: { ratings: { raterId: id } } }
+        );
+
+
         await User.findByIdAndDelete({_id: id});
     } catch(error) {
         if(error instanceof Error) {
