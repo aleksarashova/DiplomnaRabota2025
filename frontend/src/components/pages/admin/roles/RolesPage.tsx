@@ -70,6 +70,7 @@ const RolesPage = () => {
                     )
                     : null
             );
+            localStorage.removeItem("accessToken");
         } catch (error) {
             console.error("Error updating user role:", error);
         }
