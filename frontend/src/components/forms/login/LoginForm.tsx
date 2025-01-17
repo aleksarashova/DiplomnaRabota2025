@@ -2,7 +2,7 @@ import React, { FormEvent, useRef, useState } from "react";
 import "../form.css";
 import "./login.css";
 
-import { FaUser, FaLock } from "react-icons/fa";
+import {FaUser, FaLock, FaEye, FaEyeSlash} from "react-icons/fa";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -17,6 +17,8 @@ const LoginForm = () => {
 
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const navigateTo = useNavigate();
 
@@ -55,7 +57,11 @@ const LoginForm = () => {
                 handleInvalidInput("An unknown error occurred.");
             }
         }
-    };
+    }
+
+    const changePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+    }
 
     return (
         <div className="form-page">
@@ -77,11 +83,14 @@ const LoginForm = () => {
                             <div className="form-icon"><FaLock/></div>
                             <input
                                 ref={passwordRef}
-                                type="password"
+                                type={isPasswordVisible ? "text" : "password"}
                                 placeholder="Password"
                                 className="form-input"
                                 required
                             />
+                            <div onClick={changePasswordVisibility}>
+                                {isPasswordVisible ? <FaEye className="eye-icon"/> : <FaEyeSlash className="eye-icon"/>}
+                            </div>
                         </div>
                         <div className="forgot-password">
                             <Link to="/forgot-password" className="form-link">Forgot password?</Link>

@@ -10,7 +10,7 @@ import { registerUser } from "./requests";
 import RegisterError from "../../popups/errors/RegisterError";
 import RegisterSuccessfulMessage from "../../popups/messages/RegisterSuccessfulMessage";
 
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdOutlineDriveFileRenameOutline, MdEmail } from "react-icons/md";
 
 import altImage from "../../images/altImage.png";
@@ -29,6 +29,8 @@ const RegisterForm = () => {
     const emailRef = useRef<HTMLInputElement>(null);
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const navigateTo = useNavigate();
 
@@ -110,6 +112,10 @@ const RegisterForm = () => {
         } finally {
             setIsLoading(false);
         }
+    }
+
+    const changePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
     }
 
     return (
@@ -213,12 +219,14 @@ const RegisterForm = () => {
                             </div>
                             <input
                                 ref={passwordRef}
-                                type="password"
+                                type={isPasswordVisible ? "text" : "password"}
                                 placeholder="Password"
                                 className="form-input"
-                                disabled={isLoading}
                                 required
                             />
+                            <div onClick={changePasswordVisibility}>
+                                {isPasswordVisible ? <FaEye className="eye-icon"/> : <FaEyeSlash className="eye-icon"/>}
+                            </div>
                         </div>
 
                         <button type="submit" className="form-button" disabled={isLoading}>
