@@ -4,6 +4,8 @@ export const getAllApprovedRecipes = async (
     selectedCategory: string | null = null,
     searchText: string = "",
     author: string | null = null,
+    likedByAuthor: string | null = null,
+    favouritesOfAuthor: string | null = null,
 ): Promise<Recipe[]> => {
     const queryParams = new URLSearchParams();
 
@@ -16,7 +18,15 @@ export const getAllApprovedRecipes = async (
     }
 
     if(author) {
-        queryParams.append("username", author);
+        queryParams.append("recipesOf", author);
+    }
+
+    if(likedByAuthor) {
+        queryParams.append("likedBy", likedByAuthor);
+    }
+
+    if(favouritesOfAuthor) {
+        queryParams.append("favouritesOf", favouritesOfAuthor);
     }
 
     console.log(queryParams);

@@ -87,11 +87,13 @@ export const getAllRecipesData = async (): Promise<GetRecipeDTO[]> => {
 interface FilterParams {
     category?: string;
     searchText?: string;
-    username?: string;
+    recipesOf?: string;
+    likedBy?: string;
+    favouritesOf?: string;
 }
 
 export const getAllApprovedRecipesData = async (filterParams: FilterParams): Promise<GetRecipeDTO[]> => {
-    const { category, searchText, username } = filterParams;
+    const { category, searchText, recipesOf, likedBy, favouritesOf } = filterParams;
 
     try {
         const queryConditions: any = { is_approved: true };
@@ -108,18 +110,35 @@ export const getAllApprovedRecipesData = async (filterParams: FilterParams): Pro
             queryConditions.title = { $regex: searchText, $options: "i" };
         }
 
-        if (username) {
-            const user = await User.findOne({username});
+        if (recipesOf) {
+            const user = await User.findOne({ username: recipesOf });
             if (!user) {
-                throw new Error(`User "${username}" not found.`);
+                throw new Error(`User "${recipesOf}" not found.`);
             }
             queryConditions.author = user._id;
+        }
+
+        if (likedBy) {
+            const user = await User.findOne({ username: likedBy });
+            if (!user) {
+                throw new Error(`User "${likedBy}" not found.`);
+            }
+            queryConditions._id = { $in: user.liked };
+        }
+
+        if (favouritesOf) {
+            const user = await User.findOne({ username: favouritesOf });
+            if (!user) {
+                throw new Error(`User "${favouritesOf}" not found.`);
+            }
+            queryConditions._id = { $in: user.favourites };
         }
 
         const recipesRaw = await Recipe.find(queryConditions)
             .sort({ date: -1 })
             .populate("author", "username")
             .populate("category", "name");
+
 
         const recipes: GetRecipeDTO[] = [];
 

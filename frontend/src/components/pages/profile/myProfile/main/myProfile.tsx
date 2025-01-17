@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import './my-profile.css';
 
-import DeleteAccountPopup from '../../../popups/actions/delete-acc/deleteAccountPopup';
-import EditAccountPopup from '../../../popups/actions/edit-profile/editProfileInfoPopup';
-import EditProfilePicturePopup from '../../../popups/actions/edit-profile/editProfilePicturePopup';
-
-import { useNavigate } from 'react-router-dom';
-
-import { EditAcc, UserData } from './types';
+import {EditAcc, UserData} from "./types";
+import {useNavigate} from "react-router-dom";
+import {validateJWT} from "../../../authCheck";
 import {
     deleteAccountRequest,
-    deleteProfilePictureRequest,
-    editAccountRequest,
+    deleteProfilePictureRequest, editAccountRequest,
     editProfilePictureRequest,
     getUserDataRequest
-} from './requests';
+} from "./requests";
+import Header from "../../../../sections/header/Header";
 
-import Header from '../../../sections/header/Header';
-import Footer from '../../../sections/footer/Footer';
-
-import { validateJWT } from '../../authCheck';
-import altImage from "../../../images/altImage.png";
+import altImage from "../../../../images/altImage.png";
+import Profilebar from "../../../../bars/profilebar/Profilebar";
+import DeleteAccountPopup from "../../../../popups/actions/delete-acc/deleteAccountPopup";
+import EditProfilePicturePopup from "../../../../popups/actions/edit-profile/editProfilePicturePopup";
+import EditAccountPopup from "../../../../popups/actions/edit-profile/editProfileInfoPopup";
+import MyRecipesWindow from "../myRecipesWindow/MyRecipesWindow";
+import Footer from "../../../../sections/footer/Footer";
+import MyLikedWindow from "../myLikedWindow/myLikedWindow";
+import MyFavouritesWindow from "../myFavouritesWindow/myFavouritesWindow";
 
 const MyProfile = () => {
     const [visibilityDeleteAccountPopup, setVisibilityDeleteAccountPopup] = useState(false);
@@ -32,6 +32,11 @@ const MyProfile = () => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+    const [showMyRecipes, setShowMyRecipes] = useState<boolean>(false);
+    const [showMyLiked, setShowMyLiked] = useState<boolean>(false);
+    const [showMyFavourites, setShowMyFavourites] = useState<boolean>(false);
+    const [showMyRatings, setShowMyRatings] = useState<boolean>(false);
 
     const navigateTo = useNavigate();
 
@@ -291,6 +296,12 @@ const MyProfile = () => {
                     Delete account
                 </button>
             </div>
+            <Profilebar
+                setShowMyRecipes={setShowMyRecipes}
+                setShowMyLiked={setShowMyLiked}
+                setShowMyFavourites={setShowMyFavourites}
+                setShowMyRatings={setShowMyRatings}
+            />
 
             {visibilityDeleteAccountPopup && (
                 <DeleteAccountPopup
@@ -298,7 +309,6 @@ const MyProfile = () => {
                     handleDeleteAccount={handleDeleteAccount}
                 />
             )}
-
 
 
             {visibilityEditProfilePicturePopup && (
@@ -317,6 +327,27 @@ const MyProfile = () => {
                     handleEditAccount={handleEditAccount}
                     fieldToEdit={currentFieldForEdit}
                     currentValue={currentFieldValue}
+                />
+            )}
+
+            {showMyRecipes && userData?.username && (
+                <MyRecipesWindow
+                    author={userData.username}
+                    close={setShowMyRecipes}
+                />
+            )}
+
+            {showMyLiked && userData?.username && (
+                <MyLikedWindow
+                    author={userData.username}
+                    close={setShowMyLiked}
+                />
+            )}
+
+            {showMyFavourites && userData?.username && (
+                <MyFavouritesWindow
+                    author={userData.username}
+                    close={setShowMyFavourites}
                 />
             )}
 

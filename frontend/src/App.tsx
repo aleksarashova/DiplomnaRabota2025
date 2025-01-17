@@ -10,7 +10,7 @@ import ResetPasswordPage from "./components/pages/reset-password/ResetPassword";
 import VerifyProfileForm from "./components/forms/verify-profile/VerifyProfile";
 import SendEmailForm from "./components/forms/send-verification-email/SendVerificationEmail";
 import SingleView from "./components/pages/single/singlepage/singleview";
-import MyProfile from "./components/pages/profile/myProfile/myProfile";
+import MyProfile from "./components/pages/profile/myProfile/main/myProfile";
 import Profile from "./components/pages/profile/otherProfile/profile";
 import AddRecipePage from "./components/pages/add-recipe/AddRecipe";
 import AdminPage from "./components/pages/admin/main/AdminPage";

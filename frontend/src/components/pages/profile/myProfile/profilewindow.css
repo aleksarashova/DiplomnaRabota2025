@@ -1,0 +1,70 @@
+.windowOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    border: 3px solid grey;
+}
+
+.windowTitle {
+    font-family: "Century Schoolbook", sans-serif;
+    font-size: 50px;
+    font-weight: bolder;
+    color: grey;
+    align-self: center;
+    border-bottom: 3px solid grey;
+    padding-left: 200px;
+    padding-right: 200px;
+    padding-bottom: 30px;
+}
+
+.windowContent {
+    background-color: #E6E6FA;
+    width: 80%;
+    max-width: 1200px;
+    max-height: 90%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-self: center;
+}
+
+.recipesListContainer {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    justify-self: flex-start;
+}
+
+.closeButtonProfileWindow {
+    background-color: #ff4d4f;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: flex-end;
+    margin: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.closeButtonProfileWindow:hover {
+    background-color: #e63946;
+}
+
+.closeButtonProfileWindow:active {
+    background-color: #d62828;
+}

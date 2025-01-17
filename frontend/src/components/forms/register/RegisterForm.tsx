@@ -10,7 +10,7 @@ import { registerUser } from "./requests";
 import RegisterError from "../../popups/errors/RegisterError";
 import RegisterSuccessfulMessage from "../../popups/messages/RegisterSuccessfulMessage";
 
-import { FaUser, FaLock, FaUserSecret } from "react-icons/fa";
+import { FaUser, FaLock } from "react-icons/fa";
 import { MdOutlineDriveFileRenameOutline, MdEmail } from "react-icons/md";
 
 import altImage from "../../images/altImage.png";

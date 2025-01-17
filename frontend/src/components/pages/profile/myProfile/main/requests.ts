@@ -1,5 +1,6 @@
 import {EditAcc} from "./types";
 
+
 export const getUserDataRequest = async (accessToken: string) => {
     try {
         const response = await fetch("http://localhost:8000/api/users/my-profile-data", {

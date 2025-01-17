@@ -151,7 +151,7 @@ const Profile = () => {
                 RECIPES OF THIS AUTHOR:
             </div>
             <div className="recipes-list-profile">
-                <RecipesList author={username}/>
+                <RecipesList recipesOf={username}/>
             </div>
             { !isOwnProfile && (
                 <div className="rateThisAuthor">

@@ -14,10 +14,12 @@ import { MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight } f
 interface RecipesListProps {
     selectedCategory?: string | null;
     searchText?: string;
-    author?: string;
+    recipesOf?: string;
+    likedBy?: string;
+    favouritesOf?: string;
 }
 
-const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText = "", author }: RecipesListProps) => {
+const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText = "", recipesOf, likedBy, favouritesOf }: RecipesListProps) => {
     const [recipes, setRecipes] = useState<Recipe[] | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
@@ -31,7 +33,7 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
             setIsLoggedIn(!!isValid);
 
             try {
-                const recipesData = await getAllApprovedRecipes(selectedCategory, searchText, author);
+                const recipesData = await getAllApprovedRecipes(selectedCategory, searchText, recipesOf, likedBy, favouritesOf);
                 setRecipes(recipesData);
             } catch (error) {
                 console.error("Error getting recipes:", error);

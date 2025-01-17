@@ -28,10 +28,12 @@ export const getAllApprovedRecipes = async (req: Request, res: Response) => {
     try {
         const category = typeof req.query.category === "string" ? req.query.category : undefined;
         const searchText = typeof req.query.searchText === "string" ? req.query.searchText : undefined;
-        const username = typeof req.query.username === "string" ? req.query.username : undefined;
+        const recipesOf = typeof req.query.recipesOf === "string" ? req.query.recipesOf: undefined;
+        const likedBy = typeof req.query.likedBy === "string" ? req.query.likedBy: undefined;
+        const favouritesOf = typeof req.query.favouritesOf === "string" ? req.query.favouritesOf: undefined;
 
 
-        const recipes = await getAllApprovedRecipesData({ category, searchText, username });
+        const recipes = await getAllApprovedRecipesData({ category, searchText, recipesOf, likedBy, favouritesOf });
         res.status(200).json({ recipes });
     } catch (error) {
         console.error("Error during trying to get all approved recipes:", error);
