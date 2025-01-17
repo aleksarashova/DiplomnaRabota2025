@@ -2,7 +2,13 @@ import {HydratedDocument, Types} from "mongoose";
 import User, {UserInterface} from "../models/User";
 
 import bcrypt from 'bcryptjs';
-import {GetAllUsersDTO, OtherUserProfileDTO, RegisterUserDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
+import {
+    GetAllUsersDTO,
+    OtherUserProfileDTO,
+    RegisterUserDTO,
+    UpdateUserDTO,
+    UserProfileDTO, UserRating
+} from "../DTOs/UserDTOs";
 import {findRecipeById} from "./RecipeService";
 import path from "path";
 import {deleteFile} from "./FileService";
@@ -594,6 +600,38 @@ export const getAverageRating = async (username: string) => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while getting overall rating.");
+    }
+}
+
+export const getUserRatings = async (username: string) => {
+    try {
+        const user = await findUserByUsername(username);
+
+        if (!user) {
+            throw new Error("User not found.");
+        }
+
+
+        const rawRatings = user.ratings || [];
+
+        const ratings: UserRating[] = [];
+        for (const rawRating of rawRatings) {
+            const raterId = rawRating.raterId.toString();
+            const raterUser = await findUserById(raterId);
+            const raterName = raterUser ? raterUser.username : "Unknown";
+
+            ratings.push({
+                rater: raterName,
+                rating: rawRating.rating,
+            });
+        }
+
+        return ratings;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting user ratings.");
     }
 }
 

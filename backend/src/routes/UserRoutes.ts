@@ -18,7 +18,7 @@ import {
     editProfilePicture,
     deleteProfilePicture,
     rateUser,
-    getAllUsers, updateUserRole, getOverallRating
+    getAllUsers, updateUserRole, getOverallRating, getRatings
 } from "../controllers/UserController";
 import {validateRequest} from "../middlewares/RequestValidationMiddleware";
 import {profileUpdateSchema, userLoginSchema, userRegisterSchema} from "../validationSchemas/UserValidation";
@@ -52,5 +52,6 @@ router.post("/rate-user", checkAuthentication, rateUser);
 router.get("/get-all", checkAuthentication, getAllUsers);
 router.post("/update-role", checkAuthentication, updateUserRole);
 router.get("/get-overall-rating", checkAuthentication, getOverallRating);
+router.get("/get-ratings", checkAuthentication, getRatings);
 
 export default router;
