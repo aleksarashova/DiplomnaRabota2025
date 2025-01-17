@@ -29,7 +29,6 @@ const RegisterForm = () => {
     const emailRef = useRef<HTMLInputElement>(null);
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
-    const adminCodeRef = useRef<HTMLInputElement>(null);
 
     const navigateTo = useNavigate();
 
@@ -83,7 +82,6 @@ const RegisterForm = () => {
         formData.append("email", emailRef.current?.value || "");
         formData.append("username", usernameRef.current?.value || "");
         formData.append("password", passwordRef.current?.value || "");
-        formData.append("admin_code", adminCodeRef.current?.value || "");
         
         if (image) {
             formData.append("image", image);
@@ -220,19 +218,6 @@ const RegisterForm = () => {
                                 className="form-input"
                                 disabled={isLoading}
                                 required
-                            />
-                        </div>
-
-                        <div className="form-input-box">
-                            <div className="form-icon">
-                                <FaUserSecret/>
-                            </div>
-                            <input
-                                ref={adminCodeRef}
-                                type="text"
-                                placeholder="Admin code (optional)"
-                                className="form-input"
-                                disabled={isLoading}
                             />
                         </div>
 

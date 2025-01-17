@@ -9,6 +9,14 @@
     gap: 30px;
 }
 
+.noRecipesMessage {
+    font-size: 18px;
+    color: gray;
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
 #recipe-admin-page {
     height: 450px;
 }

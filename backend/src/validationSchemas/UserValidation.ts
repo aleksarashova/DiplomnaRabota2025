@@ -23,10 +23,6 @@ export const userRegisterSchema = Yup.object().shape({
     password: Yup.string()
         .required("Password is required.")
         .min(8, "Password must be at least 8 characters."),
-
-    admin_code: Yup.string()
-        .notRequired()
-        .oneOf([process.env.ADMIN_CODE, ""], "Invalid admin code."),
 })
 
 export const userLoginSchema = Yup.object().shape({

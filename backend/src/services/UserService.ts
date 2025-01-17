@@ -34,16 +34,15 @@ export const checkForRightPassword = async(password: string, real_password_hash:
 export const createUser = async (userData: RegisterUserDTO) => {
     try {
         const passwordHash: string = await hashPassword(userData.password);
-        const role: string = userData.admin_code === process.env.ADMIN_CODE ? "admin" : "user";
 
         const user: UserInterface = {
             first_name: userData.first_name,
             last_name: userData.last_name,
-            email: userData.email,
             username: userData.username,
+            email: userData.email,
             password_hash: passwordHash,
-            role,
             bio: "",
+            role: "user",
             is_verified: false,
             is_logged_in: false,
             recipes: [],
