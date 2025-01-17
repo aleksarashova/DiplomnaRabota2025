@@ -8,27 +8,42 @@ import {AddCategoryPopup} from "../../../popups/actions/add-category/AddCategory
 import {useNavigate} from "react-router-dom";
 import {validateJWT} from "../../authCheck";
 import CategoryError from "../../../popups/errors/AddCategoryError";
+import NotAdminError from "../../../popups/errors/NotAdminError";
+import Header from "../../../sections/header/Header";
 
 const CategoriesPage = () => {
     const [categories, setCategories] = useState<string[] | null>(null);
     const [visibilityAddCategoryPopup, setVisibilityAddCategoryPopup] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string>("");
     const [visibilityCategoryErrorPopup, setVisibilityCategoryErrorPopup] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+    const [notAdminErrorPopup, setNotAdminErrorPopup] = useState<boolean>(false);
 
 
     const navigateTo = useNavigate();
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("accessToken");
-        const isValid = accessToken && validateJWT(accessToken);
+        const token = localStorage.getItem("accessToken");
+        const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
+            return;
+        }
+
+        setIsLoggedIn(true);
+
+        if (role === "admin") {
+            setIsAdmin(true);
+        } else {
+            setErrorMessage("Only admins can access this page.");
+            setNotAdminErrorPopup(true);
         }
 
         const fetchCategories = async () => {
             try {
-                const categories = await getAllCategoriesForAdmin(accessToken!);
+                const categories = await getAllCategoriesForAdmin(token!);
                 setCategories(categories);
             } catch (error) {
                 console.error("Error getting categories:", error);
@@ -47,17 +62,21 @@ const CategoriesPage = () => {
         setVisibilityCategoryErrorPopup(false);
     }
 
-    const handleAddCategory = async(category: string) => {
-        const accessToken = localStorage.getItem("accessToken");
+    const handleCloseNotAdminError = () => {
+        setNotAdminErrorPopup(false);
+        navigateTo("/");
+    }
 
-        if (!accessToken) {
-            console.error("No access token found.");
+    const handleAddCategory = async(category: string) => {
+        const token = localStorage.getItem("accessToken");
+        const { isValid} = validateJWT(token);
+
+        if (!isValid) {
             navigateTo("/login");
-            return;
         }
 
         try {
-            const data = await addCategory(category, accessToken);
+            const data = await addCategory(category, token!);
 
             console.log("Backend Response:", data);
             setVisibilityAddCategoryPopup(false);
@@ -82,16 +101,15 @@ const CategoriesPage = () => {
     }
 
     const handleDeleteCategory = async(category: string) => {
-        const accessToken = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("accessToken");
+        const { isValid } = validateJWT(token);
 
-        if (!accessToken) {
-            console.error("No access token found.");
+        if (!isValid) {
             navigateTo("/login");
-            return;
         }
 
         try {
-            await deleteCategory(category, accessToken);
+            await deleteCategory(category, token!);
             window.location.reload();
         } catch (error) {
             console.error("Error during deleting category:", error);
@@ -106,6 +124,7 @@ const CategoriesPage = () => {
 
     return (
         <div className="admin-page-categories">
+            <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} isProfilePage={false} isHomePage={false} />
             <div className="categoriesSection">
                 <p className="categoriesTitleAdmin">CATEGORIES</p>
                 {categories &&
@@ -129,6 +148,12 @@ const CategoriesPage = () => {
                     handleCloseError={handleCloseCategoryError}
                     errorContent={errorMessage}
                 />
+            )}
+
+            {notAdminErrorPopup && (
+                <NotAdminError
+                    handleCloseError={handleCloseNotAdminError}
+                    errorContent={errorMessage} />
             )}
         </div>
     );

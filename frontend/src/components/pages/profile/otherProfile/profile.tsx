@@ -16,6 +16,7 @@ import {FaStar} from "react-icons/fa";
 
 const Profile = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [userData, setUserData] = useState<OtherUserData | null>(null);
     const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
     const [averageRating, setAverageRating] = useState<number>(0);
@@ -31,9 +32,15 @@ const Profile = () => {
         const fetchData = async () => {
             setLoading(true);
             window.scrollTo(0, 0);
+
             const token = localStorage.getItem("accessToken");
-            const isValid = token && validateJWT(token);
+            const { isValid, role } = validateJWT(token);
             setIsLoggedIn(!!isValid);
+            setIsAdmin(role === "admin");
+
+            if (!isValid) {
+                navigateTo("/login");
+            }
 
             if (isValid) {
                 try {
@@ -54,15 +61,15 @@ const Profile = () => {
     }, [isOwnProfile]);
 
     const getOtherUserData = async () => {
-        const accessToken = localStorage.getItem('accessToken');
-        if (!accessToken) {
-            console.error('No access token found.');
-            navigateTo('/login');
-            return;
+        const token = localStorage.getItem("accessToken");
+        const { isValid, role } = validateJWT(token);
+
+        if (!isValid) {
+            navigateTo("/login");
         }
 
         try {
-            const data = await getOtherUserDataRequest(accessToken, username || "");
+            const data = await getOtherUserDataRequest(token!, username || "");
             console.log('Backend Response:', data);
             setUserData(data.user);
             setIsOwnProfile(data.user.isOwnProfile);
@@ -78,11 +85,11 @@ const Profile = () => {
     }
 
     const handleRating = async (selectedRating: number) => {
-        const accessToken = localStorage.getItem('accessToken');
-        if (!accessToken) {
-            console.error('No access token found.');
-            navigateTo('/login');
-            return;
+        const token = localStorage.getItem("accessToken");
+        const { isValid, role } = validateJWT(token);
+
+        if (!isValid) {
+            navigateTo("/login");
         }
 
         const rateData: RateUserData =  {
@@ -91,7 +98,7 @@ const Profile = () => {
         }
 
         try {
-            await rateUserRequest(accessToken, rateData);
+            await rateUserRequest(token!, rateData);
             window.location.reload();
         } catch (error) {
             console.error('Error rating the author:', error);
@@ -122,7 +129,7 @@ const Profile = () => {
 
     return (
         <div className="profileWrapper">
-            <Header isLoggedIn={isLoggedIn} isProfilePage={false} isHomePage={false}/>
+            <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} isProfilePage={false} isHomePage={false}/>
             <div className="commonProfileInfo">
                 <div className="photo-rating-wrapper">
                     <img src={userImagePath} alt="Profile Photo" className="profilePhoto"/>

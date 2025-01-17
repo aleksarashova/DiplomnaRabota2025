@@ -40,6 +40,12 @@
     margin-left: 200px;
 }
 
+.errorCloseButtonWidest {
+    width: 150px;
+    margin-left: 100px;
+    margin-top: 20px;
+}
+
 .errorCloseButton:hover, .errorCloseButtonWider:hover {
     color: #383838;
 }

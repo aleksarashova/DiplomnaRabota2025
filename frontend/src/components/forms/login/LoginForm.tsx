@@ -45,7 +45,6 @@ const LoginForm = () => {
             console.log("Backend Response:", data);
 
             localStorage.setItem("accessToken", data.accessToken);
-            localStorage.setItem("refreshToken", data.refreshToken);
 
             navigateTo("/");
         } catch (error) {

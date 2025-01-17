@@ -16,17 +16,17 @@ const Adminbar = () => {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const accessToken = localStorage.getItem("accessToken");
-            const isValid = accessToken && validateJWT(accessToken);
+            const token = localStorage.getItem("accessToken");
+            const { isValid } = validateJWT(token);
 
             if (!isValid) {
                 navigateTo("/login");
             }
 
             try {
-                const numberRecipes = await getNumberOfPendingRecipes(accessToken!);
+                const numberRecipes = await getNumberOfPendingRecipes(token!);
                 setNumberOfPendingRecipes(numberRecipes);
-                const numberComments = await getNumberOfPendingComments(accessToken!);
+                const numberComments = await getNumberOfPendingComments(token!);
                 setNumberOfPendingComments(numberComments);
             } catch (error) {
                 console.error("Error getting categories:", error);

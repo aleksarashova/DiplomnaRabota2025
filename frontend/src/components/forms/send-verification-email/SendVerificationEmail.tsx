@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 import {SendVerificationEmailFormData} from "./types";
 import {sendVerificationEmail} from "./requests";
+import {validateJWT} from "../../pages/authCheck";
 
 const SendEmailForm = () => {
     const emailRef = useRef<HTMLInputElement>(null);

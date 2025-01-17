@@ -7,19 +7,35 @@ import {validateJWT} from "../../authCheck";
 import {approveRecipe, getAllUnapprovedRecipes, rejectRecipe} from "./requests";
 import FoodImage from "../../../images/altImage.png";
 import {FaComment, FaHeart} from "react-icons/fa";
+import Header from "../../../sections/header/Header";
+import NotAdminError from "../../../popups/errors/NotAdminError";
 
 const RecipesPage = () => {
     const [recipes, setRecipes] = useState<Recipe[] | null>(null);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+    const [notAdminErrorPopup, setNotAdminErrorPopup] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>("");
 
     const navigateTo = useNavigate();
 
     useEffect(() => {
         const fetchRecipes = async () => {
             const token = localStorage.getItem("accessToken");
-            const isValid = token && validateJWT(token);
+            const { isValid, role } = validateJWT(token);
 
             if (!isValid) {
                 navigateTo("/login");
+                return;
+            }
+
+            setIsLoggedIn(true);
+
+            if (role === "admin") {
+                setIsAdmin(true);
+            } else {
+                setErrorMessage("Only admins can access this page.");
+                setNotAdminErrorPopup(true);
             }
 
             try {
@@ -34,9 +50,14 @@ const RecipesPage = () => {
         fetchRecipes();
     }, []);
 
+    const handleCloseNotAdminError = () => {
+        setNotAdminErrorPopup(false);
+        navigateTo("/");
+    }
+
     const handleApproveRecipe = async(recipeId: string) => {
         const token = localStorage.getItem("accessToken");
-        const isValid = token && validateJWT(token);
+        const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
@@ -52,7 +73,7 @@ const RecipesPage = () => {
 
     const handleRejectRecipe = async(recipeId: string) => {
         const token = localStorage.getItem("accessToken");
-        const isValid = token && validateJWT(token);
+        const { isValid, role } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
@@ -68,6 +89,7 @@ const RecipesPage = () => {
 
     return (
         <div className="admin-page-recipes">
+            <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} isProfilePage={false} isHomePage={false} />
             <p className="recipesTitleAdmin">PENDING RECIPES</p>
             <div className="recipes-list" id="recipes-list-admin-page">
                 {recipes && recipes.length > 0 ? (
@@ -111,6 +133,11 @@ const RecipesPage = () => {
                     <p className="noRecipesMessage">No recipes available. Please check back later!</p>
                 )}
             </div>
+            {notAdminErrorPopup &&(
+              <NotAdminError
+                  handleCloseError={handleCloseNotAdminError}
+                  errorContent={errorMessage}  />
+            )}
         </div>
     );
 }

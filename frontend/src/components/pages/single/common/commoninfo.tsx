@@ -20,6 +20,7 @@ import {
     removeRecipeFromFavourites,
     removeRecipeFromLiked
 } from "./requests";
+import {validateJWT} from "../../authCheck";
 
 type CommonRecipeInfoProps = {
     recipeData: RecipeData | null;
@@ -34,12 +35,11 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
     const { recipeId } = useParams();
 
     const getIsRecipeFavouriteAndLiked = async() => {
-        const accessToken = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("accessToken");
+        const { isValid, role } = validateJWT(token);
 
-        if (!accessToken) {
-            console.error("No access token found.");
+        if (!isValid) {
             navigateTo("/login");
-            return;
         }
 
         if(!recipeId) {
@@ -49,8 +49,8 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
         }
 
         try {
-            const isFavouriteRecipe = await getIsRecipeFavourite(recipeId, accessToken);
-            const isLikedRecipe = await getIsRecipeLiked(recipeId, accessToken);
+            const isFavouriteRecipe = await getIsRecipeFavourite(recipeId, token!);
+            const isLikedRecipe = await getIsRecipeLiked(recipeId, token!);
             setIsFavourite(isFavouriteRecipe);
             setIsLiked(isLikedRecipe);
         } catch (error) {
@@ -59,12 +59,11 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
     }
 
     const handleAddOrRemoveFavourites = async () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("accessToken");
+        const { isValid, role } = validateJWT(token);
 
-        if (!accessToken) {
-            console.error("No access token found.");
+        if (!isValid) {
             navigateTo("/login");
-            return;
         }
 
         if(!recipeId) {
@@ -77,9 +76,9 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
 
         try {
             if (!isFavourite) {
-                await addRecipeToFavourites(recipeId, accessToken);
+                await addRecipeToFavourites(recipeId, token!);
             } else {
-                await removeRecipeFromFavourites(recipeId, accessToken);
+                await removeRecipeFromFavourites(recipeId, token!);
             }
         } catch (error) {
             console.error("Failed to update favourites:", error);
@@ -88,12 +87,11 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
     }
 
     const handleAddOrRemoveLiked = async () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("accessToken");
+        const { isValid, role } = validateJWT(token);
 
-        if (!accessToken) {
-            console.error("No access token found.");
+        if (!isValid) {
             navigateTo("/login");
-            return;
         }
 
         if(!recipeId) {
@@ -106,9 +104,9 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
 
         try {
             if (!isLiked) {
-                await addRecipeToLiked(recipeId, accessToken);
+                await addRecipeToLiked(recipeId, token!);
             } else {
-                await removeRecipeFromLiked(recipeId, accessToken);
+                await removeRecipeFromLiked(recipeId, token!);
             }
 
             window.location.reload();

@@ -5,19 +5,35 @@ import { validateJWT } from "../../authCheck";
 import { getAllUsers, updateUserRole } from "./requests";
 import { User } from "./types";
 import altImage from "../../../images/altImage.png";
+import Header from "../../../sections/header/Header";
+import NotAdminError from "../../../popups/errors/NotAdminError";
 
 const RolesPage = () => {
     const [users, setUsers] = useState<User[] | null>(null);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+    const [notAdminErrorPopup, setNotAdminErrorPopup] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+
     const navigateTo = useNavigate();
 
     useEffect(() => {
         const fetchUsers = async () => {
             const token = localStorage.getItem("accessToken");
-            const isValid = token && validateJWT(token);
+            const { isValid, role } = validateJWT(token);
 
             if (!isValid) {
                 navigateTo("/login");
                 return;
+            }
+
+            setIsLoggedIn(true);
+
+            if (role === "admin") {
+                setIsAdmin(true);
+            } else {
+                setErrorMessage("Only admins can access this page.");
+                setNotAdminErrorPopup(true);
             }
 
             try {
@@ -32,13 +48,21 @@ const RolesPage = () => {
         fetchUsers();
     }, [navigateTo]);
 
+    const handleCloseNotAdminError = () => {
+        setNotAdminErrorPopup(false);
+        navigateTo("/");
+    }
+
     const handleRoleChange = async (userId: string, newRole: string) => {
-        console.log("Changing role for userId:", userId, "to", newRole);
         const token = localStorage.getItem("accessToken");
-        if (!token) return;
+        const { isValid, role } = validateJWT(token);
+
+        if (!isValid) {
+            navigateTo("/login");
+        }
 
         try {
-            await updateUserRole(token, userId, newRole);
+            await updateUserRole(token!, userId, newRole);
             setUsers((prevUsers) =>
                 prevUsers
                     ? prevUsers.map((user) =>
@@ -53,6 +77,7 @@ const RolesPage = () => {
 
     return (
         <div className="admin-page-roles">
+            <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} isProfilePage={false} isHomePage={false} />
             <div className="rolesSection">
                 <p className="rolesTitleAdmin">MANAGE USER ROLES</p>
                 <div className="users-list">
@@ -104,6 +129,11 @@ const RolesPage = () => {
                     )}
                 </div>
             </div>
+            {notAdminErrorPopup && (
+                <NotAdminError
+                    handleCloseError={handleCloseNotAdminError}
+                    errorContent={errorMessage} />
+            )}
         </div>
     );
 };

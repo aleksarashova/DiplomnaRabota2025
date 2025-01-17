@@ -8,12 +8,15 @@ import AddRecipeForm from "../../forms/add-recipe/AddRecipe";
 
 const AddRecipePage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
     const navigateTo = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
-        const isValid = token && validateJWT(token);
+        const { isValid, role } = validateJWT(token);
         setIsLoggedIn(!!isValid);
+        setIsAdmin(role === "admin");
 
         if (!isValid) {
             navigateTo("/login");
@@ -26,7 +29,7 @@ const AddRecipePage = () => {
 
     return (
         <div className="form-page">
-            <Header isLoggedIn={isLoggedIn} isProfilePage={false} isHomePage={false}/>
+            <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} isProfilePage={false} isHomePage={false}/>
             <AddRecipeForm />
             <Footer />
         </div>

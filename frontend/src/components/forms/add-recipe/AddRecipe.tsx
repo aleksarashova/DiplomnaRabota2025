@@ -38,14 +38,14 @@ const AddRecipeForm = () => {
     }
 
     const getCategories = async () => {
-        const accessToken = localStorage.getItem("accessToken");
-        const isValid = accessToken && validateJWT(accessToken);
+        const token = localStorage.getItem("accessToken");
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
         }
         try {
-            const data = await getAllCategories(accessToken!);
+            const data = await getAllCategories(token!);
             console.log("Backend Response:", data);
             setCategories(data.categories);
         } catch (error) {
@@ -94,10 +94,10 @@ const AddRecipeForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const token = localStorage.getItem("accessToken");
+        const { isValid } = validateJWT(token);
 
-        const accessToken = localStorage.getItem("accessToken");
-
-        if (!accessToken) {
+        if (!isValid) {
             console.error("No access token found.");
             navigateTo("/login");
             return;
@@ -128,7 +128,7 @@ const AddRecipeForm = () => {
 
 
         try {
-            const data = await addRecipe(formData, accessToken);
+            const data = await addRecipe(formData, token!);
             console.log("Backend Response:", data);
             setVisibilitySuccessfulRecipeCreation(true);
         } catch (error) {

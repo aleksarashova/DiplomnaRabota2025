@@ -12,6 +12,7 @@ import {useNavigate} from "react-router-dom";
 import {addComment} from "./requests";
 import CommentError from "../../../popups/errors/AddCommentError";
 import {RecipeData} from "../singlepage/types";
+import {validateJWT} from "../../authCheck";
 
 type CommentsInfoProps = {
     recipeData: RecipeData | null;
@@ -44,16 +45,15 @@ const CommentsSection = ({recipeData}: CommentsInfoProps) => {
     }
 
     const handleAddComment = async (content: string) => {
-        const accessToken = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("accessToken");
+        const { isValid, role } = validateJWT(token);
 
-        if (!accessToken) {
-            console.error("No access token found.");
+        if (!isValid) {
             navigateTo("/login");
-            return;
         }
 
         try {
-            const data = await addComment(content, accessToken, recipeId || "");
+            const data = await addComment(content, token!, recipeId || "");
 
             console.log("Backend Response:", data);
 

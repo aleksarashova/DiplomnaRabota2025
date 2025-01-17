@@ -10,19 +10,21 @@ import {validateJWT} from "../authCheck";
 
 const HomePage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [searchText, setSearchText] = useState<string>("");
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
-        const isValid = validateJWT(token);
-        setIsLoggedIn(isValid);
+        const { isValid, role } = validateJWT(token);
+        setIsLoggedIn(!!isValid);
+        setIsAdmin(role === "admin");
     }, []);
 
     return (
         <div className="homepage-body">
             <Sidebar setSelectedCategory={setSelectedCategory}/>
-            <Header isLoggedIn={isLoggedIn} isProfilePage={false} isHomePage={true} setSearchText={setSearchText}/>
+            <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} isProfilePage={false} isHomePage={true} setSearchText={setSearchText}/>
             <div className="content">
                 <RecipesList selectedCategory={selectedCategory} searchText={searchText}/>
             </div>

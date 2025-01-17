@@ -16,15 +16,15 @@ const Sidebar: React.FC<SidebarProps> = ({ setSelectedCategory }) => {
     const navigateTo = useNavigate();
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("accessToken");
-        const isValid = accessToken && validateJWT(accessToken);
+        const token = localStorage.getItem("accessToken");
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
         }
         const fetchCategories = async () => {
             try {
-                const categories = await getAllCategories(accessToken!);
+                const categories = await getAllCategories(token!);
                 setCategories(categories);
             } catch (error) {
                 console.error("Error getting categories:", error);

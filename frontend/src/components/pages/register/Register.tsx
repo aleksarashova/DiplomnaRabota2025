@@ -7,7 +7,7 @@ import Footer from "../../sections/footer/Footer";
 const RegisterPage = () => {
     return (
         <div className="form-page">
-            <Header isLoggedIn={false} isProfilePage={false} isHomePage={false}/>
+            <Header isLoggedIn={false} isAdmin={false} isProfilePage={false} isHomePage={false}/>
             <RegisterForm />
             <Footer />
         </div>

@@ -15,43 +15,23 @@ import {getRecipeDataRequest} from "./requests";
 const SingleView = () => {
     const commentsSectionRef = useRef<HTMLDivElement | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [recipeData, setRecipeData] = useState<RecipeData | null>(null);
 
     const navigateTo = useNavigate();
 
     const { recipeId } = useParams();
 
-    const getRecipeData = async () => {
-        const accessToken = localStorage.getItem('accessToken');
-        if (!accessToken) {
-            console.error('No access token found.');
-            navigateTo('/login');
-            return;
-        }
-
-        if (!recipeId) {
-            console.error('No recipeId found in URL.');
-            return;
-        }
-
-        try {
-            const data = await getRecipeDataRequest(accessToken, recipeId);
-            console.log('Backend Response:', data);
-            setRecipeData(data.recipe);
-        } catch (error) {
-            console.error('Error getting recipe data:', error);
-
-            if (error instanceof Error && error.message.includes('401')) {
-                navigateTo('/login');
-            }
-        }
-    }
-
     useEffect(() => {
         const fetchData = async () => {
             const token = localStorage.getItem("accessToken");
-            const isValid = token && validateJWT(token);
+            const { isValid, role } = validateJWT(token);
             setIsLoggedIn(!!isValid);
+            setIsAdmin(role === "admin");
+
+            if (!isValid) {
+                navigateTo("/login");
+            }
 
             if (isValid) {
                 try {
@@ -67,6 +47,32 @@ const SingleView = () => {
         fetchData();
     }, []);
 
+    const getRecipeData = async () => {
+        const token = localStorage.getItem("accessToken");
+        const { isValid } = validateJWT(token);
+
+        if (!isValid) {
+            navigateTo("/login");
+        }
+
+        if (!recipeId) {
+            console.error('No recipeId found in URL.');
+            return;
+        }
+
+        try {
+            const data = await getRecipeDataRequest(token!, recipeId);
+            console.log('Backend Response:', data);
+            setRecipeData(data.recipe);
+        } catch (error) {
+            console.error('Error getting recipe data:', error);
+
+            if (error instanceof Error && error.message.includes('401')) {
+                navigateTo('/login');
+            }
+        }
+    }
+
     if (!isLoggedIn) {
         return null;
     }
@@ -77,7 +83,7 @@ const SingleView = () => {
 
     return (
         <div className="singleViewPage">
-            <Header isLoggedIn={isLoggedIn} isProfilePage={false} isHomePage={false} />
+            <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} isProfilePage={false} isHomePage={false} />
             <CommonRecipeInfo
                 recipeData={recipeData}
                 onCommentClick={handleScrollToComments}

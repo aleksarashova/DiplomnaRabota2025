@@ -5,19 +5,35 @@ import {Link, useNavigate} from "react-router-dom";
 import {validateJWT} from "../../authCheck";
 import {approveComment, getAllUnapprovedComments, rejectComment} from "./requests";
 import {Comment} from "./types";
+import Header from "../../../sections/header/Header";
+import NotAdminError from "../../../popups/errors/NotAdminError";
 
 const CommentsPage = () => {
     const [comments, setComments] = useState<Comment[] | null>(null);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+    const [notAdminErrorPopup, setNotAdminErrorPopup] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>("");
 
     const navigateTo = useNavigate();
 
     useEffect(() => {
         const fetchComments = async () => {
             const token = localStorage.getItem("accessToken");
-            const isValid = token && validateJWT(token);
+            const { isValid, role } = validateJWT(token);
 
             if (!isValid) {
                 navigateTo("/login");
+                return;
+            }
+
+            setIsLoggedIn(true);
+
+            if (role === "admin") {
+                setIsAdmin(true);
+            } else {
+                setErrorMessage("Only admins can access this page.");
+                setNotAdminErrorPopup(true);
             }
 
             try {
@@ -32,9 +48,14 @@ const CommentsPage = () => {
         fetchComments();
     }, []);
 
+    const handleCloseNotAdminError = () => {
+        setNotAdminErrorPopup(false);
+        navigateTo("/");
+    }
+
     const handleApproveComment = async(commentId: string) => {
         const token = localStorage.getItem("accessToken");
-        const isValid = token && validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
@@ -50,12 +71,11 @@ const CommentsPage = () => {
 
     const handleRejectComment = async(commentId: string) => {
         const token = localStorage.getItem("accessToken");
-        const isValid = token && validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
         }
-
         try {
             await rejectComment(token!, commentId);
             window.location.reload();
@@ -66,6 +86,7 @@ const CommentsPage = () => {
 
     return (
         <div className="admin-page-comments">
+            <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} isProfilePage={false} isHomePage={false} />
             <p className="commentsTitleAdmin">PENDING COMMENTS</p>
             <div className="comments-list">
                 {comments && comments.length > 0 ? (
@@ -89,6 +110,12 @@ const CommentsPage = () => {
                     <p className="noCommentsMessage">No comments available. Please check back later!</p>
                 )}
             </div>
+
+            {notAdminErrorPopup && (
+                <NotAdminError
+                    handleCloseError={handleCloseNotAdminError}
+                    errorContent={errorMessage} />
+            )}
         </div>
     );
 }

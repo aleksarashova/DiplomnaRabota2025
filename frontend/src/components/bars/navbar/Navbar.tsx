@@ -6,24 +6,25 @@ import { FaHome } from "react-icons/fa";
 import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { MdAppRegistration } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
+import { RiAdminFill } from "react-icons/ri";
+
 import SearchBar from "../searchbar/searchbar";
 
 interface NavbarProps {
     isLoggedIn: boolean;
+    isAdmin: boolean;
     isProfilePage: boolean;
     isHomePage: boolean;
     setSearchText?: (text: string) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isProfilePage, isHomePage, setSearchText }) => {
+const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isHomePage, setSearchText }) => {
     const navbarClass = isHomePage
         ? "navbar-home"
         : "navbar-home navbar-default";
 
     const handleLogOut = () => {
-        //ako nqma da maham login ot bazata da go promenqm i tam
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
     }
 
     return (
@@ -42,6 +43,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isProfilePage, isHomePage, 
                         </div>
                     </Link>
                 </li>
+
+                {isAdmin && isLoggedIn && (
+                    <li>
+                        <Link to="/admin" className="link">
+                            <div className="icon-box-nav">
+                                <RiAdminFill className="icon-nav" />
+                            </div>
+                        </Link>
+                    </li>
+                )}
 
                 {isLoggedIn && !isProfilePage && (
                     <li>

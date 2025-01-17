@@ -109,20 +109,11 @@ export const login = async (req: Request, res: Response) => {
                 }
             );
 
-            const refreshToken = jwt.sign(
-                {userId: user._id},
-                process.env.JWT_SECRET!,
-                {
-                    expiresIn: process.env.JWT_REFRESH_EXP,
-                }
-            );
-
             await updateUserLoggedIn(username);
 
             res.status(200).json({
                 message: "User logged in successfully.",
                 accessToken,
-                refreshToken,
             });
         } else {
             res.status(400).json({message: "No user is registered with this username. Please register first."});
