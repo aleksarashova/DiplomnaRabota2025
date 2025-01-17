@@ -1,5 +1,6 @@
 import { HydratedDocument, Types } from "mongoose";
 import Category, { CategoryInterface } from "../models/Category";
+import Recipe from "../models/Recipe";
 
 const createCategory = async (name : string) => {
     try {
@@ -16,7 +17,7 @@ const createCategory = async (name : string) => {
     }
 }
 
-export const removeCategory = async (name : string) => {
+export const removeCategory = async (name: string) => {
     try {
         const deletedCategory = await Category.findOneAndDelete({ name: name });
 
@@ -24,9 +25,16 @@ export const removeCategory = async (name : string) => {
             throw new Error("Category not found.");
         }
 
+        const recipesToDelete = await Recipe.find({ category: deletedCategory._id });
+
+        if (recipesToDelete.length > 0) {
+            await Recipe.deleteMany({ category: deletedCategory._id });
+            console.log(`${recipesToDelete.length} recipes deleted.`);
+        }
+
         console.log(`Category ${name} deleted successfully.`);
-    } catch(error) {
-        if(error instanceof Error) {
+    } catch (error) {
+        if (error instanceof Error) {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while deleting category.");
