@@ -5,7 +5,6 @@ import {
     createUser,
     deleteUser,
     findUserByUsername,
-    updateUserLoggedIn,
     updateUserProfile,
     getUserProfileData,
     updateUserVerified,
@@ -34,7 +33,7 @@ export const register = async (req: Request, res: Response) => {
         const newUser = await createUser(newUserData);
 
         const {email} = req.body;
-        // await sendVerificationEmail(email);
+        await sendVerificationEmail(email);
 
         res.status(201).json({ message: "User registered successfully.", user: newUser });
     } catch (error) {
@@ -108,8 +107,6 @@ export const login = async (req: Request, res: Response) => {
                     expiresIn: process.env.JWT_EXP,
                 }
             );
-
-            await updateUserLoggedIn(username);
 
             res.status(200).json({
                 message: "User logged in successfully.",

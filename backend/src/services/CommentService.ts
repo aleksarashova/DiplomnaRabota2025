@@ -22,7 +22,6 @@ export const addComment = async(commentData: AddCommentDTO) => {
             author: author._id,
             date: date,
             content: commentData.content,
-            recipe: recipe._id,
             is_approved: false,
         }
 

@@ -4,7 +4,6 @@ export interface CommentInterface {
     author: Types.ObjectId;
     date: Date;
     content: string;
-    recipe: Types.ObjectId;
     is_approved: boolean;
 }
 
@@ -14,7 +13,6 @@ const CommentSchema: Schema = new Schema<CommentInterface, CommentModel>({
     author: { type: Schema.Types.ObjectId, ref: "User" },
     date: { type: Date },
     content: { type: String },
-    recipe: { type: Schema.Types.ObjectId, ref: "Recipe"},
     is_approved: { type: Boolean }
 }, {collection: 'comments'});
 

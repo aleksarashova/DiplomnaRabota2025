@@ -70,17 +70,17 @@ export const generateVerificationCode = async (): Promise<number> => {
 
 const getSMTPConfig = (email: string) => {
     const domain = email.split("@")[1];
-    console.log(process.env.ABV_USER);
-    console.log(process.env.ABV_PASS);
+    console.log(process.env.EMAIL_USER);
+    console.log(process.env.EMAIL_PASS);
     console.log(domain);
 
     return {
-        host: "smtp.abv.bg",
+        host: "smtp.gmail.com",
         port: 465,
         secure: true,
         auth: {
-            user: process.env.ABV_USER,
-            pass: process.env.ABV_PASS,
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
         },
     }
 }
@@ -100,7 +100,7 @@ export const sendVerificationEmail = async (email: string) => {
         const transporter = nodemailer.createTransport(smtpConfig);
 
         const mailOptions = {
-            from: process.env.ABV_USER,
+            from: process.env.EMAIL_USER,
             to: email,
             subject: "Verification Code",
             text: `Your verification code is: ${verificationCode}`,

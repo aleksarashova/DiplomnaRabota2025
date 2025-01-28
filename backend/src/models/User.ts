@@ -9,7 +9,6 @@ export interface UserInterface {
     bio: string;
     role: string;
     is_verified: boolean;
-    is_logged_in: boolean;
     recipes: Types.ObjectId[];
     favourites: Types.ObjectId[];
     liked: Types.ObjectId[];
@@ -31,7 +30,6 @@ const UserSchema: Schema = new Schema<UserInterface, UserModel>({
     bio: { type: String },
     role: { type: String },
     is_verified: { type: Boolean },
-    is_logged_in: { type: Boolean },
     recipes: { type: [Schema.Types.ObjectId], ref: "Recipe" },
     favourites: { type: [Schema.Types.ObjectId], ref: "Recipe" },
     liked: { type: [Schema.Types.ObjectId], ref: "Recipe" },

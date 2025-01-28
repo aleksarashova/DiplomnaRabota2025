@@ -52,7 +52,6 @@ export const createUser = async (userData: RegisterUserDTO) => {
             bio: "",
             role: "user",
             is_verified: false,
-            is_logged_in: false,
             recipes: [],
             favourites: [],
             liked: [],
@@ -126,40 +125,6 @@ export const findUserByUsername = async(username: string) => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while searching for a user by username.");
-    }
-}
-
-export const updateUserLoggedIn = async(username: string) => {
-    try {
-        const user = await findUserByUsername(username);
-        if (user) {
-            user.is_logged_in = true;
-            await user.save();
-        } else {
-            throw new Error("Could not find user while trying to update it to logged in.");
-        }
-    } catch(error) {
-        if(error instanceof Error) {
-            throw new Error(error.message);
-        }
-        throw new Error("Unknown error while updating the user to logged in.");
-    }
-}
-
-export const updateUserLoggedOut = async(id: string) => {
-    try {
-        const user = await findUserById(id);
-        if (user) {
-            user.is_logged_in = false;
-            await user.save();
-        } else {
-            throw new Error("Could not find user while trying to update it to logged out.");
-        }
-    } catch(error) {
-        if(error instanceof Error) {
-            throw new Error(error.message);
-        }
-        throw new Error("Unknown error while updating the user to logged out.");
     }
 }
 
