@@ -2,16 +2,16 @@ import React from 'react';
 import "../common.css";
 import "./messages.css";
 
-type resendEmailSuccessfulMessageProps = {
+type sendPasswordResetEmailSuccessfulMessageProps = {
     handleCloseMessage: () => void
 }
 
-const ResendEmailSuccessfulMessage = ({handleCloseMessage} : resendEmailSuccessfulMessageProps) => {
+const SendResetPasswordEmailSuccessfulMessage = ({handleCloseMessage} :sendPasswordResetEmailSuccessfulMessageProps) => {
     return (
         <div className="popupOverlay">
             <div className="message-box">
                 <div className="message-success">
-                    We've sent a new code to your email. It may take a few minutes.
+                    We've sent a reset password link to your email. It may take a few minutes.
                 </div>
                 <button onClick={handleCloseMessage} className="messageCloseButton">OK</button>
             </div>
@@ -19,4 +19,4 @@ const ResendEmailSuccessfulMessage = ({handleCloseMessage} : resendEmailSuccessf
     );
 }
 
-export default ResendEmailSuccessfulMessage;
+export default SendResetPasswordEmailSuccessfulMessage;

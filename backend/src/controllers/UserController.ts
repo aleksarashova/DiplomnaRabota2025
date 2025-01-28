@@ -21,8 +21,8 @@ import {
 import {
     sendVerificationEmail,
     validateVerificationCode,
-    deleteRecord,
-    sendPasswordResetEmail
+    deleteRecordInVerificationCodes,
+    sendPasswordResetEmail,
 } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
 import {GetAllUsersDTO, OtherUserProfileDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
@@ -65,7 +65,7 @@ export const verify = async(req: Request, res: Response) => {
         }
 
         await updateUserVerified(email);
-        await deleteRecord(email);
+        await deleteRecordInVerificationCodes(email);
 
         res.status(201).json({ message: "User verified successfully." });
     } catch (error) {

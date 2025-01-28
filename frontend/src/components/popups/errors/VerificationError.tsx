@@ -4,7 +4,7 @@ import "./errors.css";
 
 import { useParams, useNavigate } from "react-router-dom";
 
-import ResendEmailSuccessfulMessage from "../messages/ResendEmailMessage";
+import ResendEmailSuccessfulMessage from "../messages/ResendVerificationEmailMessage";
 
 type verificationErrorProps = {
     handleCloseError: () => void;

@@ -4,14 +4,13 @@ import "../loading.css";
 
 import { MdOutlineEmail } from "react-icons/md";
 
-import ResendEmailSuccessfulMessage from "../../popups/messages/ResendEmailMessage";
+import ResendVerificationEmailSuccessfulMessage from "../../popups/messages/ResendVerificationEmailMessage";
 import EmailError from "../../popups/errors/EmailError";
 
 import { useNavigate } from "react-router-dom";
 
 import {SendVerificationEmailFormData} from "./types";
 import {sendVerificationEmail} from "./requests";
-import {validateJWT} from "../../pages/authCheck";
 
 const SendEmailForm = () => {
     const emailRef = useRef<HTMLInputElement>(null);
@@ -25,7 +24,7 @@ const SendEmailForm = () => {
     const handleInvalidInput = (message: string) => {
         setErrorMessage(message);
         setVisibilityEmailErrorPopup(true);
-    };
+    }
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -57,7 +56,7 @@ const SendEmailForm = () => {
 
     const handleCloseEmailError = () => {
         setVisibilityEmailErrorPopup(false);
-    };
+    }
 
     const handleCloseSuccessfulResendMessage = () => {
         setVisibilityResendEmailCodeSuccessMessage(false);
@@ -65,7 +64,7 @@ const SendEmailForm = () => {
         if (email) {
             navigateTo(`/verify-profile/${encodeURIComponent(email)}`);
         }
-    };
+    }
 
     return (
         <div className="form-page">
@@ -89,7 +88,6 @@ const SendEmailForm = () => {
                         <button
                             type="submit"
                             className="form-button"
-                            id="formButtonResetPassword"
                             disabled={isLoading}
                         >
                             Send code
@@ -105,13 +103,13 @@ const SendEmailForm = () => {
                 </div>
             </div>
             {visibilityResendEmailCodeSuccessMessage && (
-                <ResendEmailSuccessfulMessage handleCloseMessage={handleCloseSuccessfulResendMessage} />
+                <ResendVerificationEmailSuccessfulMessage handleCloseMessage={handleCloseSuccessfulResendMessage} />
             )}
             {visibilityEmailErrorPopup && (
                 <EmailError handleCloseError={handleCloseEmailError} errorContent={errorMessage} />
             )}
         </div>
     );
-};
+}
 
 export default SendEmailForm;
