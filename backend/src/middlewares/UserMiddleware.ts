@@ -114,7 +114,7 @@ export const checkAuthentication = async (
     }
 }
 
-export const checkEmailForSendingAVerificationCode = async (
+export const checkEmailForSendingAVerificationCodeOrResetPasswordLink = async (
     req: ExtendedRequest,
     res: Response,
     next: NextFunction

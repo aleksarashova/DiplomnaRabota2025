@@ -18,7 +18,12 @@ import {
     updateProfilePicture,
     removeProfilePicture, changeUserRating, getAllUsersData, changeUserRole, getAverageRating, getUserRatings
 } from "../services/UserService";
-import { sendVerificationEmail, validateVerificationCode, deleteRecord } from "../services/EmailService";
+import {
+    sendVerificationEmail,
+    validateVerificationCode,
+    deleteRecord,
+    sendPasswordResetEmail
+} from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
 import {GetAllUsersDTO, OtherUserProfileDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 
@@ -74,14 +79,31 @@ export const verify = async(req: Request, res: Response) => {
     }
 }
 
-export const resendEmail = async(req: Request, res: Response) => {
+export const resendVerificationEmail = async(req: Request, res: Response) => {
     try {
         const { email } = req.body;
         await sendVerificationEmail(email);
 
-        res.status(201).json({ message: "Resent email successfully."});
+        res.status(201).json({ message: "Resent verification email successfully."});
     } catch (error) {
-        console.error("Error during resending email:", error);
+        console.error("Error during resending verification email:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const sendResetPasswordEmail = async(req: Request, res: Response) => {
+    try {
+        const { email } = req.body;
+        await sendPasswordResetEmail(email);
+
+        res.status(201).json({ message: "Sent reset password email successfully."});
+    } catch (error) {
+        console.error("Error during sending reset password email:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});

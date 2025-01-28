@@ -7,7 +7,7 @@ import {
     deleteProfile,
     getMyProfileData,
     verify,
-    resendEmail,
+    resendVerificationEmail,
     addRecipeToFavourites,
     removeRecipeFromFavourites,
     getIsRecipeFavourite,
@@ -18,14 +18,14 @@ import {
     editProfilePicture,
     deleteProfilePicture,
     rateUser,
-    getAllUsers, updateUserRole, getOverallRating, getRatings
+    getAllUsers, updateUserRole, getOverallRating, getRatings, sendResetPasswordEmail
 } from "../controllers/UserController";
 import {validateRequest} from "../middlewares/RequestValidationMiddleware";
 import {profileUpdateSchema, userLoginSchema, userRegisterSchema} from "../validationSchemas/UserValidation";
 import {
     checkAuthentication,
     checkCredentialsLogin,
-    checkEmailForSendingAVerificationCode,
+    checkEmailForSendingAVerificationCodeOrResetPasswordLink,
     checkUniquenessRegister
 } from "../middlewares/UserMiddleware";
 import {uploadProfileImage} from "../middlewares/UploadsMiddleware";
@@ -40,7 +40,8 @@ router.post("/delete-profile-picture", checkAuthentication, deleteProfilePicture
 router.post("/delete-profile", checkAuthentication, deleteProfile);
 router.get("/my-profile-data", checkAuthentication, getMyProfileData);
 router.post("/verify-profile", verify);
-router.post("/resend-verification-email", checkEmailForSendingAVerificationCode, resendEmail);
+router.post("/resend-verification-email", checkEmailForSendingAVerificationCodeOrResetPasswordLink, resendVerificationEmail);
+router.post("/send-reset-password-email", checkEmailForSendingAVerificationCodeOrResetPasswordLink, sendResetPasswordEmail);
 router.get("/profile-data", checkAuthentication, getProfileData);
 router.post("/add-recipe-to-favourites", checkAuthentication, addRecipeToFavourites);
 router.post("/remove-recipe-from-favourites", checkAuthentication, removeRecipeFromFavourites);
