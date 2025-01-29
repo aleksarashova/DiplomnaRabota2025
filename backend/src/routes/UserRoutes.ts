@@ -18,10 +18,15 @@ import {
     editProfilePicture,
     deleteProfilePicture,
     rateUser,
-    getAllUsers, updateUserRole, getOverallRating, getRatings, sendResetPasswordEmail
+    getAllUsers, updateUserRole, getOverallRating, getRatings, sendResetPasswordEmail, resetPassword
 } from "../controllers/UserController";
 import {validateRequest} from "../middlewares/RequestValidationMiddleware";
-import {profileUpdateSchema, userLoginSchema, userRegisterSchema} from "../validationSchemas/UserValidation";
+import {
+    profileUpdateSchema,
+    userLoginSchema,
+    userRegisterSchema,
+    userResetPasswordSchema
+} from "../validationSchemas/UserValidation";
 import {
     checkAuthentication,
     checkCredentialsLogin,
@@ -42,6 +47,7 @@ router.get("/my-profile-data", checkAuthentication, getMyProfileData);
 router.post("/verify-profile", verify);
 router.post("/resend-verification-email", checkEmailForSendingAVerificationCodeOrResetPasswordLink, resendVerificationEmail);
 router.post("/send-reset-password-email", checkEmailForSendingAVerificationCodeOrResetPasswordLink, sendResetPasswordEmail);
+router.post("/reset-password", validateRequest(userResetPasswordSchema), resetPassword);
 router.get("/profile-data", checkAuthentication, getProfileData);
 router.post("/add-recipe-to-favourites", checkAuthentication, addRecipeToFavourites);
 router.post("/remove-recipe-from-favourites", checkAuthentication, removeRecipeFromFavourites);

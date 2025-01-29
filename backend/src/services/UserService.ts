@@ -14,6 +14,7 @@ import path from "path";
 import {deleteFile} from "./FileService";
 import Recipe from "../models/Recipe";
 import Comment from "../models/Comment";
+import {findKey, validatePasswordResetKey} from "./EmailService";
 
 export const hashPassword = async (password: string) => {
     try {
@@ -614,6 +615,35 @@ export const getUserRatings = async (username: string) => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while getting user ratings.");
+    }
+}
+
+export const resetUserPassword = async(password: string, key: string) => {
+    try {
+        const isValidKey = await validatePasswordResetKey(key);
+
+        if(!isValidKey) {
+            throw new Error("Expired password key.");
+        }
+
+        const recordInPasswordResetKeys = await findKey(key);
+        const userEmail = recordInPasswordResetKeys!.email;
+        const newHashedPassword = await hashPassword(password);
+
+        const user = await findUserByEmail(userEmail);
+
+        if(!user) {
+            throw new Error("User not found.");
+        }
+
+        user.password_hash = newHashedPassword;
+
+        await user.save();
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while resetting user's password.");
     }
 }
 

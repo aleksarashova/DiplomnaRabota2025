@@ -5,6 +5,8 @@ import { FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { resetUserPassword } from "./requests";
 import { ResetPasswordFormData } from "./types";
+import {Simulate} from "react-dom/test-utils";
+import reset = Simulate.reset;
 
 const ResetPasswordForm = () => {
     const [password, setPassword] = useState("");
@@ -27,10 +29,12 @@ const ResetPasswordForm = () => {
         }
 
         const urlParams = new URLSearchParams(window.location.search);
-        const resetKey = urlParams.get("token");
+        const resetKey = urlParams.get("key");
+
+        console.log(resetKey);
 
         if (!resetKey) {
-            setErrorMessage("Invalid or missing reset token.");
+            setErrorMessage("Invalid or missing reset key.");
             return;
         }
 
@@ -39,11 +43,14 @@ const ResetPasswordForm = () => {
             reset_password_key: resetKey,
         };
 
+        console.log("Form Data Submitted:", formData);
+
         try {
             await resetUserPassword(formData);
             navigate("/login");
         } catch (error) {
             console.error("Error:", error);
+
             if (error instanceof Error) {
                 handleInvalidInput(error.message);
             } else {
@@ -86,6 +93,7 @@ const ResetPasswordForm = () => {
                             className="form-button"
                             id="formButtonResetPassword"
                         >
+                            Reset Password
                         </button>
                     </form>
                 </div>

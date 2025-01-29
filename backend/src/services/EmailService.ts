@@ -239,15 +239,11 @@ export const validateVerificationCode = async(email: string, code: number): Prom
     }
 }
 
-export const validatePasswordResetKey = async(email: string, key: string): Promise<boolean> => {
+export const validatePasswordResetKey = async(key: string): Promise<boolean> => {
     try {
-        const existingRecord = await findEmailInPasswordResetKeys(email);
+        const existingRecord = await findKey(key);
         if (!existingRecord) {
             throw new Error("Expired password reset key.");
-        }
-
-        if (existingRecord.key != key) {
-            throw new Error("Invalid password reset key.");
         }
 
         return true;

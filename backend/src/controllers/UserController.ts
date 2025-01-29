@@ -16,7 +16,13 @@ import {
     checkIsRecipeLiked,
     getOtherUserProfileData,
     updateProfilePicture,
-    removeProfilePicture, changeUserRating, getAllUsersData, changeUserRole, getAverageRating, getUserRatings
+    removeProfilePicture,
+    changeUserRating,
+    getAllUsersData,
+    changeUserRole,
+    getAverageRating,
+    getUserRatings,
+    resetUserPassword
 } from "../services/UserService";
 import {
     sendVerificationEmail,
@@ -104,6 +110,24 @@ export const sendResetPasswordEmail = async(req: Request, res: Response) => {
         res.status(201).json({ message: "Sent reset password email successfully."});
     } catch (error) {
         console.error("Error during sending reset password email:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const resetPassword = async(req: Request, res: Response) => {
+    try {
+        const {password, reset_password_key} = req.body;
+        await resetUserPassword(password, reset_password_key);
+
+        console.log("Successfully reset password");
+        res.status(201).json({message: "Password reset successfully."});
+    } catch (error) {
+        console.error("Error during reset password:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});
