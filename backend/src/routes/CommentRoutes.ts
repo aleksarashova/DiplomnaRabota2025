@@ -12,10 +12,13 @@ import {
 
 const router: Router = express.Router();
 
-router.post("/add-comment", validateRequest(addCommentSchema), checkAuthentication, comment);
 router.get("/number-of-unapproved", checkAuthentication, getNumberOfPendingComments);
 router.get("/get-all-unapproved", checkAuthentication, getAllUnapprovedComments);
-router.post("/approve", checkAuthentication, approveComment);
-router.post("/reject", checkAuthentication, rejectComment);
+
+router.post("/add-comment", validateRequest(addCommentSchema), checkAuthentication, comment);
+
+router.patch("/approve", checkAuthentication, approveComment);
+
+router.delete("/reject", checkAuthentication, rejectComment);
 
 export default router;

@@ -5,7 +5,6 @@ import {addRecipeSchema, getRecipeSchema} from "../validationSchemas/RecipeValid
 import { checkAuthentication } from "../middlewares/UserMiddleware";
 import {
     makeRecipe,
-    getAllRecipes,
     getRecipe,
     getAllApprovedRecipes,
     getNumberOfPendingRecipes, getAllUnapprovedRecipes, rejectRecipe, approveRecipe
@@ -18,10 +17,13 @@ const router: Router = express.Router();
 
 router.get("/get-all-approved", getAllApprovedRecipes);
 router.get("/get-all-unapproved", checkAuthentication, getAllUnapprovedRecipes);
-router.post("/add-recipe", uploadRecipeImage.single("image"), validateRequest(addRecipeSchema), checkAuthentication, makeRecipe);
 router.get("/get-recipe-data", validateRequest(getRecipeSchema), checkAuthentication, getRecipe);
 router.get("/number-of-unapproved", checkAuthentication, getNumberOfPendingRecipes);
-router.post("/approve", checkAuthentication, approveRecipe);
-router.post("/reject", checkAuthentication, rejectRecipe);
+
+router.post("/add-recipe", uploadRecipeImage.single("image"), validateRequest(addRecipeSchema), checkAuthentication, makeRecipe);
+
+router.patch("/approve", checkAuthentication, approveRecipe);
+
+router.patch("/delete", checkAuthentication, rejectRecipe);
 
 export default router;

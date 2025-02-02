@@ -20,7 +20,7 @@ export const getAllUnapprovedComments = async (accessToken: string): Promise<Com
 
 export const approveComment = async (accessToken: string, commentId: string) => {
     const response = await fetch(`http://localhost:8000/api/comments/approve`, {
-        method: "POST",
+        method: "PATCH",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`,
@@ -37,7 +37,7 @@ export const approveComment = async (accessToken: string, commentId: string) => 
 
 export const rejectComment = async (accessToken: string, commentId: string) => {
     const response = await fetch(`http://localhost:8000/api/comments/reject`, {
-        method: "POST",
+        method: "DELETE",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`,

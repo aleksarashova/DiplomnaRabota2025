@@ -9,21 +9,6 @@ import {
 } from "../services/RecipeService";
 import {GetExtendedRecipeDTO} from "../DTOs/RecipeDTOs";
 
-export const getAllRecipes = async (req: Request, res: Response) => {
-    try {
-        const recipes = await getAllRecipesData();
-        res.status(200).json({ recipes: recipes });
-    } catch (error) {
-        console.error("Error during trying to get all recipes:", error);
-
-        if (error instanceof Error) {
-            res.status(400).json({ message: error.message });
-        } else {
-            res.status(500).json({ message: "Internal server error." });
-        }
-    }
-}
-
 export const getAllApprovedRecipes = async (req: Request, res: Response) => {
     try {
         const category = typeof req.query.category === "string" ? req.query.category : undefined;

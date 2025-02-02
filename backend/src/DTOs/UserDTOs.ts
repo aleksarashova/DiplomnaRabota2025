@@ -1,5 +1,4 @@
 import { UserInterface } from "../models/User";
-import {Types} from "mongoose";
 
 export interface RegisterUserDTO {
     first_name: string;

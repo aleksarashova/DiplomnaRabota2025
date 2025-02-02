@@ -3,7 +3,7 @@ import { VerifyProfileFormData } from "./types";
 export const verifyProfile = async (formData: VerifyProfileFormData) => {
     try {
         const response = await fetch("http://localhost:8000/api/users/verify-profile", {
-            method: "POST",
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
             },

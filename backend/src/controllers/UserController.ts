@@ -28,7 +28,7 @@ import {
     sendVerificationEmail,
     validateVerificationCode,
     deleteRecordInVerificationCodes,
-    sendPasswordResetEmail,
+    sendPasswordResetEmail, deleteRecordInPasswordResetKeys,
 } from "../services/EmailService";
 import { ExtendedRequest } from "../middlewares/UserMiddleware";
 import {GetAllUsersDTO, OtherUserProfileDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
@@ -122,7 +122,9 @@ export const sendResetPasswordEmail = async(req: Request, res: Response) => {
 export const resetPassword = async(req: Request, res: Response) => {
     try {
         const {password, reset_password_key} = req.body;
+
         await resetUserPassword(password, reset_password_key);
+        await deleteRecordInPasswordResetKeys(reset_password_key);
 
         console.log("Successfully reset password");
         res.status(201).json({message: "Password reset successfully."});

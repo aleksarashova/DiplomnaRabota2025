@@ -20,7 +20,7 @@ export const getAllUnapprovedRecipes = async (accessToken: string): Promise<Reci
 
 export const approveRecipe = async (accessToken: string, recipeId: string) => {
     const response = await fetch(`http://localhost:8000/api/recipes/approve`, {
-        method: "POST",
+        method: "PATCH",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`,
@@ -37,7 +37,7 @@ export const approveRecipe = async (accessToken: string, recipeId: string) => {
 
 export const rejectRecipe = async (accessToken: string, recipeId: string) => {
     const response = await fetch(`http://localhost:8000/api/recipes/reject`, {
-        method: "POST",
+        method: "DELETE",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`,

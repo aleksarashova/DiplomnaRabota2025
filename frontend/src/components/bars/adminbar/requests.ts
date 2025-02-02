@@ -101,7 +101,7 @@ export const addCategory = async(category: string, accessToken: string) => {
 
 export const deleteCategory = async(category: string, accessToken: string) => {
     const response = await fetch(`http://localhost:8000/api/categories/delete-category`, {
-        method: "POST",
+        method: "DELETE",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`,

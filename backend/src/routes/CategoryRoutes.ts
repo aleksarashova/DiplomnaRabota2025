@@ -7,7 +7,9 @@ import {checkUniquenessCategory} from "../middlewares/CategoryMiddleware";
 const router: Router = express.Router();
 
 router.get("/get-all", checkAuthentication, getAllCategories);
+
 router.post("/add-new", checkAuthentication, checkUniquenessCategory, addNewCategory);
-router.post("/delete-category", checkAuthentication, deleteCategory);
+
+router.delete("/delete-category", checkAuthentication, deleteCategory);
 
 export default router;

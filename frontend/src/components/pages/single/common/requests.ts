@@ -75,7 +75,7 @@ export const addRecipeToFavourites = async (recipeId: string, accessToken: strin
 export const removeRecipeFromFavourites = async (recipeId: string, accessToken: string) => {
     try {
         const response = await fetch("http://localhost:8000/api/users/remove-recipe-from-favourites", {
-            method: "POST",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
@@ -125,7 +125,7 @@ export const addRecipeToLiked = async (recipeId: string, accessToken: string) =>
 export const removeRecipeFromLiked = async (recipeId: string, accessToken: string) => {
     try {
         const response = await fetch("http://localhost:8000/api/users/remove-recipe-from-liked", {
-            method: "POST",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,

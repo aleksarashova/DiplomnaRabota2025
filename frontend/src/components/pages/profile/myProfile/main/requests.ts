@@ -28,7 +28,7 @@ export const getUserDataRequest = async (accessToken: string) => {
 export const deleteAccountRequest = async (accessToken: string) => {
     try {
         const response = await fetch("http://localhost:8000/api/users/delete-profile", {
-            method: "POST",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
@@ -52,7 +52,7 @@ export const deleteAccountRequest = async (accessToken: string) => {
 export const editAccountRequest = async (accessToken: string, formData: EditAcc) => {
     try {
         const response = await fetch("http://localhost:8000/api/users/update-profile", {
-            method: "POST",
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
@@ -77,7 +77,7 @@ export const editAccountRequest = async (accessToken: string, formData: EditAcc)
 export const editProfilePictureRequest = async (accessToken: string, formData: FormData) => {
     try {
         const response = await fetch("http://localhost:8000/api/users/edit-profile-picture", {
-            method: "POST",
+            method: "PATCH",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
             },
@@ -101,7 +101,7 @@ export const editProfilePictureRequest = async (accessToken: string, formData: F
 export const deleteProfilePictureRequest = async (accessToken: string) => {
     try {
         const response = await fetch("http://localhost:8000/api/users/delete-profile-picture", {
-            method: "POST",
+            method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
             },

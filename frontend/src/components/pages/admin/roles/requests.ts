@@ -20,7 +20,7 @@ export const getAllUsers = async (accessToken: string): Promise<User[]> => {
 
 export const updateUserRole = async (accessToken: string, userId: string, newRole: string)=> {
     const response = await fetch(`http://localhost:8000/api/users/update-role`, {
-        method: "POST",
+        method: "PATCH",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`,

@@ -60,9 +60,9 @@ export const deleteRecordInVerificationCodes = async(email: string) => {
     }
 }
 
-export const deleteRecordInPasswordResetKeys = async(email: string) => {
+export const deleteRecordInPasswordResetKeys = async(key: string) => {
     try {
-        await PasswordResetKey.findOneAndDelete({email: email});
+        await PasswordResetKey.findOneAndDelete({key: key});
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
