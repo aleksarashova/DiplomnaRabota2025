@@ -20,10 +20,14 @@ router.get("/get-all-unapproved", checkAuthentication, getAllUnapprovedRecipes);
 router.get("/get-recipe-data", validateRequest(getRecipeSchema), checkAuthentication, getRecipe);
 router.get("/number-of-unapproved", checkAuthentication, getNumberOfPendingRecipes);
 
-router.post("/add-recipe", uploadRecipeImage.single("image"), validateRequest(addRecipeSchema), checkAuthentication, makeRecipe);
+router.post("/add-recipe",
+    uploadRecipeImage.single("image"),
+    validateRequest(addRecipeSchema),
+    checkAuthentication,
+    makeRecipe);
 
 router.patch("/approve", checkAuthentication, approveRecipe);
 
-router.patch("/delete", checkAuthentication, rejectRecipe);
+router.delete("/delete", checkAuthentication, rejectRecipe);
 
 export default router;

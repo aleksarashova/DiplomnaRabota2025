@@ -255,10 +255,8 @@ export const getRecipeData = async (id: string): Promise<GetExtendedRecipeDTO> =
                 .filter(comment => comment.is_approved)
                 .map(async (comment) => {
                     const commentAuthor = await User.findById(comment.author).select('username');
-
                     const now = new Date();
                     const commentDate = new Date(comment.date);
-
                     const diffInSeconds = Math.floor((now.getTime() - commentDate.getTime()) / 1000);
 
                     let timeAgo = "";
@@ -351,7 +349,7 @@ export const updateRecipeApproved = async(recipeId: string) => {
     }
 }
 
-export const updateRecipeRejected = async(recipeId: string) => {
+export const deleteRejectedRecipe = async(recipeId: string) => {
     try {
         const recipe = await findRecipeById(recipeId);
 

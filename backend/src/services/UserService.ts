@@ -7,7 +7,7 @@ import {
     OtherUserProfileDTO,
     RegisterUserDTO,
     UpdateUserDTO,
-    UserProfileDTO, UserRating
+    UserProfileDTO, UserRatingDTO
 } from "../DTOs/UserDTOs";
 import {findRecipeById} from "./RecipeService";
 import path from "path";
@@ -167,9 +167,6 @@ export const updateUserProfile = async(updatedUserData: UpdateUserDTO) => {
         switch(updatedUserData.field) {
             case "username":
                 user.username = updatedUserData.value;
-                break;
-            case "email":
-                user.email = updatedUserData.value;
                 break;
             case "password":
                 user.password_hash = await hashPassword(updatedUserData.value);
@@ -576,7 +573,6 @@ export const getAverageRating = async (username: string) => {
             const roundedRating = Math.round(averageRating);
             finalRating = Math.min(Math.max(roundedRating, 1), 5);
         }
-
         return finalRating;
     } catch (error) {
         if (error instanceof Error) {
@@ -597,7 +593,7 @@ export const getUserRatings = async (username: string) => {
 
         const rawRatings = user.ratings || [];
 
-        const ratings: UserRating[] = [];
+        const ratings: UserRatingDTO[] = [];
         for (const rawRating of rawRatings) {
             const raterId = rawRating.raterId.toString();
             const raterUser = await findUserById(raterId);

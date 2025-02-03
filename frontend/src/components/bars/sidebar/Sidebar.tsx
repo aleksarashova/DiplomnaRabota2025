@@ -16,16 +16,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setSelectedCategory }) => {
     const navigateTo = useNavigate();
 
     useEffect(() => {
-        const token = sessionStorage.getItem("accessToken");
-        const { isValid } = validateJWT(token);
-
-        if (!isValid) {
-            navigateTo("/login");
-        }
-
         const fetchCategories = async () => {
             try {
-                const categories = await getAllCategories(token!);
+                const categories = await getAllCategories();
                 setCategories(categories);
             } catch (error) {
                 console.error("Error getting categories:", error);

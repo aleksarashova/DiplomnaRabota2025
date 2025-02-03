@@ -12,3 +12,4 @@ export const deleteFile = async (filePath: string) => {
         console.error(`Error deleting file at ${filePath}:`, error);
     }
 }
+

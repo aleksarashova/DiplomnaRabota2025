@@ -5,7 +5,7 @@ import {
     addComment,
     getAllUnapprovedCommentsData,
     getNumberOfUnapprovedComments,
-    updateCommentApproved, updateCommentRejected
+    updateCommentApproved, deleteRejectedComment
 } from "../services/CommentService";
 
 export const comment = async (req: ExtendedRequest, res: Response) => {
@@ -90,7 +90,7 @@ export const rejectComment = async (req: ExtendedRequest, res: Response) => {
     try {
         const {commentId} = req.body;
 
-        await updateCommentRejected(commentId);
+        await deleteRejectedComment(commentId);
         res.status(200).json("Successfully rejected comment.");
     } catch (error) {
         console.error("Error during rejecting comment:", error);

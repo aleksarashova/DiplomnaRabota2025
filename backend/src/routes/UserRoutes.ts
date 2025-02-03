@@ -45,7 +45,12 @@ router.get("/get-all", checkAuthentication, getAllUsers);
 router.get("/get-overall-rating", checkAuthentication, getOverallRating);
 router.get("/get-ratings", checkAuthentication, getRatings);
 
-router.post("/register", uploadProfileImage.single("image"), validateRequest(userRegisterSchema), checkUniquenessRegister, register);
+router.post("/register",
+    uploadProfileImage.single("image"),
+    validateRequest(userRegisterSchema),
+    checkUniquenessRegister,
+    register
+);
 router.post("/login", validateRequest(userLoginSchema), checkCredentialsLogin, login);
 router.post("/resend-verification-email", checkEmailForSendingAVerificationCodeOrResetPasswordLink, resendVerificationEmail);
 router.post("/send-reset-password-email", checkEmailForSendingAVerificationCodeOrResetPasswordLink, sendResetPasswordEmail);

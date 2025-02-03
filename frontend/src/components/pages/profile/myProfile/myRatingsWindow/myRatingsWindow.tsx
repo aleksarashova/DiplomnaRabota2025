@@ -8,7 +8,6 @@ import {useNavigate} from "react-router-dom";
 import {FaStar} from "react-icons/fa";
 import {FaRegStar} from "react-icons/fa6";
 import {UserRating} from "./types";
-import {User} from "../../../admin/roles/types";
 
 type MyRatingsWindowProps = {
     author: string;

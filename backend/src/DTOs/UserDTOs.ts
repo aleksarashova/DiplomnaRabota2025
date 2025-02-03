@@ -46,7 +46,7 @@ export interface GetAllUsersDTO {
     role: string;
 }
 
-export interface UserRating {
+export interface UserRatingDTO {
     rater: string;
     rating: number;
 }

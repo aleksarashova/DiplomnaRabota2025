@@ -3,9 +3,9 @@ import { ExtendedRequest } from "../middlewares/UserMiddleware";
 import {
     addRecipe,
     getAllApprovedRecipesData,
-    getAllRecipesData, getAllUnapprovedRecipesData,
+    getAllUnapprovedRecipesData,
     getNumberOfUnapprovedRecipes,
-    getRecipeData, updateRecipeApproved, updateRecipeRejected
+    getRecipeData, updateRecipeApproved, deleteRejectedRecipe
 } from "../services/RecipeService";
 import {GetExtendedRecipeDTO} from "../DTOs/RecipeDTOs";
 
@@ -132,7 +132,7 @@ export const rejectRecipe = async (req: ExtendedRequest, res: Response) => {
     try {
         const {recipeId} = req.body;
 
-        await updateRecipeRejected(recipeId);
+        await deleteRejectedRecipe(recipeId);
         res.status(200).json("Successfully rejected recipe.");
     } catch (error) {
         console.error("Error during rejecting recipe:", error);

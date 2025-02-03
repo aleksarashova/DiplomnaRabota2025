@@ -103,7 +103,7 @@ export const updateCommentApproved = async(commentId: string) => {
     }
 }
 
-export const updateCommentRejected = async(commentId: string) => {
+export const deleteRejectedComment = async(commentId: string) => {
     try {
         const comment = await findCommentById(commentId);
 
