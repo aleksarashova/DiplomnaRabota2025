@@ -57,6 +57,7 @@
     justify-content: space-between;
     width: 300px;
     height: 430px;
+    min-height: fit-content;
     border-radius: 40px;
     background-color: whitesmoke;
     cursor: default;

@@ -19,4 +19,5 @@ export const validateJWT = (token: string | null): { isValid: boolean; role?: st
         console.error("Failed to validate JWT:", error);
         return { isValid: false };
     }
-};
+}
+

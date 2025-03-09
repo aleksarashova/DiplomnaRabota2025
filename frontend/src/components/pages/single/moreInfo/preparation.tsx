@@ -4,16 +4,17 @@ import "./more-info.css";
 import { IoFootsteps } from "react-icons/io5";
 import { RiKnifeFill } from "react-icons/ri";
 import {RecipeData} from "../singlepage/types";
+import RecipeTimer from "../timer/timer";
 
 type PrepInfoProps = {
     recipeData: RecipeData | null;
 };
 
 const RecipePreparation = ({recipeData}: PrepInfoProps) => {
-    //ot bazata
     const steps= recipeData?.preparation_steps;
     return (
         <details className="collapsible-preparation" open>
+            <div className="recipeTimer"><RecipeTimer /></div>
             <summary className="collapsible-summary">
                 <h1 className="Preparation">
                     <IoFootsteps /> How to prepare <span className="expand-symbol"></span>

@@ -10,6 +10,10 @@
     border: 1px solid black;
 }
 
+#timerMessageBox {
+    width: 200px;
+}
+
 .message-success {
     font-weight: lighter;
     font-family: -apple-system, sans-serif;

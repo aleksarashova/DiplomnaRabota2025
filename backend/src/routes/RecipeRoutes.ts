@@ -28,6 +28,6 @@ router.post("/add-recipe",
 
 router.patch("/approve", checkAuthentication, approveRecipe);
 
-router.delete("/delete", checkAuthentication, rejectRecipe);
+router.delete("/reject", checkAuthentication, rejectRecipe);
 
 export default router;
