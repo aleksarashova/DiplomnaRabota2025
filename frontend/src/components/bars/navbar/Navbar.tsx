@@ -10,6 +10,8 @@ import { RiAdminFill } from "react-icons/ri";
 
 import SearchBar from "../searchbar/searchbar";
 
+import * as Tone from "tone";
+
 interface NavbarProps {
     isLoggedIn: boolean;
     isAdmin: boolean;
@@ -23,7 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isH
         ? "navbar-home"
         : "navbar-home navbar-default";
 
-    const handleLogOut = () => {
+    const handleLogOut = async() => {
         sessionStorage.removeItem("accessToken");
     }
 

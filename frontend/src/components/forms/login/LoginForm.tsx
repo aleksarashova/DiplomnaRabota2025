@@ -11,6 +11,8 @@ import { LoginFormData } from "./types";
 import LoginError from "../../popups/errors/LoginError";
 import { loginUser } from "./requests";
 
+import * as Tone from "tone";
+
 const LoginForm = () => {
     const [visibilityLoginErrorPopup, setVisibilityLoginErrorPopup] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>("");

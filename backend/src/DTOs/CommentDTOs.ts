@@ -2,6 +2,7 @@ export interface AddCommentDTO {
     user_id: string;
     content: string;
     recipe_id: string;
+    reply_to: string;
 }
 
 export interface GetCommentDTO {

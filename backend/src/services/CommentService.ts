@@ -16,6 +16,11 @@ export const addComment = async(commentData: AddCommentDTO) => {
             throw new Error("Recipe not found when trying to add a comment.");
         }
 
+        const reply_to_comment = await findCommentById(commentData.reply_to);
+        if(!reply_to_comment) {
+            throw new Error("Parent comment not found when trying to reply to it.");
+        }
+
         const date = new Date();
 
         const comment: CommentInterface = {
@@ -23,6 +28,7 @@ export const addComment = async(commentData: AddCommentDTO) => {
             date: date,
             content: commentData.content,
             is_approved: false,
+            reply_to: reply_to_comment._id
         }
 
         const newComment: HydratedDocument<CommentInterface> = new Comment(comment);
