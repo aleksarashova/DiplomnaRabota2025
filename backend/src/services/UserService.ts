@@ -284,6 +284,14 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
 
         user.favourites.push(recipe._id!);
         await user.save();
+
+        const notification: NotificationInterface = {
+            for_user: recipe.author,
+            content: user.username + " added your recipe: " + recipe.title.toLocaleUpperCase() + " to his favourites.",
+        }
+
+        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
+        await newNotification.save();
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
