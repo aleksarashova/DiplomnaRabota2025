@@ -660,7 +660,8 @@ export const getUserNotifications = async (username: string) => {
         }
 
 
-        const rawNotifications = await Notification.find({for_user: user._id});
+        const rawNotifications = await Notification.find({for_user: user._id})
+            .sort({ createdAt: -1 });;
 
         const notifications: GetNotificationDTO[] = [];
         for (const rawNotification of rawNotifications) {

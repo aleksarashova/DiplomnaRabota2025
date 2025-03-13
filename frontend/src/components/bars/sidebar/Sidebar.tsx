@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./sidebar.css";
 
 import { getAllCategories } from "./requests";
-import {validateJWT} from "../../pages/authCheck";
 import {useNavigate} from "react-router-dom";
 
 interface SidebarProps {

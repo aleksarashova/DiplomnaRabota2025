@@ -44,7 +44,7 @@ router.get("/get-is-recipe-liked", checkAuthentication, getIsRecipeLiked);
 router.get("/get-all", checkAuthentication, getAllUsers);
 router.get("/get-overall-rating", checkAuthentication, getOverallRating);
 router.get("/get-ratings", checkAuthentication, getRatings);
-router.get("/get-notificationc", checkAuthentication, getNotifications);
+router.get("/get-notifications", checkAuthentication, getNotifications);
 
 router.post("/register",
     uploadProfileImage.single("image"),

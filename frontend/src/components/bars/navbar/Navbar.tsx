@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./navbar.css";
 
 import {Link} from "react-router-dom";
@@ -7,10 +7,10 @@ import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { MdAppRegistration } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { RiAdminFill } from "react-icons/ri";
+import { MdNotificationsActive } from "react-icons/md";
 
 import SearchBar from "../searchbar/searchbar";
-
-import * as Tone from "tone";
+import Notificationbar from "../notificationbar/Notificationbar";
 
 interface NavbarProps {
     isLoggedIn: boolean;
@@ -21,6 +21,7 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isHomePage, setSearchText }) => {
+    const [visibilityNotificationBar, setVisibilityNotificationBar] = useState(false);
     const navbarClass = isHomePage
         ? "navbar-home"
         : "navbar-home navbar-default";
@@ -71,14 +72,14 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isH
                         <li>
                             <Link to="/login" className="link">
                                 <div className="icon-box-nav">
-                                    <IoMdLogIn className="icon-nav" />
+                                    <IoMdLogIn className="icon-nav"/>
                                 </div>
                             </Link>
                         </li>
                         <li>
                             <Link to="/register" className="link">
                                 <div className="icon-box-nav-last">
-                                    <MdAppRegistration className="icon-nav" />
+                                    <MdAppRegistration className="icon-nav"/>
                                 </div>
                             </Link>
                         </li>
@@ -87,14 +88,22 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isH
 
                 {isLoggedIn && (
                     <li>
+                        <Link to="#" onClick={() => setVisibilityNotificationBar(!visibilityNotificationBar)} className="link">
+                            <div className="icon-box-nav-last">
+                                <MdNotificationsActive className="icon-nav"/>
+                            </div>
+                        </Link>
                         <Link to="/login" onClick={handleLogOut} className="link">
                             <div className="icon-box-nav-last">
-                                <IoMdLogOut className="icon-nav" />
+                                <IoMdLogOut className="icon-nav"/>
                             </div>
                         </Link>
                     </li>
                 )}
             </ul>
+            {visibilityNotificationBar && (
+                <Notificationbar />
+            )}
         </nav>
     );
 };
