@@ -13,6 +13,7 @@ export interface GetCommentDTO {
     };
     date: string;
     is_approved: boolean;
+    reply_to: string;
 }
 
 export interface GetCommentShortDTO {

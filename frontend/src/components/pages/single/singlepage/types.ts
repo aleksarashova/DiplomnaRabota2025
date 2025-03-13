@@ -10,6 +10,7 @@ export type RecipeData = {
     preparation_steps: string[];
     likes: number;
     comments: {
+        id: string,
         content: string;
         author: {
             id: string;
@@ -17,6 +18,7 @@ export type RecipeData = {
         };
         date: string;
         is_approved: boolean;
+        reply_to: string;
     }[];
     image: string;
 }

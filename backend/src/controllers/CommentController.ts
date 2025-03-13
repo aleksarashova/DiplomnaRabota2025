@@ -16,13 +16,14 @@ export const comment = async (req: ExtendedRequest, res: Response) => {
             return;
         }
 
-        const { content, recipeId, replyTo } = req.body;
+        const { content, recipeId, parentCommentId } = req.body;
+        console.log("gotten replyTo:", parentCommentId);
 
         const newCommentData: AddCommentDTO = {
             user_id: userId,
             content: content,
             recipe_id: recipeId,
-            reply_to: replyTo
+            reply_to: parentCommentId
         }
 
         console.log(newCommentData);

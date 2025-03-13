@@ -1,4 +1,4 @@
-export const addComment = async (content: string, accessToken: string, recipeId: string):Promise<string> => {
+export const addComment = async (content: string, accessToken: string, recipeId: string, parentCommentId: string | null):Promise<string> => {
     try {
         const response = await fetch("http://localhost:8000/api/comments/add-comment", {
             method: "POST",
@@ -6,7 +6,7 @@ export const addComment = async (content: string, accessToken: string, recipeId:
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
             },
-            body: JSON.stringify({content, recipeId}),
+            body: JSON.stringify({content, recipeId, parentCommentId}),
         });
 
         const data = await response.json();

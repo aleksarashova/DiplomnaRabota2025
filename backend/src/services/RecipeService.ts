@@ -8,6 +8,7 @@ import { getCategoryIdByName } from "./CategoryService";
 import Category from "../models/Category";
 import {findUserById} from "./UserService";
 import path from "path";
+import {findCommentById} from "./CommentService";
 
 export const addRecipe = async (recipeData: AddRecipeDTO, userId: string) => {
     try {
@@ -280,7 +281,26 @@ export const getRecipeData = async (id: string): Promise<GetExtendedRecipeDTO> =
                         timeAgo = `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
                     }
 
+                    let parentCommentAuthorUsername = "";
+                    if(comment.reply_to != null) {
+
+                        const commentReplyTo = await findCommentById(comment.reply_to.toString());
+                        if (!commentReplyTo) {
+                            throw new Error('Parent comment not found.');
+                        }
+                        const parentCommentAuthorId = commentReplyTo.author;
+                        if (!commentAuthor) {
+                            throw new Error('Parent comment author id not found.');
+                        }
+                        const parentCommentAuthor = await findUserById(parentCommentAuthorId.toString());
+                        if (!parentCommentAuthor) {
+                            throw new Error('Parent comment author not found.');
+                        }
+                        parentCommentAuthorUsername = parentCommentAuthor.username;
+                    }
+
                     return {
+                        id: comment._id,
                         content: comment.content,
                         author: {
                             id: comment.author.toString(),
@@ -288,6 +308,7 @@ export const getRecipeData = async (id: string): Promise<GetExtendedRecipeDTO> =
                         },
                         date: timeAgo,
                         is_approved: comment.is_approved,
+                        reply_to: parentCommentAuthorUsername,
                     };
                 })
         );
@@ -296,7 +317,7 @@ export const getRecipeData = async (id: string): Promise<GetExtendedRecipeDTO> =
         const imagePath = imageName ? `/uploads/recipes/${imageName}` : undefined;
 
         const recipeData: GetExtendedRecipeDTO = {
-            id: recipe.id,
+            id: recipe._id.toString(),
             title: recipe.title,
             author: author.username,
             date: recipe.date.toISOString().split('T')[0],

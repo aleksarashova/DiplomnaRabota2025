@@ -5,7 +5,7 @@ export interface CommentInterface {
     date: Date;
     content: string;
     is_approved: boolean;
-    reply_to: Types.ObjectId;
+    reply_to: Types.ObjectId | null;
 }
 
 type CommentModel = Model<CommentInterface>;
@@ -15,7 +15,7 @@ const CommentSchema: Schema = new Schema<CommentInterface, CommentModel>({
     date: { type: Date },
     content: { type: String },
     is_approved: { type: Boolean },
-    reply_to: {type: Schema.Types.ObjectId, ref: "Comment" }
+    reply_to: {type: Schema.Types.ObjectId, ref: "Comment", default: null }
 }, {collection: 'comments'});
 
 const Comment: CommentModel = model<CommentInterface, CommentModel>('Comment', CommentSchema);

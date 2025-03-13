@@ -15,12 +15,26 @@
     gap: 10px;
 }
 
-.addCommentButton {
+.addCommentButton,
+.replyToCommentButton
+{
     display: flex;
     flex-direction: row;
     align-items: center;
     border: none;
     background-color: transparent;
+}
+
+
+.replyToCommentButton {
+    font-size: 25px;
+    color: grey;
+    float: right;
+}
+
+.replyToCommentButton:hover {
+    font-size: 26px;
+    color: deeppink;
 }
 
 .addCommentIcon {
@@ -40,6 +54,17 @@
     border-bottom: 1px solid dimgrey;
     margin-bottom: 50px;
     padding-bottom: 30px;
+}
+
+.replyComment {
+    margin-left: 100px;
+    background-color: #FFE4C4;
+}
+
+.replyingToText {
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 5px;
 }
 
 .comments {
