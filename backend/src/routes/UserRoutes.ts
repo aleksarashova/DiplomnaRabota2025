@@ -18,7 +18,7 @@ import {
     editProfilePicture,
     deleteProfilePicture,
     rateUser,
-    getAllUsers, updateUserRole, getOverallRating, getRatings, sendResetPasswordEmail, resetPassword
+    getAllUsers, updateUserRole, getOverallRating, getRatings, sendResetPasswordEmail, resetPassword, getNotifications
 } from "../controllers/UserController";
 import {validateRequest} from "../middlewares/RequestValidationMiddleware";
 import {
@@ -44,6 +44,7 @@ router.get("/get-is-recipe-liked", checkAuthentication, getIsRecipeLiked);
 router.get("/get-all", checkAuthentication, getAllUsers);
 router.get("/get-overall-rating", checkAuthentication, getOverallRating);
 router.get("/get-ratings", checkAuthentication, getRatings);
+router.get("/get-notificationc", checkAuthentication, getNotifications);
 
 router.post("/register",
     uploadProfileImage.single("image"),

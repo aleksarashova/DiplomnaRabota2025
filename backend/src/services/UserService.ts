@@ -16,6 +16,7 @@ import Recipe from "../models/Recipe";
 import Comment from "../models/Comment";
 import {findKey, validatePasswordResetKey} from "./EmailService";
 import Notification, {NotificationInterface} from "../models/Notification";
+import {GetNotificationDTO} from "../DTOs/NotificationDTOs";
 
 export const hashPassword = async (password: string) => {
     try {
@@ -647,6 +648,35 @@ export const getUserRatings = async (username: string) => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while getting user ratings.");
+    }
+}
+
+export const getUserNotifications = async (username: string) => {
+    try {
+        const user = await findUserByUsername(username);
+
+        if (!user) {
+            throw new Error("User not found.");
+        }
+
+
+        const rawNotifications = await Notification.find({for_user: user._id});
+
+        const notifications: GetNotificationDTO[] = [];
+        for (const rawNotification of rawNotifications) {
+
+            notifications.push({
+                id: rawNotification._id.toString(),
+                content: rawNotification.content,
+            });
+        }
+
+        return notifications;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while getting user notifications.");
     }
 }
 

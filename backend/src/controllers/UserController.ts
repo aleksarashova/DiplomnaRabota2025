@@ -22,7 +22,7 @@ import {
     changeUserRole,
     getAverageRating,
     getUserRatings,
-    resetUserPassword
+    resetUserPassword, getUserNotifications
 } from "../services/UserService";
 import {
     sendVerificationEmail,
@@ -545,6 +545,23 @@ export const getRatings = async(req: ExtendedRequest, res:Response) => {
         res.status(200).json({ratings: ratings});
     } catch(error) {
         console.error("Error during getting overall rating:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const getNotifications = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const username = req.query.username as string;
+
+        const notifications = await getUserNotifications(username);
+        res.status(200).json({notifications: notifications});
+    } catch(error) {
+        console.error("Error during getting user notifications:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});
