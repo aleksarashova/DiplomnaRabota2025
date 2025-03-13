@@ -514,6 +514,19 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
         }
 
         await userBeingRated.save();
+
+        const rater = await findUserById(userIdOfRater);
+        if(!rater) {
+            throw new Error('User not found.');
+        }
+
+        const notification: NotificationInterface = {
+            for_user: userBeingRated._id,
+            content: rater.username + " rated you with " + rating + " stars.",
+        }
+
+        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
+        await newNotification.save();
     } catch (error) {
         if (error instanceof Error) {
             throw new Error(error.message);
