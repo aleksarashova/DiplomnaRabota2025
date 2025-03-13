@@ -24,6 +24,15 @@ export const addComment = async(commentData: AddCommentDTO) => {
                 throw new Error("The comment you are replying to does not exist.");
             }
             commentToReplyToId = commentToReplyTo._id;
+            if(commentToReplyToId != null) {
+                const notification: NotificationInterface = {
+                    for_user: commentToReplyTo.author._id,
+                    content: author.username + " replied to your comment on this recipe: " + recipe.title.toLocaleUpperCase() + ".",
+                }
+
+                const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
+                await newNotification.save();
+            }
         }
 
         const date = new Date();
