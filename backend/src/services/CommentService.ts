@@ -4,6 +4,7 @@ import { findUserById } from "./UserService";
 
 import {HydratedDocument, Types} from "mongoose";
 import {findRecipeById} from "./RecipeService";
+import Notification, {NotificationInterface} from "../models/Notification";
 
 export const addComment = async(commentData: AddCommentDTO) => {
     try {
@@ -40,6 +41,14 @@ export const addComment = async(commentData: AddCommentDTO) => {
 
         recipe.comments.push(newComment._id);
         await recipe.save();
+
+        const notification: NotificationInterface = {
+            for_user: recipe.author,
+            content: author.username + " commented on your recipe: " + recipe.title.toLocaleUpperCase() + ".",
+        }
+
+        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
+        await newNotification.save();
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
