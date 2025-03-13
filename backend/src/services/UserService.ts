@@ -82,6 +82,9 @@ export const deleteUser = async (id: string) => {
 
         await Comment.deleteMany({ author: id });
 
+        await Notification.deleteMany({for_user: id});
+        await Notification.deleteMany({from_user: id});
+
         await User.updateMany(
             { "ratings.raterId": id },
             { $pull: { ratings: { raterId: id } } }
