@@ -15,6 +15,7 @@ import {deleteFile} from "./FileService";
 import Recipe from "../models/Recipe";
 import Comment from "../models/Comment";
 import {findKey, validatePasswordResetKey} from "./EmailService";
+import Notification, {NotificationInterface} from "../models/Notification";
 
 export const hashPassword = async (password: string) => {
     try {
@@ -314,6 +315,14 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string) => 
 
         recipe.likes += 1;
         await recipe.save();
+
+        const notification: NotificationInterface = {
+            for_user: recipe.author,
+            content: user.username + " liked your recipe: " + recipe.title.toLocaleUpperCase() + ".",
+        }
+
+        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
+        await newNotification.save();
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
