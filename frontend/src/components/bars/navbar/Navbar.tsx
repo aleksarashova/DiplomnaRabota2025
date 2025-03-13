@@ -31,6 +31,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isH
     }
 
     return (
+        <div>
         <nav className={navbarClass}>
             {isHomePage && (
                 <div className="search-bar-nav">
@@ -101,10 +102,9 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isH
                     </li>
                 )}
             </ul>
-            {visibilityNotificationBar && (
-                <Notificationbar />
-            )}
         </nav>
+            <Notificationbar visibility={visibilityNotificationBar} />
+        </div>
     );
 };
 

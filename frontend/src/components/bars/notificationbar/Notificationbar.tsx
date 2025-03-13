@@ -5,8 +5,13 @@ import {useNavigate} from "react-router-dom";
 import {UserNotification} from "./types";
 import {getAllNotifications} from "./requests";
 
+import { MdOutlineCircleNotifications } from "react-icons/md";
 
-const NotificationBar = () => {
+interface NotificationbarProps {
+    visibility: boolean;
+}
+
+const NotificationBar = ({visibility}: NotificationbarProps) => {
     const [notifications, setNotifications] = React.useState<UserNotification[]>([]);
 
     const navigateTo = useNavigate();
@@ -33,12 +38,13 @@ const NotificationBar = () => {
         fetchData();
     }, []);
     return (
-        <nav className="notificationbar">
+        <nav className={`notificationbar ${visibility ? "visible" : ""}`}>
+            <p className="notificationsTitle">NOTIFICATIONS</p>
             <div className="myNotifications">
                 {notifications.length > 0 ? (
                     notifications.map((notification, index) => (
                         <div key={index} className="notificationRow">
-                            <p className="notification">{notification.content}</p>
+                            <p className="notification">{notification.content}<MdOutlineCircleNotifications className="notificationIcon"/></p>
                         </div>
                     ))
                 ) : (
@@ -46,6 +52,7 @@ const NotificationBar = () => {
                 )}
             </div>
         </nav>
+
     );
 }
 
