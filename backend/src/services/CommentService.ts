@@ -27,6 +27,7 @@ export const addComment = async(commentData: AddCommentDTO) => {
             if(commentToReplyToId != null) {
                 const notification: NotificationInterface = {
                     for_user: commentToReplyTo.author._id,
+                    from_user: author._id,
                     content: author.username + " replied to your comment on this recipe: " + recipe.title.toLocaleUpperCase() + ".",
                 }
 
@@ -53,6 +54,7 @@ export const addComment = async(commentData: AddCommentDTO) => {
 
         const notification: NotificationInterface = {
             for_user: recipe.author,
+            from_user: author._id,
             content: author.username + " commented on your recipe: " + recipe.title.toLocaleUpperCase() + ".",
         }
 

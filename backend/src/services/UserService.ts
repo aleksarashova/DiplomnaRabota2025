@@ -287,6 +287,7 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
 
         const notification: NotificationInterface = {
             for_user: recipe.author,
+            from_user: user._id,
             content: user.username + " added your recipe: " + recipe.title.toLocaleUpperCase() + " to his favourites.",
         }
 
@@ -326,6 +327,7 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string) => 
 
         const notification: NotificationInterface = {
             for_user: recipe.author,
+            from_user: user._id,
             content: user.username + " liked your recipe: " + recipe.title.toLocaleUpperCase() + ".",
         }
 
@@ -522,6 +524,7 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
 
         const notification: NotificationInterface = {
             for_user: userBeingRated._id,
+            from_user: rater._id,
             content: rater.username + " rated you with " + rating + " stars.",
         }
 
