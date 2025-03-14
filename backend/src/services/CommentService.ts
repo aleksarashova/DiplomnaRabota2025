@@ -25,10 +25,12 @@ export const addComment = async(commentData: AddCommentDTO) => {
             }
             commentToReplyToId = commentToReplyTo._id;
             if(commentToReplyToId != null) {
+                const now = new Date();
                 const notification: NotificationInterface = {
                     for_user: commentToReplyTo.author._id,
                     from_user: author._id,
                     content: author.username + " replied to your comment on this recipe: " + recipe.title.toLocaleUpperCase() + ".",
+                    date: now
                 }
 
                 const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
@@ -52,10 +54,12 @@ export const addComment = async(commentData: AddCommentDTO) => {
         recipe.comments.push(newComment._id);
         await recipe.save();
 
+        const now = new Date();
         const notification: NotificationInterface = {
             for_user: recipe.author,
             from_user: author._id,
             content: author.username + " commented on your recipe: " + recipe.title.toLocaleUpperCase() + ".",
+            date: now
         }
 
         const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);

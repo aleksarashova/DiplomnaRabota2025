@@ -44,7 +44,8 @@ const NotificationBar = ({visibility}: NotificationbarProps) => {
                 {notifications.length > 0 ? (
                     notifications.map((notification, index) => (
                         <div key={index} className="notificationRow">
-                            <p className="notification">{notification.content}<MdOutlineCircleNotifications className="notificationIcon"/></p>
+                            <p className="timeAgoNotification"><MdOutlineCircleNotifications className="notificationIcon"/>{notification.date}</p>
+                            <p className="notification">{notification.content}</p>
                         </div>
                     ))
                 ) : (
