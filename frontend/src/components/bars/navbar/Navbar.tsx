@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./navbar.css";
 
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { MdAppRegistration } from "react-icons/md";
@@ -11,6 +11,7 @@ import { MdNotificationsActive } from "react-icons/md";
 
 import SearchBar from "../searchbar/searchbar";
 import Notificationbar from "../notificationbar/Notificationbar";
+import {validateJWT} from "../../pages/authCheck";
 
 interface NavbarProps {
     isLoggedIn: boolean;
@@ -28,12 +29,32 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isH
         ? "navbar-home"
         : "navbar-home navbar-default";
 
+    const navigateTo = useNavigate();
+
     useEffect(() => {
         sessionStorage.setItem("notificationBarVisibility", JSON.stringify(visibilityNotificationBar));
     }, [visibilityNotificationBar]);
 
     const handleLogOut = async() => {
+        sessionStorage.setItem("notificationBarVisibility", "false");
         sessionStorage.removeItem("accessToken");
+    }
+
+    const handleNotificationClick = () => {
+        const token = sessionStorage.getItem("accessToken");
+        if(!token) {
+            sessionStorage.setItem("notificationBarVisibility", "false");
+            setTimeout(() => navigateTo("/login"), 0);
+            return;
+        }
+
+        const isValid = validateJWT(token);
+        if (!isValid) {
+            navigateTo("/login");
+            return;
+        } else {
+            setVisibilityNotificationBar(!visibilityNotificationBar);
+        }
     }
 
     return (
@@ -95,7 +116,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isH
 
                 {isLoggedIn && (
                     <li>
-                        <Link to="#" onClick={() => setVisibilityNotificationBar(!visibilityNotificationBar)} className="link">
+                        <Link to="#" onClick={handleNotificationClick} className="link">
                             <div className="icon-box-nav-last">
                                 <MdNotificationsActive className="icon-nav"/>
                             </div>
