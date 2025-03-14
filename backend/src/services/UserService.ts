@@ -289,10 +289,12 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
         user.favourites.push(recipe._id!);
         await user.save();
 
+        const now = new Date();
         const notification: NotificationInterface = {
             for_user: recipe.author,
             from_user: user._id,
             content: user.username + " added your recipe: " + recipe.title.toLocaleUpperCase() + " to his favourites.",
+            date: now
         }
 
         const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
@@ -329,10 +331,12 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string) => 
         recipe.likes += 1;
         await recipe.save();
 
+        const now = new Date();
         const notification: NotificationInterface = {
             for_user: recipe.author,
             from_user: user._id,
             content: user.username + " liked your recipe: " + recipe.title.toLocaleUpperCase() + ".",
+            date: now
         }
 
         const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
@@ -526,10 +530,12 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
             throw new Error('User not found.');
         }
 
+        const now = new Date();
         const notification: NotificationInterface = {
             for_user: userBeingRated._id,
             from_user: rater._id,
             content: rater.username + " rated you with " + rating + " stars.",
+            date: now,
         }
 
         const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
@@ -661,14 +667,39 @@ export const getUserNotifications = async (username: string) => {
 
 
         const rawNotifications = await Notification.find({for_user: user._id})
-            .sort({ createdAt: -1 });;
+            .sort({ createdAt: -1 });
 
         const notifications: GetNotificationDTO[] = [];
         for (const rawNotification of rawNotifications) {
+            const now = new Date();
+            const notificationDate = new Date(rawNotification.date);
+            const diffInSeconds = Math.floor((now.getTime() - notificationDate.getTime()) / 1000);
+
+            let timeAgo = "";
+
+            if (diffInSeconds < 60) {
+                timeAgo = `${diffInSeconds} second${diffInSeconds > 1 ? 's' : ''} ago`;
+            } else if (diffInSeconds < 3600) {
+                const diffInMinutes = Math.floor(diffInSeconds / 60);
+                timeAgo = `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
+            } else if (diffInSeconds < 86400) {
+                const diffInHours = Math.floor(diffInSeconds / 3600);
+                timeAgo = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+            } else if (diffInSeconds < 2592000) {
+                const diffInDays = Math.floor(diffInSeconds / 86400);
+                timeAgo = `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+            } else if (diffInSeconds < 31536000) {
+                const diffInMonths = Math.floor(diffInSeconds / 2592000);
+                timeAgo = `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
+            } else {
+                const diffInYears = Math.floor(diffInSeconds / 31536000);
+                timeAgo = `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
+            }
 
             notifications.push({
                 id: rawNotification._id.toString(),
                 content: rawNotification.content,
+                date: timeAgo,
             });
         }
 

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./navbar.css";
 
 import {Link} from "react-router-dom";
@@ -21,10 +21,16 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isHomePage, setSearchText }) => {
-    const [visibilityNotificationBar, setVisibilityNotificationBar] = useState(false);
+    const [visibilityNotificationBar, setVisibilityNotificationBar] = useState<boolean>(() => {
+        return JSON.parse(sessionStorage.getItem("notificationBarVisibility") || "false");
+    });
     const navbarClass = isHomePage
         ? "navbar-home"
         : "navbar-home navbar-default";
+
+    useEffect(() => {
+        sessionStorage.setItem("notificationBarVisibility", JSON.stringify(visibilityNotificationBar));
+    }, [visibilityNotificationBar]);
 
     const handleLogOut = async() => {
         sessionStorage.removeItem("accessToken");

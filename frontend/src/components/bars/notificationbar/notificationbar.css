@@ -48,3 +48,7 @@
 .notificationIcon {
     font-size: 40px;
 }
+
+.noRatingsMessage {
+    direction: ltr;
+}
