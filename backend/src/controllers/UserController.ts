@@ -22,7 +22,7 @@ import {
     changeUserRole,
     getAverageRating,
     getUserRatings,
-    resetUserPassword, getUserNotifications
+    resetUserPassword, getUserNotifications, deleteUserNotifications
 } from "../services/UserService";
 import {
     sendVerificationEmail,
@@ -562,6 +562,23 @@ export const getNotifications = async(req: ExtendedRequest, res:Response) => {
         res.status(200).json({notifications: notifications});
     } catch(error) {
         console.error("Error during getting user notifications:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
+export const deleteNotifications = async(req: ExtendedRequest, res:Response) => {
+    try {
+        const {username, selectedNotificationIds} = req.body;
+
+        await deleteUserNotifications(username, selectedNotificationIds);
+        res.status(200).json("Successfully deleted noifications.");
+    } catch(error) {
+        console.error("Error during deleting user notifications:", error);
 
         if (error instanceof Error) {
             res.status(400).json({message: error.message});

@@ -64,6 +64,7 @@ const NotificationBar = ({ visibility }: NotificationbarProps) => {
             }
             setSelectedNotifications([]);
             setSelectAll(false);
+            window.location.reload();
         }
     }
 

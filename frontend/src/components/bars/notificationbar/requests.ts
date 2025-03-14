@@ -32,7 +32,7 @@ export const deleteNotifications = async (accessToken: string, username: string,
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
             },
-            body: JSON.stringify({ selectedNotificationIds }),
+            body: JSON.stringify({ username, selectedNotificationIds }),
         });
 
         const data = await response.json();

@@ -18,7 +18,14 @@ import {
     editProfilePicture,
     deleteProfilePicture,
     rateUser,
-    getAllUsers, updateUserRole, getOverallRating, getRatings, sendResetPasswordEmail, resetPassword, getNotifications
+    getAllUsers,
+    updateUserRole,
+    getOverallRating,
+    getRatings,
+    sendResetPasswordEmail,
+    resetPassword,
+    getNotifications,
+    deleteNotifications
 } from "../controllers/UserController";
 import {validateRequest} from "../middlewares/RequestValidationMiddleware";
 import {
@@ -69,5 +76,6 @@ router.delete("/delete-profile-picture", checkAuthentication, deleteProfilePictu
 router.delete("/delete-profile", checkAuthentication, deleteProfile);
 router.delete("/remove-recipe-from-favourites", checkAuthentication, removeRecipeFromFavourites);
 router.delete("/remove-recipe-from-liked", checkAuthentication, removeRecipeFromLiked);
+router.delete("/delete-notifications", checkAuthentication, deleteNotifications);
 
 export default router;

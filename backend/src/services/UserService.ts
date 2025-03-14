@@ -712,6 +712,19 @@ export const getUserNotifications = async (username: string) => {
     }
 }
 
+export const deleteUserNotifications = async (username: string, notificationIds: string[]) => {
+    try {
+       for(const notificationId of notificationIds) {
+           await Notification.findOneAndDelete({ _id: notificationId });
+       }
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while deleting user notifications.");
+    }
+}
+
 export const resetUserPassword = async(password: string, key: string) => {
     try {
         const isValidKey = await validatePasswordResetKey(key);
