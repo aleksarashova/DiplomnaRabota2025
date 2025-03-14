@@ -293,7 +293,7 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
         const notification: NotificationInterface = {
             for_user: recipe.author,
             from_user: user._id,
-            content: user.username + " added your recipe: " + recipe.title.toLocaleUpperCase() + " to his favourites.",
+            content: user.username + " added " + recipe.title.toLocaleUpperCase() + " to favourites",
             date: now
         }
 
@@ -335,7 +335,7 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string) => 
         const notification: NotificationInterface = {
             for_user: recipe.author,
             from_user: user._id,
-            content: user.username + " liked your recipe: " + recipe.title.toLocaleUpperCase() + ".",
+            content: user.username + " liked " + recipe.title.toLocaleUpperCase() + "",
             date: now
         }
 
@@ -534,7 +534,7 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
         const notification: NotificationInterface = {
             for_user: userBeingRated._id,
             from_user: rater._id,
-            content: rater.username + " rated you with " + rating + " stars.",
+            content: rater.username + " rated you with " + rating + " stars",
             date: now,
         }
 
@@ -666,8 +666,10 @@ export const getUserNotifications = async (username: string) => {
         }
 
 
-        const rawNotifications = await Notification.find({for_user: user._id})
-            .sort({ createdAt: -1 });
+        const rawNotifications = await Notification.find({
+            for_user: user._id,
+            $or: [{ is_comment_approved: true }, { is_comment_approved: { $exists: false } }]
+        }).sort({ createdAt: -1 });
 
         const notifications: GetNotificationDTO[] = [];
         for (const rawNotification of rawNotifications) {

@@ -9,6 +9,7 @@ import Category from "../models/Category";
 import {findUserById} from "./UserService";
 import path from "path";
 import {findCommentById} from "./CommentService";
+import Notification, {NotificationInterface} from "../models/Notification";
 
 export const addRecipe = async (recipeData: AddRecipeDTO, userId: string) => {
     try {
@@ -362,6 +363,16 @@ export const updateRecipeApproved = async(recipeId: string) => {
 
         recipe.is_approved = true;
         await recipe.save();
+
+        const now = new Date();
+        const notification: NotificationInterface = {
+            for_user: recipe.author,
+            content: "Your recipe " + recipe.title.toLocaleUpperCase() + " has been approved",
+            date: now
+        }
+
+        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
+        await newNotification.save();
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);

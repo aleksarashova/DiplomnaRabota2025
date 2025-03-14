@@ -29,8 +29,9 @@ export const addComment = async(commentData: AddCommentDTO) => {
                 const notification: NotificationInterface = {
                     for_user: commentToReplyTo.author._id,
                     from_user: author._id,
-                    content: author.username + " replied to your comment on this recipe: " + recipe.title.toLocaleUpperCase() + ".",
-                    date: now
+                    content: author.username + " replied to your comment on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content,
+                    date: now,
+                    is_comment_approved: false
                 }
 
                 const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
@@ -58,8 +59,9 @@ export const addComment = async(commentData: AddCommentDTO) => {
         const notification: NotificationInterface = {
             for_user: recipe.author,
             from_user: author._id,
-            content: author.username + " commented on your recipe: " + recipe.title.toLocaleUpperCase() + ".",
-            date: now
+            content: author.username + " commented on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content,
+            date: now,
+            is_comment_approved: false
         }
 
         const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
@@ -129,6 +131,24 @@ export const updateCommentApproved = async(commentId: string) => {
 
         comment.is_approved = true;
         await comment.save();
+
+        const now = new Date();
+        const notification: NotificationInterface = {
+            for_user: comment.author,
+            content: "Your comment: '" + comment.content + "' has been approved",
+            date: now
+        }
+
+        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
+        await newNotification.save();
+
+        await Notification.updateOne(
+            {
+                content: { $regex: comment.content, $options: "i" },
+                is_comment_approved: { $exists: true }
+            },
+            { $set: { is_comment_approved: true } }
+        );
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
