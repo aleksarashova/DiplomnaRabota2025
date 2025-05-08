@@ -3,6 +3,15 @@
     padding-bottom: 100px;
 }
 
+#recipe-form-page input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px whitesmoke inset !important;
+    -webkit-text-fill-color: black !important;
+    background-color: whitesmoke !important;
+    color: black !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+
 .recipe-creation-title {
     font-family: "Lucida Handwriting", sans-serif;
     font-size: 30px;
@@ -82,7 +91,7 @@
 .recipeFormInputImage
 {
     border: none;
-    background: transparent;
+    background: whitesmoke;
     font-size: 20px;
     font-weight: lighter;
     font-family: Arial, serif;
