@@ -5,6 +5,7 @@ import { findUserById } from "./UserService";
 import {HydratedDocument, Types} from "mongoose";
 import {findRecipeById} from "./RecipeService";
 import Notification, {NotificationInterface} from "../models/Notification";
+import Recipe from "../models/Recipe";
 
 export const addComment = async(commentData: AddCommentDTO) => {
     try {
@@ -165,6 +166,10 @@ export const deleteRejectedComment = async(commentId: string) => {
             throw new Error(`Comment with ID "${commentId}" not found.`);
         }
 
+        await Recipe.updateMany(
+            { comments: comment._id },
+            { $pull: { comments: comment._id } }
+        );
         await Comment.deleteOne({ _id: commentId });
     } catch(error) {
         if(error instanceof Error) {
