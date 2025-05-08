@@ -109,8 +109,18 @@ export const getAllApprovedRecipesData = async (filterParams: FilterParams): Pro
         }
 
         if (searchText) {
-            queryConditions.title = { $regex: searchText, $options: "i" };
+            const author = await User.findOne({ username: { $regex: searchText, $options: "i" } });
+
+            queryConditions.$or = [
+                { title: { $regex: searchText, $options: "i" } },
+                { products: { $elemMatch: { $regex: searchText, $options: "i" } } }
+            ];
+
+            if (author) {
+                queryConditions.$or.push({ author: author._id });
+            }
         }
+
 
         if (recipesOf) {
             const user = await User.findOne({ username: recipesOf });
