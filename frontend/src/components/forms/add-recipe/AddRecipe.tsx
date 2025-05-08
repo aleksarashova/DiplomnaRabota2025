@@ -118,6 +118,16 @@ const AddRecipeForm = () => {
         }
 
         if (image) {
+            const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+            if (!validTypes.includes(image.type)) {
+                handleInvalidInput("Image must be JPEG or PNG.");
+                return;
+            }
+            const maxSizeMB = 5;
+            if (image.size > maxSizeMB * 1024 * 1024) {
+                handleInvalidInput(`Image size must not exceed ${maxSizeMB}MB.`);
+                return;
+            }
             formData.append("image", image);
         }
 
