@@ -91,7 +91,7 @@ export const deleteUser = async (id: string) => {
             { $pull: { ratings: { raterId: id } } }
         );
 
-
+        await deleteFile(user.image);
         await User.findByIdAndDelete({_id: id});
     } catch(error) {
         if(error instanceof Error) {
