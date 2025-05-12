@@ -44,7 +44,7 @@ export const checkForRightPassword = async(password: string, real_password_hash:
 }
 
 
-export const createUser = async (userData: RegisterUserDTO) => {
+export const createUser = async (userData: RegisterUserDTO): Promise<void> => {
     try {
         const passwordHash: string = await hashPassword(userData.password);
 
@@ -66,10 +66,11 @@ export const createUser = async (userData: RegisterUserDTO) => {
 
         const newUser: HydratedDocument<UserInterface> = new User(user);
         await newUser.save();
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error creating user with email: ", userData.email, error);
         throw new Error("Unknown error while creating user.");
     }
 }
