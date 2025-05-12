@@ -14,7 +14,7 @@ import {
 import {findRecipeById} from "./RecipeService";
 import path from "path";
 import {deleteFile} from "./FileService";
-import Recipe from "../models/Recipe";
+import Recipe, {RecipeInterface} from "../models/Recipe";
 import Comment from "../models/Comment";
 import {findKey, validatePasswordResetKey} from "./EmailService";
 import Notification, {NotificationInterface} from "../models/Notification";
@@ -285,16 +285,14 @@ export const getOtherUserProfileData = async (username: string, userId: string):
     }
 }
 
-export const addRecipeToFavouritesList = async (recipeId: string, userId: string) => {
+export const addRecipeToFavouritesList = async (recipeId: string, userId: string): Promise<void> => {
     try {
-        const user = await findUserById(userId);
-
+        const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
         }
 
-        const recipe = await findRecipeById(recipeId);
-
+        const recipe: HydratedDocument<RecipeInterface> | null = await findRecipeById(recipeId);
         if(!recipe) {
             throw new Error("Recipe not found.");
         }
@@ -306,7 +304,7 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
         user.favourites.push(recipe._id!);
         await user.save();
 
-        const now = new Date();
+        const now: Date = new Date();
         const notification: NotificationInterface = {
             for_user: recipe.author,
             from_user: user._id,
@@ -316,24 +314,23 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
 
         const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
         await newNotification.save();
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error adding recipe to favourites list of user with ID: ", userId, error);
         throw new Error("Unknown error while adding recipe to favourites list.");
     }
 }
 
-export const addRecipeToLikedList = async (recipeId: string, userId: string) => {
+export const addRecipeToLikedList = async (recipeId: string, userId: string): Promise<void> => {
     try {
-        const user = await findUserById(userId);
-
+        const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
         }
 
-        const recipe = await findRecipeById(recipeId);
-
+        const recipe: HydratedDocument<RecipeInterface> | null = await findRecipeById(recipeId);
         if(!recipe) {
             throw new Error("Recipe not found.");
         }
@@ -348,7 +345,7 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string) => 
         recipe.likes += 1;
         await recipe.save();
 
-        const now = new Date();
+        const now: Date = new Date();
         const notification: NotificationInterface = {
             for_user: recipe.author,
             from_user: user._id,
@@ -358,10 +355,11 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string) => 
 
         const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
         await newNotification.save();
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error adding recipe to liked list of user with ID: ", userId, error);
         throw new Error("Unknown error while adding recipe to liked list.");
     }
 }
