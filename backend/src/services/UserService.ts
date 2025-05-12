@@ -113,35 +113,38 @@ export const deleteUser = async (id: string): Promise<void> => {
     }
 }
 
-export const findUserById = async(id: string) => {
+export const findUserById = async(id: string): Promise<HydratedDocument<UserInterface> | null> => {
     try {
         return await User.findOne({_id: id});
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error finding user by id: ", error);
         throw new Error("Unknown error while searching for a user by id.");
     }
 }
 
-export const findUserByEmail = async(email: string) => {
+export const findUserByEmail = async(email: string): Promise<HydratedDocument<UserInterface> | null> => {
     try {
         return await User.findOne({email: email});
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error finding user by email: ", error);
         throw new Error("Unknown error while searching for a user by email.");
     }
 }
 
-export const findUserByUsername = async(username: string) => {
+export const findUserByUsername = async(username: string): Promise<HydratedDocument<UserInterface> | null> => {
     try {
         return await User.findOne({username: username});
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error finding user by username: ", error);
         throw new Error("Unknown error while searching for a user by username.");
     }
 }
