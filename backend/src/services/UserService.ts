@@ -20,25 +20,27 @@ import {findKey, validatePasswordResetKey} from "./EmailService";
 import Notification, {NotificationInterface} from "../models/Notification";
 import {GetNotificationDTO} from "../DTOs/NotificationDTOs";
 
-export const hashPassword = async (password: string) => {
+export const hashPassword = async (password: string): Promise<string> => {
     try {
         const salt: string = await bcrypt.genSalt(10);
         return await bcrypt.hash(password, salt);
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error hashing password: ", error);
         throw new Error("Unknown error while hashing the password.");
     }
 }
 
-export const checkForRightPassword = async(password: string, real_password_hash: string) => {
+export const checkForRightPassword = async(password: string, real_password_hash: string): Promise<boolean> => {
     try {
         return await bcrypt.compare(password, real_password_hash);
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error checking for right password: ", error);
         throw new Error("Unknown error while checking the password.");
     }
 }
