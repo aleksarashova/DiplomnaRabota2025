@@ -1,6 +1,8 @@
 import {HydratedDocument, Types} from "mongoose";
 import User, {UserInterface} from "../models/User";
 
+import mongoose from "mongoose";
+
 import bcrypt from 'bcryptjs';
 import {
     GetAllUsersDTO,
@@ -72,9 +74,12 @@ export const createUser = async (userData: RegisterUserDTO) => {
     }
 }
 
-export const deleteUser = async (id: string) => {
+export const deleteUser = async (id: string): Promise<void> => {
     try {
-        const user = await User.findById(id);
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new Error("Invalid user ID format");
+        }
+        const user: HydratedDocument<UserInterface> | null = await User.findById(id);
         if (!user) {
             throw new Error("User not found");
         }
@@ -83,20 +88,24 @@ export const deleteUser = async (id: string) => {
 
         await Comment.deleteMany({ author: id });
 
-        await Notification.deleteMany({for_user: id});
-        await Notification.deleteMany({from_user: id});
+        await Notification.deleteMany({
+            $or: [{for_user: id}, {from_user: id}]
+        });
 
         await User.updateMany(
             { "ratings.raterId": id },
             { $pull: { ratings: { raterId: id } } }
         );
 
-        await deleteFile(user.image);
-        await User.findByIdAndDelete({_id: id});
-    } catch(error) {
+        if(user.image) {
+            await deleteFile(user.image);
+        }
+        await user.deleteOne();
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error deleting user: ", error);
         throw new Error("Unknown error while deleting user.");
     }
 }
