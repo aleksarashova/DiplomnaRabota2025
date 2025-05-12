@@ -1,4 +1,4 @@
-import {HydratedDocument, Types} from "mongoose";
+import {HydratedDocument, Schema, Types} from "mongoose";
 import User, {UserInterface} from "../models/User";
 
 import mongoose from "mongoose";
@@ -149,24 +149,25 @@ export const findUserByUsername = async(username: string): Promise<HydratedDocum
     }
 }
 
-export const updateUserVerified = async(email: string) => {
+export const updateUserVerified = async(email: string): Promise<void> => {
     try {
-        const user = await findUserByEmail(email);
-        if (user) {
-            user.is_verified = true;
-            await user.save();
-        } else {
+        const user: HydratedDocument<UserInterface> | null = await findUserByEmail(email);
+        if(!user) {
             throw new Error("Could not find user while trying to update it to verified.");
         }
-    } catch(error) {
+
+        user.is_verified = true;
+        await user.save();
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error updating user to be verified: ", error);
         throw new Error("Unknown error while updating the user to verified.");
     }
 }
 
-export const updateUserProfile = async(updatedUserData: UpdateUserDTO) => {
+export const updateUserProfile = async(updatedUserData: UpdateUserDTO): Promise<void> => {
     try {
         if (!updatedUserData.user_id) {
             throw new Error("User ID is required.");
@@ -179,7 +180,7 @@ export const updateUserProfile = async(updatedUserData: UpdateUserDTO) => {
             }
         }
 
-        const user = await findUserById(updatedUserData.user_id);
+        const user: HydratedDocument<UserInterface> | null = await findUserById(updatedUserData.user_id);
         if(!user) {
             throw new Error("Could not find user while trying to update his profile.");
         }
@@ -199,24 +200,24 @@ export const updateUserProfile = async(updatedUserData: UpdateUserDTO) => {
         }
 
         await user.save();
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error updating user profile: ", error);
         throw new Error("Unknown error while updating the user to logged out.");
     }
 }
 
-export const getUserProfileData = async (id: string) => {
+export const getUserProfileData = async (id: string): Promise<UserProfileDTO> => {
     try {
         const user: UserInterface | null = await findUserById(id);
-
         if (!user) {
             throw new Error('User not found');
         }
 
-        const imageName = user.image ? path.basename(user.image) : undefined;
-        const imagePath = imageName ? `/uploads/profile/${imageName}` : undefined;
+        const imageName: string | undefined = user.image ? path.basename(user.image) : undefined;
+        const imagePath: string | undefined = imageName ? `/uploads/profile/${imageName}` : undefined;
 
         const userData: UserProfileDTO = {
             first_name: user.first_name,
@@ -229,39 +230,39 @@ export const getUserProfileData = async (id: string) => {
         };
 
         return userData;
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error getting user profile data: ", error);
         throw new Error("Unknown error while getting the user profile data.");
     }
 }
 
-export const getOtherUserProfileData = async (username: string, userId: string) => {
+export const getOtherUserProfileData = async (username: string, userId: string): Promise<OtherUserProfileDTO> => {
     try {
-        const user = await findUserByUsername(username);
-
+        const user: HydratedDocument<UserInterface> | null = await findUserByUsername(username);
         if (!user) {
             throw new Error('User not found');
         }
 
-        const profileUserId = user._id.toString();
-
+        const profileUserId: string = user._id.toString();
         let isOwnProfile = false;
-
         if (profileUserId === userId) {
             console.log("User is opening their own profile.");
             isOwnProfile = true;
         }
 
-        const ratings = user.ratings || [];
+        type RatingType =  { raterId: Types.ObjectId, rating: number };
 
-        const userRating = ratings.find((ratingObj) => ratingObj.raterId.toString() === userId)?.rating || null;
+        const ratings: RatingType[] | [] = user.ratings || [];
 
-        const averageRating = await getAverageRating(user.username);
+        const userRating: number | null = ratings.find((ratingObject) => ratingObject.raterId.toString() === userId)?.rating || null;
 
-        const imageName = user.image ? path.basename(user.image) : undefined;
-        const imagePath = imageName ? `/uploads/profile/${imageName}` : undefined;
+        const averageRating: number = await getAverageRating(user.username);
+
+        const imageName: string | undefined = user.image ? path.basename(user.image) : undefined;
+        const imagePath: string | undefined = imageName ? `/uploads/profile/${imageName}` : undefined;
 
         const userData: OtherUserProfileDTO = {
             first_name: user.first_name,
@@ -275,10 +276,11 @@ export const getOtherUserProfileData = async (username: string, userId: string) 
         };
 
         return userData;
-    } catch (error) {
+    } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error getting other user profile data: ", error);
         throw new Error("Unknown error while getting the other user profile data.");
     }
 }
