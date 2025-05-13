@@ -506,7 +506,7 @@ export const checkIsRecipeLiked = async (recipeId: string, userId: string): Prom
     try {
         checkIdFormat(recipeId);
         checkIdFormat(userId);
-        
+
         const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
@@ -527,48 +527,52 @@ export const checkIsRecipeLiked = async (recipeId: string, userId: string): Prom
     }
 }
 
-export const updateProfilePicture = async(userId: string, imagePath: string | null) => {
+export const updateProfilePicture = async(userId: string, imagePath: string | null): Promise<void> => {
     try {
+        checkIdFormat(userId);
+
         if (!imagePath) {
             throw new Error("Image path is missing.");
         }
 
-        const user = await findUserById(userId);
-
+        const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
         }
 
-        const oldImagePath = user.image;
+        const oldImagePath: string = user.image;
         user.image = imagePath;
         await user.save();
 
         await deleteFile(oldImagePath);
-    }  catch(error) {
+    }  catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.log("Error updating profile picture of user with ID: ", userId, error);
         throw new Error("Unknown error while updating profile picture.");
     }
 }
 
-export const removeProfilePicture = async(userId: string) => {
+export const removeProfilePicture = async(userId: string): Promise<void> => {
     try {
-        const user = await findUserById(userId);
+        checkIdFormat(userId);
 
+        const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
         }
 
-        const oldImagePath = user.image;
+        const oldImagePath: string = user.image;
         user.image = "";
         await user.save();
 
         await deleteFile(oldImagePath);
-    }  catch(error) {
+    }  catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.log("Error deleting profile picture of user with ID: ", userId, error);
         throw new Error("Unknown error while updating profile picture.");
     }
 }
