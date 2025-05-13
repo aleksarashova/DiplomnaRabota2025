@@ -626,6 +626,30 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
     }
 }
 
+export const changeUserRole = async (userId: string, newRole: string): Promise<void> => {
+    try {
+        checkIdFormat(userId);
+
+        if(newRole !== "admin" && newRole !== "user") {
+            throw new Error("Invalid user role.");
+        }
+
+        const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
+        if(!user) {
+            throw new Error('User not found.');
+        }
+
+        user.role = newRole;
+        await user.save();
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        console.log("Error changing user role for user with ID: ", userId, " with role: ", newRole, error);
+        throw new Error("Unknown error while changing user role.");
+    }
+}
+
 export const getAllUsersData = async () => {
     try {
         const users = await User.find({});
@@ -650,29 +674,6 @@ export const getAllUsersData = async () => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while getting all users data.");
-    }
-}
-
-export const changeUserRole = async (userId: string, newRole: string) => {
-    try {
-        if(newRole !== "admin" && newRole !== "user") {
-            throw new Error("Invalid user role.");
-        }
-
-        const user = await findUserById(userId);
-
-        if(!user) {
-            throw new Error('User not found.');
-        }
-
-        user.role = newRole;
-
-        await user.save();
-    } catch (error) {
-        if (error instanceof Error) {
-            throw new Error(error.message);
-        }
-        throw new Error("Unknown error while changing user role.");
     }
 }
 
