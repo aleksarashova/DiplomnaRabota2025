@@ -577,33 +577,37 @@ export const removeProfilePicture = async(userId: string): Promise<void> => {
     }
 }
 
-export const changeUserRating = async (userIdOfRater: string, usernameOfUserBeingRated: string, rating: number) => {
+export const changeUserRating = async (userIdOfRater: string, usernameOfUserBeingRated: string, rating: number): Promise<void> => {
     try {
-        const userBeingRated = await findUserByUsername(usernameOfUserBeingRated);
+        checkIdFormat(userIdOfRater);
 
+        const userBeingRated: HydratedDocument<UserInterface> | null = await findUserByUsername(usernameOfUserBeingRated);
         if (!userBeingRated) {
             throw new Error('User not found.');
         }
 
-        const existingRating = userBeingRated.ratings.find(r => r.raterId.toString() === userIdOfRater);
+        type RatingType =  { raterId: Types.ObjectId, rating: number };
 
+        const existingRating: RatingType | undefined = userBeingRated.ratings.find(
+            (r: RatingType): boolean => r.raterId.toString() === userIdOfRater
+        );
         if (existingRating) {
             existingRating.rating = rating;
             console.log(`Updated rating from user ${userIdOfRater} to ${rating}`);
         } else {
-            const raterObjectId = new Types.ObjectId(userIdOfRater);
+            const raterObjectId: Types.ObjectId = new Types.ObjectId(userIdOfRater);
             userBeingRated.ratings.push({ raterId: raterObjectId, rating });
             console.log(`Added new rating from user ${userIdOfRater} with rating ${rating}`);
         }
 
         await userBeingRated.save();
 
-        const rater = await findUserById(userIdOfRater);
+        const rater: HydratedDocument<UserInterface> | null = await findUserById(userIdOfRater);
         if(!rater) {
             throw new Error('User not found.');
         }
 
-        const now = new Date();
+        const now: Date = new Date();
         const notification: NotificationInterface = {
             for_user: userBeingRated._id,
             from_user: rater._id,
@@ -613,10 +617,11 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
 
         const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
         await newNotification.save();
-    } catch (error) {
+    } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
         }
+        console.log("Error changing user rating for user: ", usernameOfUserBeingRated, " with rating: ", rating, error);
         throw new Error("Unknown error while updating rating.");
     }
 }
