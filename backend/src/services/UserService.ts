@@ -588,7 +588,7 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
 
         type RatingType =  { raterId: Types.ObjectId, rating: number };
 
-        const existingRating: RatingType | undefined = userBeingRated.ratings.find(
+        const existingRating: RatingType | undefined = (userBeingRated.ratings || []).find(
             (r: RatingType): boolean => r.raterId.toString() === userIdOfRater
         );
         if (existingRating) {
