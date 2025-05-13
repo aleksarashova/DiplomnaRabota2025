@@ -425,48 +425,46 @@ export const removeRecipeFromLikedList = async (recipeId: string, userId: string
     }
 }
 
-export const checkIsRecipeFavourite = async (recipeId: string, userId: string) => {
+export const checkIsRecipeFavourite = async (recipeId: string, userId: string): Promise<boolean> => {
     try {
-        const user = await findUserById(userId);
-
+        const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
         }
 
-        const recipe = await findRecipeById(recipeId);
-
+        const recipe: HydratedDocument<RecipeInterface> | null = await findRecipeById(recipeId);
         if(!recipe) {
             throw new Error("Recipe not found.");
         }
 
         return user.favourites.includes(recipe._id!);
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error checking is recipe with ID: ", recipeId, " favourite of user with ID: ", userId, error);
         throw new Error("Unknown error while checking is recipe favourite.");
     }
 }
 
-export const checkIsRecipeLiked = async (recipeId: string, userId: string) => {
+export const checkIsRecipeLiked = async (recipeId: string, userId: string): Promise<boolean> => {
     try {
-        const user = await findUserById(userId);
-
+        const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
         }
 
-        const recipe = await findRecipeById(recipeId);
-
+        const recipe: HydratedDocument<RecipeInterface> | null = await findRecipeById(recipeId);
         if(!recipe) {
             throw new Error("Recipe not found.");
         }
 
         return user.liked.includes(recipe._id!);
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error checking is recipe with ID: ", recipeId, " liked by user with ID: ", userId, error);
         throw new Error("Unknown error while checking is recipe liked.");
     }
 }
