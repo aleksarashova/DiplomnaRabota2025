@@ -19,6 +19,7 @@ import Comment from "../models/Comment";
 import {findKey, validatePasswordResetKey} from "./EmailService";
 import Notification, {NotificationInterface} from "../models/Notification";
 import {GetNotificationDTO} from "../DTOs/NotificationDTOs";
+import {PasswordResetKeyInterface} from "../models/PasswordReset";
 
 export const hashPassword = async (password: string): Promise<string> => {
     try {
@@ -650,6 +651,48 @@ export const changeUserRole = async (userId: string, newRole: string): Promise<v
     }
 }
 
+export const resetUserPassword = async(password: string, key: string): Promise<void> => {
+    try {
+        const isValidKey: boolean = await validatePasswordResetKey(key);
+        if(!isValidKey) {
+            throw new Error("Expired password key.");
+        }
+
+        const recordInPasswordResetKeys: HydratedDocument<PasswordResetKeyInterface> | null = await findKey(key);
+        if(!recordInPasswordResetKeys) {
+            throw new Error("No record with this key in the database.");
+        }
+        const userEmail: string = recordInPasswordResetKeys!.email;
+        const newHashedPassword: string = await hashPassword(password);
+
+        const user: HydratedDocument<UserInterface> | null = await findUserByEmail(userEmail);
+        if(!user) {
+            throw new Error("User not found.");
+        }
+
+        user.password_hash = newHashedPassword;
+
+        await user.save();
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        console.log("Error resetting user password: ", error);
+        throw new Error("Unknown error while resetting user's password.");
+    }
+}
+
+export const deleteUserNotifications = async (username: string, notificationIds: string[]) => {
+    try {
+        await Notification.deleteMany({ _id: { $in: notificationIds } });
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error("Unknown error while deleting user notifications.");
+    }
+}
+
 export const getAllUsersData = async () => {
     try {
         const users = await User.find({});
@@ -790,46 +833,6 @@ export const getUserNotifications = async (username: string) => {
             throw new Error(error.message);
         }
         throw new Error("Unknown error while getting user notifications.");
-    }
-}
-
-export const deleteUserNotifications = async (username: string, notificationIds: string[]) => {
-    try {
-        await Notification.deleteMany({ _id: { $in: notificationIds } });
-    } catch (error) {
-        if (error instanceof Error) {
-            throw new Error(error.message);
-        }
-        throw new Error("Unknown error while deleting user notifications.");
-    }
-}
-
-export const resetUserPassword = async(password: string, key: string) => {
-    try {
-        const isValidKey = await validatePasswordResetKey(key);
-
-        if(!isValidKey) {
-            throw new Error("Expired password key.");
-        }
-
-        const recordInPasswordResetKeys = await findKey(key);
-        const userEmail = recordInPasswordResetKeys!.email;
-        const newHashedPassword = await hashPassword(password);
-
-        const user = await findUserByEmail(userEmail);
-
-        if(!user) {
-            throw new Error("User not found.");
-        }
-
-        user.password_hash = newHashedPassword;
-
-        await user.save();
-    } catch (error) {
-        if (error instanceof Error) {
-            throw new Error(error.message);
-        }
-        throw new Error("Unknown error while resetting user's password.");
     }
 }
 
