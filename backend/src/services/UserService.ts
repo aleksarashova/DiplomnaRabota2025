@@ -45,6 +45,35 @@ export const checkForRightPassword = async(password: string, real_password_hash:
     }
 }
 
+const checkIdFormat = (id: string) => {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new Error("Invalid mongoose ID format.");
+        }
+    } catch(error: unknown) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        console.error("Error during checking id format for ID: ", id);
+        throw new Error("Unknown error while checking id format.");
+    }
+}
+
+const checkEmailFormat = (email: string) => {
+    try {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            throw new Error("Invalid email format.");
+        }
+    } catch(error: unknown) {
+        if(error instanceof Error) {
+            throw new Error(error.message);
+        }
+        console.error("Error during checking email format for email: ", email);
+        throw new Error("Unknown error while checking email format.");
+    }
+}
+
 
 export const createUser = async (userData: RegisterUserDTO): Promise<void> => {
     try {
@@ -79,9 +108,8 @@ export const createUser = async (userData: RegisterUserDTO): Promise<void> => {
 
 export const deleteUser = async (id: string): Promise<void> => {
     try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            throw new Error("Invalid user ID format");
-        }
+        checkIdFormat(id);
+
         const user: HydratedDocument<UserInterface> | null = await User.findById(id);
         if (!user) {
             throw new Error("User not found");
@@ -115,6 +143,8 @@ export const deleteUser = async (id: string): Promise<void> => {
 
 export const findUserById = async(id: string): Promise<HydratedDocument<UserInterface> | null> => {
     try {
+        checkIdFormat(id);
+
         return await User.findOne({_id: id});
     } catch(error: unknown) {
         if(error instanceof Error) {
@@ -127,6 +157,8 @@ export const findUserById = async(id: string): Promise<HydratedDocument<UserInte
 
 export const findUserByEmail = async(email: string): Promise<HydratedDocument<UserInterface> | null> => {
     try {
+        checkEmailFormat(email);
+
         return await User.findOne({email: email});
     } catch(error: unknown) {
         if(error instanceof Error) {
@@ -151,6 +183,8 @@ export const findUserByUsername = async(username: string): Promise<HydratedDocum
 
 export const updateUserVerified = async(email: string): Promise<void> => {
     try {
+        checkEmailFormat(email);
+
         const user: HydratedDocument<UserInterface> | null = await findUserByEmail(email);
         if(!user) {
             throw new Error("Could not find user while trying to update it to verified.");
@@ -179,6 +213,8 @@ export const updateUserProfile = async(updatedUserData: UpdateUserDTO): Promise<
                 updatedUserData.value = "";
             }
         }
+
+        checkIdFormat(updatedUserData.user_id);
 
         const user: HydratedDocument<UserInterface> | null = await findUserById(updatedUserData.user_id);
         if(!user) {
@@ -211,6 +247,8 @@ export const updateUserProfile = async(updatedUserData: UpdateUserDTO): Promise<
 
 export const getUserProfileData = async (id: string): Promise<UserProfileDTO> => {
     try {
+        checkIdFormat(id);
+
         const user: UserInterface | null = await findUserById(id);
         if (!user) {
             throw new Error('User not found');
@@ -241,6 +279,8 @@ export const getUserProfileData = async (id: string): Promise<UserProfileDTO> =>
 
 export const getOtherUserProfileData = async (username: string, userId: string): Promise<OtherUserProfileDTO> => {
     try {
+        checkIdFormat(userId);
+
         const user: HydratedDocument<UserInterface> | null = await findUserByUsername(username);
         if (!user) {
             throw new Error('User not found');
@@ -287,13 +327,16 @@ export const getOtherUserProfileData = async (username: string, userId: string):
 
 export const addRecipeToFavouritesList = async (recipeId: string, userId: string): Promise<void> => {
     try {
+        checkIdFormat(recipeId);
+        checkIdFormat(userId);
+
         const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
         }
 
         const recipe: HydratedDocument<RecipeInterface> | null = await findRecipeById(recipeId);
-        if(!recipe) {
+        if (!recipe) {
             throw new Error("Recipe not found.");
         }
 
@@ -325,13 +368,16 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
 
 export const addRecipeToLikedList = async (recipeId: string, userId: string): Promise<void> => {
     try {
+        checkIdFormat(recipeId);
+        checkIdFormat(userId);
+
         const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
         }
 
         const recipe: HydratedDocument<RecipeInterface> | null = await findRecipeById(recipeId);
-        if(!recipe) {
+        if (!recipe) {
             throw new Error("Recipe not found.");
         }
 
@@ -366,6 +412,9 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string): Pr
 
 export const removeRecipeFromFavouritesList = async (recipeId: string, userId: string): Promise<void> => {
     try {
+        checkIdFormat(recipeId);
+        checkIdFormat(userId);
+
         const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
@@ -395,6 +444,9 @@ export const removeRecipeFromFavouritesList = async (recipeId: string, userId: s
 
 export const removeRecipeFromLikedList = async (recipeId: string, userId: string): Promise<void> => {
     try {
+        checkIdFormat(recipeId);
+        checkIdFormat(userId);
+
         const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
@@ -427,6 +479,9 @@ export const removeRecipeFromLikedList = async (recipeId: string, userId: string
 
 export const checkIsRecipeFavourite = async (recipeId: string, userId: string): Promise<boolean> => {
     try {
+        checkIdFormat(recipeId);
+        checkIdFormat(userId);
+
         const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
@@ -449,6 +504,9 @@ export const checkIsRecipeFavourite = async (recipeId: string, userId: string): 
 
 export const checkIsRecipeLiked = async (recipeId: string, userId: string): Promise<boolean> => {
     try {
+        checkIdFormat(recipeId);
+        checkIdFormat(userId);
+        
         const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
