@@ -573,9 +573,9 @@ export const getNotifications = async(req: ExtendedRequest, res:Response) => {
 
 export const deleteNotifications = async(req: ExtendedRequest, res:Response) => {
     try {
-        const {username, selectedNotificationIds} = req.body;
+        const {selectedNotificationIds} = req.body;
 
-        await deleteUserNotifications(username, selectedNotificationIds);
+        await deleteUserNotifications(selectedNotificationIds);
         res.status(200).json("Successfully deleted noifications.");
     } catch(error) {
         console.error("Error during deleting user notifications:", error);

@@ -46,7 +46,7 @@ export const checkForRightPassword = async(password: string, real_password_hash:
     }
 }
 
-const checkIdFormat = (id: string) => {
+const checkIdFormat = (id: string):  void => {
     try {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error("Invalid mongoose ID format.");
@@ -60,7 +60,7 @@ const checkIdFormat = (id: string) => {
     }
 }
 
-const checkEmailFormat = (email: string) => {
+const checkEmailFormat = (email: string): void => {
     try {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -682,24 +682,29 @@ export const resetUserPassword = async(password: string, key: string): Promise<v
     }
 }
 
-export const deleteUserNotifications = async (username: string, notificationIds: string[]) => {
+export const deleteUserNotifications = async (notificationIds: string[]): Promise<void> => {
     try {
+        notificationIds.map((notificationId: string) => {
+            checkIdFormat(notificationId);
+        })
+
         await Notification.deleteMany({ _id: { $in: notificationIds } });
-    } catch (error) {
+    } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
         }
+        console.log("Error deleting user notification: ", error);
         throw new Error("Unknown error while deleting user notifications.");
     }
 }
 
-export const getAllUsersData = async () => {
+export const getAllUsersData = async (): Promise<GetAllUsersDTO[]> => {
     try {
-        const users = await User.find({});
+        const users: HydratedDocument<UserInterface>[] = await User.find({});
 
-        const usersData: GetAllUsersDTO[] = users.map((user) => {
-            const imageName = user.image ? path.basename(user.image) : undefined;
-            const imagePath = imageName ? `/uploads/profile/${imageName}` : undefined;
+        const usersData: GetAllUsersDTO[] = users.map((user: HydratedDocument<UserInterface>) => {
+            const imageName: string | undefined = user.image ? path.basename(user.image) : undefined;
+            const imagePath: string | undefined = imageName ? `/uploads/profile/${imageName}` : undefined;
 
             return {
                 id: user._id.toString(),
@@ -712,57 +717,65 @@ export const getAllUsersData = async () => {
         });
 
         return usersData;
-    } catch (error) {
+    } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
         }
+        console.log("Error getting all users from the database: ", error);
         throw new Error("Unknown error while getting all users data.");
     }
 }
 
-export const getAverageRating = async (username: string) => {
+export const getAverageRating = async (username: string): Promise<number> => {
     try {
-        const user = await findUserByUsername(username);
-
+        const user: HydratedDocument<UserInterface> | null = await findUserByUsername(username);
         if(!user) {
             throw new Error("User not found.");
         }
 
-        const ratings = user.ratings || [];
+        type RatingType =  { raterId: Types.ObjectId, rating: number };
 
-        let averageRating = 0;
-        let finalRating = 0;
+        const ratings: RatingType[] = user.ratings || [];
+
+        let averageRating: number = 0;
+        let finalRating: number = 0;
         if (ratings.length > 0) {
-            const totalRating = ratings.reduce((sum, ratingObj) => sum + ratingObj.rating, 0);
+            const totalRating: number = ratings.reduce((sum: number, ratingObj: RatingType) => sum + ratingObj.rating, 0);
             averageRating = totalRating / ratings.length;
-            const roundedRating = Math.round(averageRating);
+            const roundedRating: number = Math.round(averageRating);
+
             finalRating = Math.min(Math.max(roundedRating, 1), 5);
         }
+
         return finalRating;
-    } catch (error) {
+    } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
         }
+        console.log("Error getting user rating for user: ", username, error);
         throw new Error("Unknown error while getting overall rating.");
     }
 }
 
-export const getUserRatings = async (username: string) => {
+export const getUserRatings = async (username: string): Promise<UserRatingDTO[]> => {
     try {
-        const user = await findUserByUsername(username);
-
+        const user: HydratedDocument<UserInterface> | null = await findUserByUsername(username);
         if (!user) {
             throw new Error("User not found.");
         }
 
+        type RatingType =  { raterId: Types.ObjectId, rating: number };
 
-        const rawRatings = user.ratings || [];
+        const rawRatings: RatingType[] = user.ratings || [];
 
         const ratings: UserRatingDTO[] = [];
         for (const rawRating of rawRatings) {
-            const raterId = rawRating.raterId.toString();
-            const raterUser = await findUserById(raterId);
-            const raterName = raterUser ? raterUser.username : "Unknown";
+            const raterId: string = rawRating.raterId.toString();
+            const raterUser: HydratedDocument<UserInterface> | null = await findUserById(raterId);
+            if(!raterUser) {
+                throw new Error("Rater is not found as user in the database.");
+            }
+            const raterName: string = raterUser ? raterUser.username : "Unknown";
 
             ratings.push({
                 rater: raterName,
@@ -771,52 +784,52 @@ export const getUserRatings = async (username: string) => {
         }
 
         return ratings;
-    } catch (error) {
+    } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
         }
+        console.log("Error getting user ratings for user: ", username, error);
         throw new Error("Unknown error while getting user ratings.");
     }
 }
 
-export const getUserNotifications = async (username: string) => {
+export const getUserNotifications = async (username: string): Promise<GetNotificationDTO[]> => {
     try {
-        const user = await findUserByUsername(username);
+        const user: HydratedDocument<UserInterface> | null = await findUserByUsername(username);
 
         if (!user) {
             throw new Error("User not found.");
         }
 
-
-        const rawNotifications = await Notification.find({
+        const rawNotifications: HydratedDocument<NotificationInterface>[] = await Notification.find({
             for_user: user._id,
             $or: [{ is_comment_approved: true }, { is_comment_approved: { $exists: false } }]
         }).sort({ createdAt: -1 });
 
         const notifications: GetNotificationDTO[] = [];
         for (const rawNotification of rawNotifications) {
-            const now = new Date();
-            const notificationDate = new Date(rawNotification.date);
-            const diffInSeconds = Math.floor((now.getTime() - notificationDate.getTime()) / 1000);
+            const now: Date = new Date();
+            const notificationDate: Date = new Date(rawNotification.date);
+            const diffInSeconds: number = Math.floor((now.getTime() - notificationDate.getTime()) / 1000);
 
-            let timeAgo = "";
+            let timeAgo: string = "";
 
             if (diffInSeconds < 60) {
                 timeAgo = `${diffInSeconds} second${diffInSeconds > 1 ? 's' : ''} ago`;
             } else if (diffInSeconds < 3600) {
-                const diffInMinutes = Math.floor(diffInSeconds / 60);
+                const diffInMinutes: number = Math.floor(diffInSeconds / 60);
                 timeAgo = `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
             } else if (diffInSeconds < 86400) {
-                const diffInHours = Math.floor(diffInSeconds / 3600);
+                const diffInHours: number = Math.floor(diffInSeconds / 3600);
                 timeAgo = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
             } else if (diffInSeconds < 2592000) {
-                const diffInDays = Math.floor(diffInSeconds / 86400);
+                const diffInDays: number = Math.floor(diffInSeconds / 86400);
                 timeAgo = `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
             } else if (diffInSeconds < 31536000) {
-                const diffInMonths = Math.floor(diffInSeconds / 2592000);
+                const diffInMonths: number = Math.floor(diffInSeconds / 2592000);
                 timeAgo = `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
             } else {
-                const diffInYears = Math.floor(diffInSeconds / 31536000);
+                const diffInYears: number = Math.floor(diffInSeconds / 31536000);
                 timeAgo = `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
             }
 
@@ -828,10 +841,11 @@ export const getUserNotifications = async (username: string) => {
         }
 
         return notifications;
-    } catch (error) {
+    } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
         }
+        console.log("Error getting user notifications for user: ", username, error);
         throw new Error("Unknown error while getting user notifications.");
     }
 }
