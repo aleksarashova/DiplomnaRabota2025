@@ -364,16 +364,14 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string): Pr
     }
 }
 
-export const removeRecipeFromFavouritesList = async (recipeId: string, userId: string) => {
+export const removeRecipeFromFavouritesList = async (recipeId: string, userId: string): Promise<void> => {
     try {
-        const user = await findUserById(userId);
-
+        const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
         }
 
-        const recipe = await findRecipeById(recipeId);
-
+        const recipe: HydratedDocument<RecipeInterface> | null = await findRecipeById(recipeId);
         if(!recipe) {
             throw new Error("Recipe not found.");
         }
@@ -386,24 +384,23 @@ export const removeRecipeFromFavouritesList = async (recipeId: string, userId: s
             { _id: user._id },
             { $pull: { favourites: recipe._id } }
         );
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error removing recipe from favourites list of user with ID: ", userId, error);
         throw new Error("Unknown error while removing recipe from favourites list.");
     }
 }
 
-export const removeRecipeFromLikedList = async (recipeId: string, userId: string) => {
+export const removeRecipeFromLikedList = async (recipeId: string, userId: string): Promise<void> => {
     try {
-        const user = await findUserById(userId);
-
+        const user: HydratedDocument<UserInterface> | null = await findUserById(userId);
         if (!user) {
             throw new Error('User not found.');
         }
 
-        const recipe = await findRecipeById(recipeId);
-
+        const recipe: HydratedDocument<RecipeInterface> | null = await findRecipeById(recipeId);
         if(!recipe) {
             throw new Error("Recipe not found.");
         }
@@ -419,10 +416,11 @@ export const removeRecipeFromLikedList = async (recipeId: string, userId: string
 
         recipe.likes -= 1;
         await recipe.save();
-    } catch(error) {
+    } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
         }
+        console.error("Error removing recipe from liked list of user with ID: ", userId, error);
         throw new Error("Unknown error while removing recipe from favourites list.");
     }
 }
