@@ -46,7 +46,7 @@ export const checkForRightPassword = async(password: string, real_password_hash:
     }
 }
 
-const checkIdFormat = (id: string):  void => {
+export const checkIdFormat = (id: string):  void => {
     try {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error("Invalid mongoose ID format.");
