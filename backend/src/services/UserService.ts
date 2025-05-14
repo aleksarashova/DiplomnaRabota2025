@@ -61,7 +61,7 @@ export const checkIdFormat = (id: string):  void => {
     }
 }
 
-const checkEmailFormat = (email: string): void => {
+export const checkEmailFormat = (email: string): void => {
     try {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
