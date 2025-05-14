@@ -5,7 +5,8 @@ export const createNotification = async (
     for_user: Types.ObjectId,
     from_user: Types.ObjectId | null,
     content: string,
-    isCommentApproved: boolean | null
+    isCommentApproved: boolean | null,
+    relatedCommentId: Types.ObjectId | null
 ): Promise<void> => {
     try {
         const now: Date = new Date();
@@ -24,6 +25,10 @@ export const createNotification = async (
             notification.is_comment_approved = isCommentApproved;
         }
 
+        if (relatedCommentId) {
+            notification.related_comment_id = relatedCommentId;
+        }
+
         const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
         await newNotification.save();
     } catch (error: unknown) {
@@ -36,14 +41,12 @@ export const createNotification = async (
 }
 
 export const updateNotificationWhenCommentIsApproved = async(
-    commentContent: string,
-    fromUserId: Types.ObjectId
+    commentId: Types.ObjectId
 ): Promise<void> => {
     try {
         await Notification.updateOne(
             {
-                from_user: fromUserId,
-                content: { $regex: commentContent, $options: "i" },
+                related_comment_id: commentId,
                 is_comment_approved: { $exists: true }
             },
             { $set: { is_comment_approved: true } }
@@ -52,7 +55,7 @@ export const updateNotificationWhenCommentIsApproved = async(
         if (error instanceof Error) {
             throw new Error(error.message);
         }
-        console.log("Error updatiing notification when comment is approved: ", error);
-        throw new Error("Unknown error while updating a notfication.");
+        console.error("Error updatiing notification when comment is approved: ", error);
+        throw new Error("Unknown error while updating the notfication.");
     }
 }

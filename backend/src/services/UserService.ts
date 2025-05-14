@@ -350,7 +350,7 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
         await user.save();
 
         const notificationContent: string = user.username + " added " + recipe.title.toLocaleUpperCase() + " to favourites";
-        await createNotification(recipe.author, user._id, notificationContent, null);
+        await createNotification(recipe.author, user._id, notificationContent, null, null);
     } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -386,7 +386,7 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string): Pr
         await recipe.save();
 
         const notificationContent: string = user.username + " liked " + recipe.title.toLocaleUpperCase() + "";
-        await createNotification(recipe.author, user._id, notificationContent, null);
+        await createNotification(recipe.author, user._id, notificationContent, null, null);
     } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -594,7 +594,7 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
         }
 
         const notificationContent: string = rater.username + " rated you with " + rating + " stars";
-        await createNotification(userBeingRated._id, rater._id, notificationContent, null);
+        await createNotification(userBeingRated._id, rater._id, notificationContent, null, null);
     } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
@@ -621,7 +621,7 @@ export const changeUserRole = async (userId: string, newRole: string): Promise<v
         await user.save();
 
         const notificationContent: string = "With the next login your role will be changed to: " + newRole;
-        await createNotification(user._id, null, notificationContent, null);
+        await createNotification(user._id, null, notificationContent, null, null);
     } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);

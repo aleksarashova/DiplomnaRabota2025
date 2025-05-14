@@ -20,16 +20,13 @@ export const addComment = async(commentData: AddCommentDTO) => {
         }
 
         let commentToReplyToId: Types.ObjectId | null = null;
+        let commentToReplyTo = null;
         if (commentData.reply_to != null) {
-            const commentToReplyTo = await findCommentById(commentData.reply_to);
+            commentToReplyTo = await findCommentById(commentData.reply_to);
             if (!commentToReplyTo) {
                 throw new Error("The comment you are replying to does not exist.");
             }
             commentToReplyToId = commentToReplyTo._id;
-            if(commentToReplyToId != null) {
-                const notificationContent: string = author.username + " replied to your comment on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content;
-                await createNotification(commentToReplyTo.author._id, author._id, notificationContent, false);
-            }
         }
 
         const date = new Date();
@@ -48,8 +45,13 @@ export const addComment = async(commentData: AddCommentDTO) => {
         recipe.comments.push(newComment._id);
         await recipe.save();
 
+        if(commentToReplyToId != null && commentToReplyTo != null) {
+            const notificationContent: string = author.username + " replied to your comment on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content;
+            await createNotification(commentToReplyTo.author._id, author._id, notificationContent, false, newComment._id);
+        }
+
         const notificationContent: string = author.username + " commented on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content;
-        await createNotification(recipe.author, author._id, notificationContent, false);
+        await createNotification(recipe.author, author._id, notificationContent, false, newComment._id);
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -117,9 +119,9 @@ export const updateCommentApproved = async(commentId: string) => {
         await comment.save();
 
         const notificationContent: string = "Your comment: '" + comment.content + "' has been approved";
-        await createNotification(comment.author, null, notificationContent, null);
+        await createNotification(comment.author, null, notificationContent, null, null);
 
-        await updateNotificationWhenCommentIsApproved(comment.content, comment.author);
+        await updateNotificationWhenCommentIsApproved(comment._id);
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);

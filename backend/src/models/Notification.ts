@@ -6,6 +6,7 @@ export interface NotificationInterface {
     content: string;
     date: Date;
     is_comment_approved?: boolean;
+    related_comment_id?: Types.ObjectId;
 }
 
 type NotificationModel = Model<NotificationInterface>;
@@ -16,6 +17,7 @@ const NotificationSchema: Schema = new Schema<NotificationInterface, Notificatio
     content: { type: String },
     date: { type: Date },
     is_comment_approved: { type: Boolean, required: false },
+    related_comment_id: { type: Schema.Types.ObjectId, ref: "Comment", required: false },
 }, {collection: 'notifications', timestamps: true});
 
 const Notification: NotificationModel = model<NotificationInterface, NotificationModel>('Notification', NotificationSchema);
