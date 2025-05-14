@@ -11,6 +11,7 @@ import path from "path";
 import {findCommentById} from "./CommentService";
 import Notification, {NotificationInterface} from "../models/Notification";
 import {GetCommentDTO} from "../DTOs/CommentDTOs";
+import {createNotification} from "./NotificationService";
 
 export const addRecipe = async (recipeData: AddRecipeDTO, userId: string): Promise<HydratedDocument<RecipeInterface>> => {
     try {
@@ -349,15 +350,8 @@ export const updateRecipeApproved = async(recipeId: string): Promise<void> => {
         recipe.is_approved = true;
         await recipe.save();
 
-        const now: Date = new Date();
-        const notification: NotificationInterface = {
-            for_user: recipe.author,
-            content: "Your recipe " + recipe.title.toLocaleUpperCase() + " has been approved",
-            date: now
-        }
-
-        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
-        await newNotification.save();
+        const notificationContent: string = "Your recipe " + recipe.title.toLocaleUpperCase() + " has been approved";
+        await createNotification(recipe.author, null, notificationContent, null);
     } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);

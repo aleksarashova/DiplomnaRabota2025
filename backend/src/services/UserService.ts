@@ -20,6 +20,7 @@ import {findKey, validatePasswordResetKey} from "./EmailService";
 import Notification, {NotificationInterface} from "../models/Notification";
 import {GetNotificationDTO} from "../DTOs/NotificationDTOs";
 import {PasswordResetKeyInterface} from "../models/PasswordReset";
+import {createNotification} from "./NotificationService";
 
 export const hashPassword = async (password: string): Promise<string> => {
     try {
@@ -348,16 +349,8 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
         user.favourites.push(recipe._id!);
         await user.save();
 
-        const now: Date = new Date();
-        const notification: NotificationInterface = {
-            for_user: recipe.author,
-            from_user: user._id,
-            content: user.username + " added " + recipe.title.toLocaleUpperCase() + " to favourites",
-            date: now
-        }
-
-        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
-        await newNotification.save();
+        const notificationContent: string = user.username + " added " + recipe.title.toLocaleUpperCase() + " to favourites";
+        await createNotification(recipe.author, user._id, notificationContent, null);
     } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -392,16 +385,8 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string): Pr
         recipe.likes += 1;
         await recipe.save();
 
-        const now: Date = new Date();
-        const notification: NotificationInterface = {
-            for_user: recipe.author,
-            from_user: user._id,
-            content: user.username + " liked " + recipe.title.toLocaleUpperCase() + "",
-            date: now
-        }
-
-        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
-        await newNotification.save();
+        const notificationContent: string = user.username + " liked " + recipe.title.toLocaleUpperCase() + "";
+        await createNotification(recipe.author, user._id, notificationContent, null);
     } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -608,16 +593,8 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
             throw new Error('User not found.');
         }
 
-        const now: Date = new Date();
-        const notification: NotificationInterface = {
-            for_user: userBeingRated._id,
-            from_user: rater._id,
-            content: rater.username + " rated you with " + rating + " stars",
-            date: now,
-        }
-
-        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
-        await newNotification.save();
+        const notificationContent: string = rater.username + " rated you with " + rating + " stars";
+        await createNotification(userBeingRated._id, rater._id, notificationContent, null);
     } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
@@ -642,6 +619,9 @@ export const changeUserRole = async (userId: string, newRole: string): Promise<v
 
         user.role = newRole;
         await user.save();
+
+        const notificationContent: string = "With the next login your role will be changed to: " + newRole;
+        await createNotification(user._id, null, notificationContent, null);
     } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);

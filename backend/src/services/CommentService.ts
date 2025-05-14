@@ -6,6 +6,7 @@ import {HydratedDocument, Types} from "mongoose";
 import {findRecipeById} from "./RecipeService";
 import Notification, {NotificationInterface} from "../models/Notification";
 import Recipe from "../models/Recipe";
+import {createNotification, updateNotificationWhenCommentIsApproved} from "./NotificationService";
 
 export const addComment = async(commentData: AddCommentDTO) => {
     try {
@@ -26,17 +27,8 @@ export const addComment = async(commentData: AddCommentDTO) => {
             }
             commentToReplyToId = commentToReplyTo._id;
             if(commentToReplyToId != null) {
-                const now = new Date();
-                const notification: NotificationInterface = {
-                    for_user: commentToReplyTo.author._id,
-                    from_user: author._id,
-                    content: author.username + " replied to your comment on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content,
-                    date: now,
-                    is_comment_approved: false
-                }
-
-                const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
-                await newNotification.save();
+                const notificationContent: string = author.username + " replied to your comment on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content;
+                await createNotification(commentToReplyTo.author._id, author._id, notificationContent, false);
             }
         }
 
@@ -56,17 +48,8 @@ export const addComment = async(commentData: AddCommentDTO) => {
         recipe.comments.push(newComment._id);
         await recipe.save();
 
-        const now = new Date();
-        const notification: NotificationInterface = {
-            for_user: recipe.author,
-            from_user: author._id,
-            content: author.username + " commented on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content,
-            date: now,
-            is_comment_approved: false
-        }
-
-        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
-        await newNotification.save();
+        const notificationContent: string = author.username + " commented on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content;
+        await createNotification(recipe.author, author._id, notificationContent, false);
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -133,23 +116,10 @@ export const updateCommentApproved = async(commentId: string) => {
         comment.is_approved = true;
         await comment.save();
 
-        const now = new Date();
-        const notification: NotificationInterface = {
-            for_user: comment.author,
-            content: "Your comment: '" + comment.content + "' has been approved",
-            date: now
-        }
+        const notificationContent: string = "Your comment: '" + comment.content + "' has been approved";
+        await createNotification(comment.author, null, notificationContent, null);
 
-        const newNotification: HydratedDocument<NotificationInterface> = new Notification(notification);
-        await newNotification.save();
-
-        await Notification.updateOne(
-            {
-                content: { $regex: comment.content, $options: "i" },
-                is_comment_approved: { $exists: true }
-            },
-            { $set: { is_comment_approved: true } }
-        );
+        await updateNotificationWhenCommentIsApproved(comment.content, comment.author);
     } catch(error) {
         if(error instanceof Error) {
             throw new Error(error.message);
