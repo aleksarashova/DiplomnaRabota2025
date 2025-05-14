@@ -4,7 +4,8 @@ import VerificationCode, { VerificationCodeInterface } from "../models/Verificat
 import PasswordResetKey, {PasswordResetKeyInterface} from "../models/PasswordReset";
 
 import nodemailer from "nodemailer";
-import {checkEmailFormat} from "./UserService";
+import {checkEmailFormat} from "../shared/utils";
+import {MailOptionsInterface, SMTPInterface} from "../shared/interfaces";
 
 export const findCode = async(code: number): Promise<HydratedDocument<VerificationCodeInterface> | null> => {
     try {
@@ -154,16 +155,6 @@ export const generatePasswordResetKey = async (): Promise<string> => {
     throw new Error("Failed to generate a unique password reset key after multiple (5) attempts.");
 }
 
-interface SMTPInterface {
-    host: string;
-    port: number;
-    secure: boolean;
-    auth: {
-        user: string | undefined;
-        pass: string | undefined;
-    };
-}
-
 const getSMTPConfig = (email: string): SMTPInterface => {
     const domain: string = email.split("@")[1];
     console.log(process.env.EMAIL_USER);
@@ -179,13 +170,6 @@ const getSMTPConfig = (email: string): SMTPInterface => {
             pass: process.env.EMAIL_PASS,
         },
     };
-}
-
-interface MailOptionsInterface {
-    from: string | undefined;
-    to: string;
-    subject: string;
-    text: string;
 }
 
 export const sendVerificationEmail = async (email: string): Promise<void> => {

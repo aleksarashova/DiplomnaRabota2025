@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ExtendedRequest } from "../middlewares/UserMiddleware";
+import {ExtendedRequest} from "../shared/interfaces";
 import {
     addRecipe,
     getAllApprovedRecipesData,

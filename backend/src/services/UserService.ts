@@ -1,7 +1,5 @@
-import {HydratedDocument, Schema, Types} from "mongoose";
+import {HydratedDocument, Types} from "mongoose";
 import User, {UserInterface} from "../models/User";
-
-import mongoose from "mongoose";
 
 import bcrypt from 'bcryptjs';
 import {
@@ -21,6 +19,8 @@ import Notification, {NotificationInterface} from "../models/Notification";
 import {GetNotificationDTO} from "../DTOs/NotificationDTOs";
 import {PasswordResetKeyInterface} from "../models/PasswordReset";
 import {createNotification} from "./NotificationService";
+import {checkIdFormat, checkEmailFormat} from "../shared/utils";
+import {RatingInterface} from "../shared/interfaces";
 
 export const hashPassword = async (password: string): Promise<string> => {
     try {
@@ -46,36 +46,6 @@ export const checkForRightPassword = async(password: string, real_password_hash:
         throw new Error("Unknown error while checking the password.");
     }
 }
-
-export const checkIdFormat = (id: string):  void => {
-    try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            throw new Error("Invalid mongoose ID format.");
-        }
-    } catch(error: unknown) {
-        if(error instanceof Error) {
-            throw new Error(error.message);
-        }
-        console.error("Error during checking id format for ID: ", id);
-        throw new Error("Unknown error while checking id format.");
-    }
-}
-
-export const checkEmailFormat = (email: string): void => {
-    try {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            throw new Error("Invalid email format.");
-        }
-    } catch(error: unknown) {
-        if(error instanceof Error) {
-            throw new Error(error.message);
-        }
-        console.error("Error during checking email format for email: ", email);
-        throw new Error("Unknown error while checking email format.");
-    }
-}
-
 
 export const createUser = async (userData: RegisterUserDTO): Promise<void> => {
     try {
@@ -295,9 +265,7 @@ export const getOtherUserProfileData = async (username: string, userId: string):
             isOwnProfile = true;
         }
 
-        type RatingType =  { raterId: Types.ObjectId, rating: number };
-
-        const ratings: RatingType[] | [] = user.ratings || [];
+        const ratings: RatingInterface[] | [] = user.ratings || [];
 
         const userRating: number | null = ratings.find((ratingObject) => ratingObject.raterId.toString() === userId)?.rating || null;
 
@@ -572,10 +540,8 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
             throw new Error('User not found.');
         }
 
-        type RatingType =  { raterId: Types.ObjectId, rating: number };
-
-        const existingRating: RatingType | undefined = (userBeingRated.ratings || []).find(
-            (r: RatingType): boolean => r.raterId.toString() === userIdOfRater
+        const existingRating: RatingInterface | undefined = (userBeingRated.ratings || []).find(
+            (r: RatingInterface): boolean => r.raterId.toString() === userIdOfRater
         );
         if (existingRating) {
             existingRating.rating = rating;
@@ -713,14 +679,12 @@ export const getAverageRating = async (username: string): Promise<number> => {
             throw new Error("User not found.");
         }
 
-        type RatingType =  { raterId: Types.ObjectId, rating: number };
-
-        const ratings: RatingType[] = user.ratings || [];
+        const ratings: RatingInterface[] = user.ratings || [];
 
         let averageRating: number = 0;
         let finalRating: number = 0;
         if (ratings.length > 0) {
-            const totalRating: number = ratings.reduce((sum: number, ratingObj: RatingType) => sum + ratingObj.rating, 0);
+            const totalRating: number = ratings.reduce((sum: number, ratingObj: RatingInterface) => sum + ratingObj.rating, 0);
             averageRating = totalRating / ratings.length;
             const roundedRating: number = Math.round(averageRating);
 
@@ -744,9 +708,7 @@ export const getUserRatings = async (username: string): Promise<UserRatingDTO[]>
             throw new Error("User not found.");
         }
 
-        type RatingType =  { raterId: Types.ObjectId, rating: number };
-
-        const rawRatings: RatingType[] = user.ratings || [];
+        const rawRatings: RatingInterface[] = user.ratings || [];
 
         const ratings: UserRatingDTO[] = [];
         for (const rawRating of rawRatings) {

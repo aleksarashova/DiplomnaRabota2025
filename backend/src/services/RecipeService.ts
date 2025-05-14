@@ -6,12 +6,13 @@ import User, {UserInterface} from "../models/User";
 import {AddRecipeDTO, GetExtendedRecipeDTO, GetRecipeDTO} from "../DTOs/RecipeDTOs";
 import { getCategoryIdByName } from "./CategoryService";
 import Category, {CategoryInterface} from "../models/Category";
-import {checkIdFormat, findUserById} from "./UserService";
 import path from "path";
 import {findCommentById} from "./CommentService";
-import Notification, {NotificationInterface} from "../models/Notification";
 import {GetCommentDTO} from "../DTOs/CommentDTOs";
 import {createNotification} from "./NotificationService";
+import {checkIdFormat} from "../shared/utils";
+import {findUserById} from "./UserService";
+import {FilterParams} from "../shared/interfaces";
 
 export const addRecipe = async (recipeData: AddRecipeDTO, userId: string): Promise<HydratedDocument<RecipeInterface>> => {
     try {
@@ -65,14 +66,6 @@ export const findRecipeById = async(id: string): Promise<HydratedDocument<Recipe
         console.log("Error finding recipe in the database with ID: ", id, error);
         throw new Error("Unknown error while searching for a recipe by id.");
     }
-}
-
-interface FilterParams {
-    category?: string;
-    searchText?: string;
-    recipesOf?: string;
-    likedBy?: string;
-    favouritesOf?: string;
 }
 
 export const getAllApprovedRecipesData = async (filterParams: FilterParams): Promise<GetRecipeDTO[]> => {

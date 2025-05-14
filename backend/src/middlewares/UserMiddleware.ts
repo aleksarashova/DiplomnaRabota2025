@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt, {JwtPayload} from "jsonwebtoken";
 
 import {findUserByEmail, findUserByUsername, checkForRightPassword} from "../services/UserService";
+import {ExtendedRequest} from "../shared/interfaces";
 
 export const checkUniquenessRegister = async (
     req: Request,
@@ -70,10 +71,6 @@ export const checkCredentialsLogin = async (
             res.status(500).json({message: "Internal server error."});
         }
     }
-}
-
-export interface ExtendedRequest extends Request {
-    userId?: string
 }
 
 export const checkAuthentication = async (

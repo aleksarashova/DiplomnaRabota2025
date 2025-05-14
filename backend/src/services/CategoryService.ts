@@ -1,4 +1,4 @@
-import { HydratedDocument, Types } from "mongoose";
+import { HydratedDocument } from "mongoose";
 import Category, { CategoryInterface } from "../models/Category";
 import Recipe from "../models/Recipe";
 

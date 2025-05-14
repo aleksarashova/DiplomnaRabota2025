@@ -4,7 +4,6 @@ import { findUserById } from "./UserService";
 
 import {HydratedDocument, Types} from "mongoose";
 import {findRecipeById} from "./RecipeService";
-import Notification, {NotificationInterface} from "../models/Notification";
 import Recipe from "../models/Recipe";
 import {createNotification, updateNotificationWhenCommentIsApproved} from "./NotificationService";
 
