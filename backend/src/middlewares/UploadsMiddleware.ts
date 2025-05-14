@@ -2,8 +2,8 @@ import multer from "multer";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 
-export const fileFilter = (req: any, file: any, cb: any) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+export const fileFilter = (req: any, file: any, cb: any): void => {
+    const allowedTypes: string[] = ["image/jpeg", "image/png", "image/jpg"];
     if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {

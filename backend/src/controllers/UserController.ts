@@ -30,7 +30,7 @@ import {
     deleteRecordInVerificationCodes,
     sendPasswordResetEmail, deleteRecordInPasswordResetKeys,
 } from "../services/EmailService";
-import { ExtendedRequest } from "../middlewares/UserMiddleware";
+import {ExtendedRequest} from "../shared/interfaces";
 import {GetAllUsersDTO, OtherUserProfileDTO, UpdateUserDTO, UserProfileDTO} from "../DTOs/UserDTOs";
 
 export const register = async (req: Request, res: Response) => {
