@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 
 import {createCategory, getAllCategoryNames, removeCategory} from "../services/CategoryService";
 
-export const getAllCategories = async (req: Request, res: Response) => {
+export const getAllCategories = async (req: Request, res: Response): Promise<void> => {
     try {
-        const categoryNames = await getAllCategoryNames();
+        const categoryNames: string[] = await getAllCategoryNames();
         res.status(200).json({ categories: categoryNames });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error during trying to get all categories:", error);
 
         if (error instanceof Error) {
@@ -17,12 +17,12 @@ export const getAllCategories = async (req: Request, res: Response) => {
     }
 }
 
-export const addNewCategory = async (req: Request, res: Response) => {
+export const addNewCategory = async (req: Request, res: Response): Promise<void> => {
     try {
         const {category} = req.body;
         await createCategory(category);
         res.status(200).json("Successfully added new category.");
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error during trying to add new category:", error);
 
         if (error instanceof Error) {
@@ -33,12 +33,12 @@ export const addNewCategory = async (req: Request, res: Response) => {
     }
 }
 
-export const deleteCategory = async (req: Request, res: Response) => {
+export const deleteCategory = async (req: Request, res: Response): Promise<void> => {
     try {
         const {category} = req.body;
         await removeCategory(category);
         res.status(200).json("Successfully deleted category.");
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error during trying to delete category:", error);
 
         if (error instanceof Error) {

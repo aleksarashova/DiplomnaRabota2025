@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import {ExtendedRequest} from "../shared/interfaces";
-import { AddCommentDTO } from "../DTOs/CommentDTOs";
+import {AddCommentDTO, GetCommentShortDTO} from "../DTOs/CommentDTOs";
 import {
     addComment,
     getAllUnapprovedCommentsData,
@@ -8,9 +8,9 @@ import {
     updateCommentApproved, deleteRejectedComment
 } from "../services/CommentService";
 
-export const comment = async (req: ExtendedRequest, res: Response) => {
+export const comment = async (req: ExtendedRequest, res: Response): Promise<void> => {
     try {
-        const userId = req.userId as string;
+        const userId: string = req.userId as string;
         if (!userId) {
             res.status(400).json({ message: "User ID is missing." });
             return;
@@ -30,7 +30,7 @@ export const comment = async (req: ExtendedRequest, res: Response) => {
 
         await addComment(newCommentData);
         res.status(200).json({ message: "Comment added successfully." });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error during adding comment:", error);
 
         if (error instanceof Error) {
@@ -41,11 +41,11 @@ export const comment = async (req: ExtendedRequest, res: Response) => {
     }
 }
 
-export const getNumberOfPendingComments = async (req: ExtendedRequest, res: Response) => {
+export const getNumberOfPendingComments = async (req: ExtendedRequest, res: Response): Promise<void> => {
     try {
-        const number = await getNumberOfUnapprovedComments();
+        const number: number = await getNumberOfUnapprovedComments();
         res.status(200).json(number);
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error during getting number of unapproved comments:", error);
 
         if (error instanceof Error) {
@@ -56,11 +56,11 @@ export const getNumberOfPendingComments = async (req: ExtendedRequest, res: Resp
     }
 }
 
-export const getAllUnapprovedComments = async (req: Request, res: Response) => {
+export const getAllUnapprovedComments = async (req: Request, res: Response): Promise<void> => {
     try {
-        const comments = await getAllUnapprovedCommentsData();
+        const comments: GetCommentShortDTO[] = await getAllUnapprovedCommentsData();
         res.status(200).json({ comments });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error during trying to get all unapproved comments:", error);
 
         if (error instanceof Error) {
@@ -71,13 +71,12 @@ export const getAllUnapprovedComments = async (req: Request, res: Response) => {
     }
 }
 
-export const approveComment = async (req: ExtendedRequest, res: Response) => {
+export const approveComment = async (req: ExtendedRequest, res: Response): Promise<void> => {
     try {
         const {commentId} = req.body;
-
         await updateCommentApproved(commentId);
         res.status(200).json("Successfully approved comment.");
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error during approving comment:", error);
 
         if (error instanceof Error) {
@@ -88,13 +87,12 @@ export const approveComment = async (req: ExtendedRequest, res: Response) => {
     }
 }
 
-export const rejectComment = async (req: ExtendedRequest, res: Response) => {
+export const rejectComment = async (req: ExtendedRequest, res: Response): Promise<void> => {
     try {
         const {commentId} = req.body;
-
         await deleteRejectedComment(commentId);
         res.status(200).json("Successfully rejected comment.");
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error during rejecting comment:", error);
 
         if (error instanceof Error) {
