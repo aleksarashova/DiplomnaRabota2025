@@ -1,16 +1,15 @@
 import {NextFunction, Request, Response} from "express";
-import {findCategoryByName} from "../services/CategoryService";
+import {checkDoesCategoryExist} from "../services/CategoryService";
 
 export const checkUniquenessCategory = async (
     req: Request,
     res: Response,
     next: NextFunction
-) => {
+): Promise<void> => {
     try {
         const {category} = req.body;
 
-        const existingCategory = await findCategoryByName(category);
-        if (existingCategory) {
+        if (await checkDoesCategoryExist(category)) {
             res.status(400).json({ message: "Category already exists." });
             return;
         }

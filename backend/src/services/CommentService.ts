@@ -119,7 +119,7 @@ export const findCommentById = async(id: string): Promise<HydratedDocument<Comme
 export const updateCommentApproved = async(commentId: string): Promise<void> => {
     try {
         checkIdFormat(commentId);
-        
+
         const comment: HydratedDocument<CommentInterface> | null = await findCommentById(commentId);
         if (!comment) {
             throw new Error(`Comment with ID "${commentId}" not found.`);
