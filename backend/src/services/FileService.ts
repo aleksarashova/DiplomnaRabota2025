@@ -1,15 +1,16 @@
-import fs from "node:fs";
+import { promises as fs } from "node:fs";
 
-export const deleteFile = async (filePath: string) => {
+export const deleteFile = async (filePath: string): Promise<void> => {
     try {
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-            console.log(`Deleted file: ${filePath}`);
-        } else {
+        await fs.access(filePath);
+        await fs.unlink(filePath);
+        console.log(`Deleted file: ${filePath}`);
+    } catch (error: any) {
+        if (error.code === 'ENOENT') {
             console.warn(`File not found: ${filePath}`);
+        } else {
+            console.error(`Error deleting file at ${filePath}:`, error);
         }
-    } catch (error) {
-        console.error(`Error deleting file at ${filePath}:`, error);
     }
 }
 
