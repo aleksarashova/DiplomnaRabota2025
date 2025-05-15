@@ -2,7 +2,7 @@ import {UserNotification} from "./types";
 
 export const getAllNotifications = async (accessToken: string, username: string): Promise<UserNotification[]> => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/get-notifications?username=${username}`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/get-notifications?username=${username}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export const getAllNotifications = async (accessToken: string, username: string)
 
 export const deleteNotifications = async (accessToken: string, username: string, selectedNotificationIds: string[]): Promise<UserNotification[]> => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/delete-notifications`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/delete-notifications`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

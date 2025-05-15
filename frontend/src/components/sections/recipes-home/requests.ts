@@ -31,7 +31,7 @@ export const getAllApprovedRecipes = async (
 
     console.log(queryParams);
 
-    const response = await fetch(`${process.env.BASE_URL}recipes/get-all-approved?${queryParams.toString()}`, {
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}recipes/get-all-approved?${queryParams.toString()}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

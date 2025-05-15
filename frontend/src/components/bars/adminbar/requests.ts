@@ -1,8 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 export const getNumberOfPendingRecipes = async (accessToken: string): Promise<number> => {
-    const response = await fetch(`${process.env.BASE_URL}recipes/number-of-unapproved`, {
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}recipes/number-of-unapproved`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -31,7 +28,7 @@ export const getNumberOfPendingRecipes = async (accessToken: string): Promise<nu
 }
 
 export const getNumberOfPendingComments = async (accessToken: string): Promise<number> => {
-    const response = await fetch(`${process.env.BASE_URL}comments/number-of-unapproved`, {
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}comments/number-of-unapproved`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -60,7 +57,7 @@ export const getNumberOfPendingComments = async (accessToken: string): Promise<n
 }
 
 export const getAllCategoriesForAdmin = async (accessToken: string): Promise<string[]> => {
-    const response = await fetch(`${process.env.BASE_URL}categories/get-all`, {
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}categories/get-all`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -81,7 +78,7 @@ export const getAllCategoriesForAdmin = async (accessToken: string): Promise<str
 }
 
 export const addCategory = async(category: string, accessToken: string) => {
-    const response = await fetch(`${process.env.BASE_URL}categories/add-new`, {
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}categories/add-new`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -103,7 +100,7 @@ export const addCategory = async(category: string, accessToken: string) => {
 }
 
 export const deleteCategory = async(category: string, accessToken: string) => {
-    const response = await fetch(`${process.env.BASE_URL}categories/delete-category`, {
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}categories/delete-category`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",

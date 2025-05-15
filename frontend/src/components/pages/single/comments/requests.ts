@@ -1,6 +1,6 @@
 export const addComment = async (content: string, accessToken: string, recipeId: string, parentCommentId: string | null):Promise<string> => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}comments/add-comment`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}comments/add-comment`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

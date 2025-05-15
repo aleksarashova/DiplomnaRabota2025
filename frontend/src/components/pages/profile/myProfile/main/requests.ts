@@ -3,7 +3,7 @@ import {EditAcc} from "./types";
 
 export const getUserDataRequest = async (accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/my-profile-data`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/my-profile-data`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -27,7 +27,7 @@ export const getUserDataRequest = async (accessToken: string) => {
 
 export const deleteAccountRequest = async (accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/delete-profile`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/delete-profile`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export const deleteAccountRequest = async (accessToken: string) => {
 
 export const editAccountRequest = async (accessToken: string, formData: EditAcc) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/update-profile`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/update-profile`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export const editAccountRequest = async (accessToken: string, formData: EditAcc)
 
 export const editProfilePictureRequest = async (accessToken: string, formData: FormData) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/edit-profile-picture`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/edit-profile-picture`, {
             method: "PATCH",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -100,7 +100,7 @@ export const editProfilePictureRequest = async (accessToken: string, formData: F
 
 export const deleteProfilePictureRequest = async (accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/delete-profile-picture`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/delete-profile-picture`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,

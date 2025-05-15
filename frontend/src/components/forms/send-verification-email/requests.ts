@@ -2,7 +2,7 @@ import { SendVerificationEmailFormData } from "./types";
 
 export const sendVerificationEmail = async (formData: SendVerificationEmailFormData) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}resend-verification-email`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}resend-verification-email`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

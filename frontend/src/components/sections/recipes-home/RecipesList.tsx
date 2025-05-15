@@ -58,7 +58,7 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
             <div className="recipes-list">
                 {recipes && recipes.length > 0 ? (
                     recipes.map((recipe) => {
-                        const recipeImagePath = recipe.image ? `${process.env.BASE_URL}${recipe.image}` : FoodImage;
+                        const recipeImagePath = recipe.image ? `${process.env.REACT_APP_BASE_URL_IMAGES}${recipe.image}` : FoodImage;
                         console.log(recipeImagePath);
 
                         return (

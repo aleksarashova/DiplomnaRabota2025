@@ -2,7 +2,7 @@ import { VerifyProfileFormData } from "./types";
 
 export const verifyProfile = async (formData: VerifyProfileFormData) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/verify-profile`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/verify-profile`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

@@ -1,6 +1,6 @@
 export const getAllCategories = async (accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}categories/get-all`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}categories/get-all`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export const getAllCategories = async (accessToken: string) => {
 
 export const addRecipe = async (formData: FormData, accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}recipes/add-recipe`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}recipes/add-recipe`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,

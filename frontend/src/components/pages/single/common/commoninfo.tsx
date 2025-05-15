@@ -120,7 +120,7 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
         getIsRecipeFavouriteAndLiked();
     }, []);
 
-    const recipeImagePath = recipeData?.image ? `${process.env.BASE_URL}${recipeData.image}` : FoodImage;
+    const recipeImagePath = recipeData?.image ? `${process.env.REACT_APP_BASE_URL_IMAGES}${recipeData.image}` : FoodImage;
     console.log(recipeImagePath);
 
     return (

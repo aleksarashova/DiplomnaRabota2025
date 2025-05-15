@@ -2,7 +2,7 @@ import { LoginFormData } from "./types";
 
 export const loginUser = async (formData: LoginFormData) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/login`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

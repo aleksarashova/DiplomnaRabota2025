@@ -85,7 +85,7 @@ const RolesPage = () => {
                     {users && users.length > 0 ? (
                         users.map((user) => {
                             const userImagePath = user.image
-                                ? `${process.env.BASE_URL}${user.image}`
+                                ? `${process.env.REACT_APP_BASE_URL_IMAGES}${user.image}`
                                 : altImage;
                             return (
                                 <div key={user.id} className="userAdminPage">

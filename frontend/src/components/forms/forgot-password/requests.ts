@@ -2,7 +2,7 @@ import { SendResetPasswordEmailFormData } from "./types";
 
 export const sendResetPasswordEmail = async (formData: SendResetPasswordEmailFormData) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/send-reset-password-email`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/send-reset-password-email`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

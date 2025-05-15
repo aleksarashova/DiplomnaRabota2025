@@ -1,6 +1,6 @@
 export const getIsRecipeFavourite = async (recipeId: string, accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/get-is-recipe-favourite?recipeId=${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/get-is-recipe-favourite?recipeId=${recipeId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export const getIsRecipeFavourite = async (recipeId: string, accessToken: string
 
 export const getIsRecipeLiked = async (recipeId: string, accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/get-is-recipe-liked?recipeId=${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/get-is-recipe-liked?recipeId=${recipeId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -49,7 +49,7 @@ export const getIsRecipeLiked = async (recipeId: string, accessToken: string) =>
 
 export const addRecipeToFavourites = async (recipeId: string, accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/add-recipe-to-favourites`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/add-recipe-to-favourites`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export const addRecipeToFavourites = async (recipeId: string, accessToken: strin
 
 export const removeRecipeFromFavourites = async (recipeId: string, accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/remove-recipe-from-favourites`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/remove-recipe-from-favourites`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export const removeRecipeFromFavourites = async (recipeId: string, accessToken: 
 
 export const addRecipeToLiked = async (recipeId: string, accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/add-recipe-to-liked`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/add-recipe-to-liked`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -124,7 +124,7 @@ export const addRecipeToLiked = async (recipeId: string, accessToken: string) =>
 
 export const removeRecipeFromLiked = async (recipeId: string, accessToken: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}users/remove-recipe-from-liked`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/remove-recipe-from-liked`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

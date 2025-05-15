@@ -43,7 +43,7 @@ const VerificationError = ({ handleCloseError, errorContent }: verificationError
 
         setIsLoading(true);
 
-        fetch(`${process.env.BASE_URL}users/resend-verification-email`, {
+        fetch(`${process.env.REACT_APP_BASE_URL}users/resend-verification-email`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -1,7 +1,7 @@
 import {Comment} from "./types";
 
 export const getAllUnapprovedComments = async (accessToken: string): Promise<Comment[]> => {
-    const response = await fetch(`${process.env.BASE_URL}comments/get-all-unapproved`, {
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}comments/get-all-unapproved`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export const getAllUnapprovedComments = async (accessToken: string): Promise<Com
 }
 
 export const approveComment = async (accessToken: string, commentId: string) => {
-    const response = await fetch(`${process.env.BASE_URL}comments/approve`, {
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}comments/approve`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export const approveComment = async (accessToken: string, commentId: string) => 
 }
 
 export const rejectComment = async (accessToken: string, commentId: string) => {
-    const response = await fetch(`${process.env.BASE_URL}comments/reject`, {
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}comments/reject`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",

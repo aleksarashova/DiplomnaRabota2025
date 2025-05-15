@@ -1,6 +1,6 @@
 export const getRecipeDataRequest = async (accessToken: string, recipeId: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}recipes/get-recipe-data?recipeId=${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}recipes/get-recipe-data?recipeId=${recipeId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export const getRecipeDataRequest = async (accessToken: string, recipeId: string
 
 export const getIsFavouriteRequest = async (accessToken: string, recipeId: string) => {
     try {
-        const response = await fetch(`${process.env.BASE_URL}api/users/get-is-favourite-recipe?recipeId=${recipeId}`, {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}api/users/get-is-favourite-recipe?recipeId=${recipeId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
