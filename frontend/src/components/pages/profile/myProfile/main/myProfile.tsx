@@ -45,7 +45,7 @@ const MyProfile = () => {
         const fetchData = async () => {
             const token = sessionStorage.getItem("accessToken");
             const { isValid, role } = validateJWT(token);
-            setIsLoggedIn(!!isValid);
+            setIsLoggedIn(isValid);
             setIsAdmin(role === "admin");
 
             if (!isValid) {
@@ -63,7 +63,7 @@ const MyProfile = () => {
             }
         };
 
-        fetchData();
+        fetchData().then();
     }, []);
 
     const getUserData = async () => {
@@ -97,7 +97,7 @@ const MyProfile = () => {
 
     const handleRemoveImage = async () => {
         const token = sessionStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
@@ -124,7 +124,7 @@ const MyProfile = () => {
         formData.append("image", selectedImage);
 
         const token = sessionStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
@@ -150,7 +150,7 @@ const MyProfile = () => {
 
     const handleDeleteAccount = async () => {
         const token = sessionStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");

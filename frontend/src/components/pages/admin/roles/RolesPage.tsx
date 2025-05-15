@@ -45,7 +45,7 @@ const RolesPage = () => {
             }
         };
 
-        fetchUsers();
+        fetchUsers().then();
     }, [navigateTo]);
 
     const handleCloseNotAdminError = () => {
@@ -55,7 +55,7 @@ const RolesPage = () => {
 
     const handleRoleChange = async (userId: string, newRole: string) => {
         const token = sessionStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");

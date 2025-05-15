@@ -47,7 +47,7 @@ const RecipesPage = () => {
             }
         };
 
-        fetchRecipes();
+        fetchRecipes().then();
     }, []);
 
     const handleCloseNotAdminError = () => {
@@ -57,7 +57,7 @@ const RecipesPage = () => {
 
     const handleApproveRecipe = async(recipeId: string) => {
         const token = sessionStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
@@ -73,7 +73,7 @@ const RecipesPage = () => {
 
     const handleRejectRecipe = async(recipeId: string) => {
         const token = sessionStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");

@@ -5,19 +5,15 @@ import { FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { resetUserPassword } from "./requests";
 import { ResetPasswordFormData } from "./types";
-import {Simulate} from "react-dom/test-utils";
-import reset = Simulate.reset;
 
 const ResetPasswordForm = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const [visibilityResetPasswordErrorPopup, setVisibilityResetPasswordErrorPopup] = useState(false);
     const navigate = useNavigate();
 
     const handleInvalidInput = (message: string) => {
         setErrorMessage(message);
-        setVisibilityResetPasswordErrorPopup(true);
     }
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

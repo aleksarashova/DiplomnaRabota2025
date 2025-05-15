@@ -42,7 +42,7 @@ const RecipeTimer: React.FC = () => {
         if (isRunning && hours === 0 && minutes === 0 && seconds === 0) {
             setIsRunning(false);
             setIsTimeUp(true);
-            playSound();
+            playSound().then();
         }
     }, [hours, minutes, seconds, isRunning]);
 

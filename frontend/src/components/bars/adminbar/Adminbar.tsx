@@ -15,9 +15,9 @@ const Adminbar = () => {
     const navigateTo = useNavigate();
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchCategories = async (): Promise<void> => {
             const token = sessionStorage.getItem("accessToken");
-            const { isValid, role } = validateJWT(token);
+            const { isValid } = validateJWT(token);
 
             if (!isValid) {
                 navigateTo("/login");
@@ -40,7 +40,7 @@ const Adminbar = () => {
             }
         };
 
-        fetchCategories();
+        fetchCategories().then();
     }, []);
 
     return (

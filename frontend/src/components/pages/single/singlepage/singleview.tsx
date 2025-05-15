@@ -49,7 +49,7 @@ const SingleView = () => {
             }
         };
 
-        fetchData();
+        fetchData().then();
     }, []);
 
     const getRecipeData = async () => {

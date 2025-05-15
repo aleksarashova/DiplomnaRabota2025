@@ -41,7 +41,7 @@ const RecipesList: React.FC<RecipesListProps> = ({ selectedCategory, searchText 
             }
         };
 
-        fetchRecipes();
+        fetchRecipes().then();
     }, [selectedCategory, searchText]);
 
     return (

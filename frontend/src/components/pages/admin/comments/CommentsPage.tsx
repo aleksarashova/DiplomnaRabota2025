@@ -45,7 +45,7 @@ const CommentsPage = () => {
             }
         };
 
-        fetchComments();
+        fetchComments().then();
     }, []);
 
     const handleCloseNotAdminError = () => {

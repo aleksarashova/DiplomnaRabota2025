@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./sidebar.css";
 
 import { getAllCategories } from "./requests";
-import {useNavigate} from "react-router-dom";
 
 interface SidebarProps {
     setSelectedCategory: (category: string | null) => void;
@@ -12,10 +11,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setSelectedCategory }) => {
     const [categories, setCategories] = useState<string[] | null>(null);
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
-    const navigateTo = useNavigate();
-
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchCategories = async (): Promise<void> => {
             try {
                 const categories = await getAllCategories();
                 setCategories(categories);
@@ -24,7 +21,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setSelectedCategory }) => {
             }
         };
 
-        fetchCategories();
+        fetchCategories(). then();
     }, []);
 
     const handleCategoryClick = (category: string | null) => {

@@ -15,7 +15,7 @@ const NotificationBar = ({ visibility }: NotificationbarProps) => {
     const [selectAll, setSelectAll] = useState(false);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (): Promise<void> => {
             const token = sessionStorage.getItem("accessToken");
             const isValid = token && validateJWT(token);
 
@@ -31,7 +31,7 @@ const NotificationBar = ({ visibility }: NotificationbarProps) => {
             }
         };
 
-        fetchData();
+        fetchData().then();
     }, []);
 
     const handleSelectNotification = (id: string) => {

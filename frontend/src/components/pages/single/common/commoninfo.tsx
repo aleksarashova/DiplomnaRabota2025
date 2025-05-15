@@ -5,7 +5,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 
 import FoodImage from "../../../images/altImage.png";
 
-import { FaHeart, FaComment, FaRegComment, FaHourglassHalf, FaRegCalendarAlt } from "react-icons/fa";
+import { FaHeart, FaComment, FaRegComment, FaHourglassHalf } from "react-icons/fa";
 import { VscHeartFilled } from "react-icons/vsc";
 import { PiForkKnifeFill } from "react-icons/pi";
 import { MdOutlineMenuBook } from "react-icons/md";
@@ -60,7 +60,7 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
 
     const handleAddOrRemoveFavourites = async () => {
         const token = sessionStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
@@ -88,7 +88,7 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
 
     const handleAddOrRemoveLiked = async () => {
         const token = sessionStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
@@ -117,7 +117,7 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
     }
 
     useEffect(() => {
-        getIsRecipeFavouriteAndLiked();
+        getIsRecipeFavouriteAndLiked().then();
     }, []);
 
     const recipeImagePath = recipeData?.image ? `${process.env.REACT_APP_BASE_URL_IMAGES}${recipeData.image}` : FoodImage;

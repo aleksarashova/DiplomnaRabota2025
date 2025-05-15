@@ -39,7 +39,7 @@ const MyRatingsWindow: React.FC<MyRatingsWindowProps> = ({ author, close }) => {
             }
         };
 
-        fetchData();
+        fetchData().then();
     }, []);
 
     return (

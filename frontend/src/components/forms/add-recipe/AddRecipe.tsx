@@ -37,7 +37,7 @@ const AddRecipeForm = () => {
         navigateTo("/");
     }
 
-    const getCategories = async () => {
+    const getCategories = async (): Promise<void> => {
         const token = sessionStorage.getItem("accessToken");
         const { isValid } = validateJWT(token);
 
@@ -60,7 +60,7 @@ const AddRecipeForm = () => {
     }
 
     useEffect(() => {
-        getCategories();
+        getCategories().then();
     }, []);
 
     const handleAddProduct = () => {

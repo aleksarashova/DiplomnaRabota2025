@@ -2,7 +2,7 @@ import React, { useState, useEffect, FormEvent } from 'react';
 import "../common.css";
 import "./errors.css";
 
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams} from "react-router-dom";
 
 import ResendEmailSuccessfulMessage from "../messages/ResendVerificationEmailMessage";
 
@@ -51,8 +51,7 @@ const VerificationError = ({ handleCloseError, errorContent }: verificationError
             body: JSON.stringify(formData),
         })
             .then(async (response) => {
-                const data = await response.json();
-                return data;
+                return await response.json();
             })
             .then((data) => {
                 console.log("Backend Response:", data);
@@ -94,6 +93,6 @@ const VerificationError = ({ handleCloseError, errorContent }: verificationError
             )}
         </div>
     );
-};
+}
 
 export default VerificationError;

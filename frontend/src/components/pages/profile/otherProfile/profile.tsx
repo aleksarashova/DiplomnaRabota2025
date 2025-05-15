@@ -10,7 +10,7 @@ import Header from "../../../sections/header/Header";
 import {validateJWT} from "../../authCheck";
 import {useNavigate, useParams} from "react-router-dom";
 import {getOtherUserDataRequest, rateUserRequest} from "./requests";
-import {OtherUserData, RateUserData, Rating} from "./types";
+import {OtherUserData, RateUserData} from "./types";
 import altImage from "../../../images/altImage.png";
 import {FaStar} from "react-icons/fa";
 
@@ -62,12 +62,12 @@ const Profile = () => {
             setLoading(false);
         };
 
-        fetchData();
+        fetchData().then();
     }, [isOwnProfile]);
 
     const getOtherUserData = async () => {
         const token = sessionStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");
@@ -91,7 +91,7 @@ const Profile = () => {
 
     const handleRating = async (selectedRating: number) => {
         const token = sessionStorage.getItem("accessToken");
-        const { isValid, role } = validateJWT(token);
+        const { isValid } = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");

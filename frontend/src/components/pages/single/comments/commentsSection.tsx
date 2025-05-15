@@ -51,7 +51,7 @@ const CommentsSection = ({recipeData}: CommentsInfoProps) => {
 
     const handleAddComment = async (content: string, reply_to: string | null) => {
         const token = sessionStorage.getItem("accessToken");
-        const {isValid, role} = validateJWT(token);
+        const {isValid} = validateJWT(token);
 
         if (!isValid) {
             navigateTo("/login");

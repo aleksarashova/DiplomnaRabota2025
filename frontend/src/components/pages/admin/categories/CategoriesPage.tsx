@@ -50,7 +50,7 @@ const CategoriesPage = () => {
             }
         };
 
-        fetchCategories();
+        fetchCategories().then();
     }, []);
 
     const handleInvalidInput = (message: string) => {

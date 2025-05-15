@@ -15,8 +15,8 @@ import SendResetPasswordEmailSuccessfulMessage from "../../popups/messages/SendP
 const ForgotPasswordForm = () => {
     const emailRef = useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [visibilitySendEmailLinkSuccessMessage, setvisibilitySendEmailLinkSuccessMessage] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const [visibilitySendEmailLinkSuccessMessage, setvisibilitySendEmailLinkSuccessMessage] = useState(false);
     const [visibilityEmailErrorPopup, setVisibilityEmailErrorPopup] = useState(false);
 
     const navigateTo = useNavigate();
