@@ -85,7 +85,7 @@ const RolesPage = () => {
                     {users && users.length > 0 ? (
                         users.map((user) => {
                             const userImagePath = user.image
-                                ? `http://localhost:8000${user.image}`
+                                ? `${process.env.BASE_URL}${user.image}`
                                 : altImage;
                             return (
                                 <div key={user.id} className="userAdminPage">

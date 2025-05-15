@@ -1,7 +1,7 @@
 import {Recipe} from "../../../sections/recipes-home/types";
 
 export const getAllUnapprovedRecipes = async (accessToken: string): Promise<Recipe[]> => {
-    const response = await fetch(`http://localhost:8000/api/recipes/get-all-unapproved`, {
+    const response = await fetch(`${process.env.BASE_URL}recipes/get-all-unapproved`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export const getAllUnapprovedRecipes = async (accessToken: string): Promise<Reci
 }
 
 export const approveRecipe = async (accessToken: string, recipeId: string) => {
-    const response = await fetch(`http://localhost:8000/api/recipes/approve`, {
+    const response = await fetch(`${process.env.BASE_URL}recipes/approve`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export const approveRecipe = async (accessToken: string, recipeId: string) => {
 }
 
 export const rejectRecipe = async (accessToken: string, recipeId: string) => {
-    const response = await fetch(`http://localhost:8000/api/recipes/reject`, {
+    const response = await fetch(`${process.env.BASE_URL}recipes/reject`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",

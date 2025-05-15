@@ -94,7 +94,7 @@ const RecipesPage = () => {
             <div className="recipes-list" id="recipes-list-admin-page">
                 {recipes && recipes.length > 0 ? (
                     recipes.map((recipe) => {
-                        const recipeImagePath = recipe.image ? `http://localhost:8000${recipe.image}` : FoodImage;
+                        const recipeImagePath = recipe.image ? `${process.env.BASE_URL}${recipe.image}` : FoodImage;
                         console.log(recipeImagePath);
 
                         return (

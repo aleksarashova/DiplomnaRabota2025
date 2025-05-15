@@ -2,7 +2,7 @@ import {UserRating} from "./types";
 
 export const getOverallRating = async (accessToken: string, username: string) => {
     try {
-        const response = await fetch(`http://localhost:8000/api/users/get-overall-rating?username=${username}`, {
+        const response = await fetch(`${process.env.BASE_URL}users/get-overall-rating?username=${username}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export const getOverallRating = async (accessToken: string, username: string) =>
 
 export const getAllRatings = async (accessToken: string, username: string): Promise<UserRating[]> => {
     try {
-        const response = await fetch(`http://localhost:8000/api/users/get-ratings?username=${username}`, {
+        const response = await fetch(`${process.env.BASE_URL}users/get-ratings?username=${username}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

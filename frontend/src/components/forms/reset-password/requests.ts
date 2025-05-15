@@ -2,7 +2,7 @@ import {ResetPasswordFormData} from "./types";
 
 export const resetUserPassword = async (formData: ResetPasswordFormData) => {
     try {
-        const response = await fetch("http://localhost:8000/api/users/reset-password", {
+        const response = await fetch(`${process.env.BASE_URL}users/reset-password`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

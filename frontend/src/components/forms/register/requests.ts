@@ -1,6 +1,6 @@
 export const registerUser = async (formData: FormData) => {
     try {
-        const response = await fetch("http://localhost:8000/api/users/register", {
+        const response = await fetch(`${process.env.BASE_URL}users/register`, {
             method: "POST",
             body: formData,
         });

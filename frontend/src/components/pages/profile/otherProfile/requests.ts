@@ -2,7 +2,7 @@ import {RateUserData} from "./types";
 
 export const getOtherUserDataRequest = async (accessToken: string, username: string) => {
     try {
-        const response = await fetch(`http://localhost:8000/api/users/profile-data?username=${username}`, {
+        const response = await fetch(`${process.env.BASE_URL}users/profile-data?username=${username}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export const getOtherUserDataRequest = async (accessToken: string, username: str
 
 export const rateUserRequest = async (accessToken: string, rateData: RateUserData) => {
     try {
-        const response = await fetch(`http://localhost:8000/api/users/rate-user`, {
+        const response = await fetch(`${process.env.BASE_URL}users/rate-user`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

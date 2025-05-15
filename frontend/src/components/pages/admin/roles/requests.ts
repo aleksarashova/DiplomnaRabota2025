@@ -1,7 +1,7 @@
 import {User} from "./types";
 
 export const getAllUsers = async (accessToken: string): Promise<User[]> => {
-    const response = await fetch(`http://localhost:8000/api/users/get-all`, {
+    const response = await fetch(`${process.env.BASE_URL}users/get-all`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export const getAllUsers = async (accessToken: string): Promise<User[]> => {
 }
 
 export const updateUserRole = async (accessToken: string, userId: string, newRole: string)=> {
-    const response = await fetch(`http://localhost:8000/api/users/update-role`, {
+    const response = await fetch(`${process.env.BASE_URL}users/update-role`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",

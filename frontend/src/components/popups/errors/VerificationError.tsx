@@ -43,7 +43,7 @@ const VerificationError = ({ handleCloseError, errorContent }: verificationError
 
         setIsLoading(true);
 
-        fetch("http://localhost:8000/api/users/resend-verification-email", {
+        fetch(`${process.env.BASE_URL}users/resend-verification-email`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -64,7 +64,7 @@ const VerificationError = ({ handleCloseError, errorContent }: verificationError
             .finally(() => {
                 setIsLoading(false);
             });
-    };
+    }
 
     return (
         <div className="popupOverlay">

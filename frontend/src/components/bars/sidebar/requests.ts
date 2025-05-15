@@ -1,5 +1,5 @@
 export const getAllCategories = async (): Promise<string[]> => {
-    const response = await fetch(`http://localhost:8000/api/categories/get-all-sidebar`, {
+    const response = await fetch(`${process.env.BASE_URL}categories/get-all-sidebar`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

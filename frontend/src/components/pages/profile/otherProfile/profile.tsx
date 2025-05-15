@@ -126,7 +126,7 @@ const Profile = () => {
         return <div>Loading...</div>;
     }
 
-    const userImagePath = userData?.image ? `http://localhost:8000${userData.image}` : altImage;
+    const userImagePath = userData?.image ? `${process.env.BASE_URL}${userData.image}` : altImage;
     console.log(userImagePath);
 
     const name = userData?.first_name + " " + userData?.last_name;

@@ -209,7 +209,7 @@ const MyProfile = () => {
         return null;
     }
 
-    const userImagePath = userData?.image ? `http://localhost:8000${userData.image}` : altImage;
+    const userImagePath = userData?.image ? `${process.env.BASE_URL}${userData.image}` : altImage;
 
     return (
         <div className="myProfileWrapper">
