@@ -7,6 +7,9 @@ import nodemailer from "nodemailer";
 import {checkEmailFormat} from "../shared/utils";
 import {MailOptionsInterface, SMTPInterface} from "../shared/interfaces";
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 export const findCode = async(code: number): Promise<HydratedDocument<VerificationCodeInterface> | null> => {
     try {
         return await VerificationCode.findOne({code: code});
@@ -214,7 +217,7 @@ export const sendPasswordResetEmail = async (email: string): Promise<void> => {
         const passwordResetKey: string = await generatePasswordResetKey();
         await saveRecordInPasswordResetKeys(email, passwordResetKey);
 
-        const passwordResetLink: string = `http://localhost:3000/reset-password?key=${passwordResetKey}`;
+        const passwordResetLink: string = `${process.env.BASE_URL}/reset-password?key=${passwordResetKey}`;
 
         const smtpConfig: SMTPInterface = getSMTPConfig(email);
 

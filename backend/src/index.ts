@@ -12,7 +12,7 @@ const port: string | number = process.env.PORT || 7000;
 console.log("Starting server...");
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: process.env.BASE_URL,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
