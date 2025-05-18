@@ -30,9 +30,15 @@ type CommonRecipeInfoProps = {
 const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps) => {
     const [isFavourite, setIsFavourite] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
+    const [likesCount, setLikesCount] = useState(recipeData?.likes || 0);
+
     const navigateTo = useNavigate();
 
     const { recipeId } = useParams();
+
+    useEffect(() => {
+        setLikesCount(recipeData?.likes || 0);
+    }, [recipeData]);
 
     const getIsRecipeFavouriteAndLiked = async() => {
         const token = sessionStorage.getItem("accessToken");
@@ -100,16 +106,16 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
             return;
         }
 
-        setIsLiked((prevState) => !prevState);
-
         try {
             if (!isLiked) {
                 await addRecipeToLiked(recipeId, token!);
+                setIsLiked(true);
+                setLikesCount((prev) => prev + 1);
             } else {
                 await removeRecipeFromLiked(recipeId, token!);
+                setIsLiked(false);
+                setLikesCount((prev) => prev - 1);
             }
-
-            window.location.reload();
         } catch (error) {
             console.error("Failed to update liked:", error);
             setIsFavourite((prevState) => !prevState);
@@ -134,7 +140,7 @@ const CommonRecipeInfo = ({ recipeData, onCommentClick }: CommonRecipeInfoProps)
                     )}
                 </button>
                 <div className="likes-comments-single">
-                    <div><FaHeart/> {recipeData?.likes}</div>
+                    <div><FaHeart/> {likesCount}</div>
                     <div><FaComment/> {recipeData?.comments?.length}</div>
                 </div>
                 <div className="recipeTitleSingle">{recipeData?.title}</div>
