@@ -65,7 +65,7 @@ const RecipesPage = () => {
 
         try {
             await approveRecipe(token!, recipeId);
-            window.location.reload();
+            setRecipes((prev) => prev?.filter(r => r.id !== recipeId) || []);
         } catch (error) {
             console.error("Error approving recipe:", error);
         }
@@ -81,7 +81,7 @@ const RecipesPage = () => {
 
         try {
             await rejectRecipe(token!, recipeId);
-            window.location.reload();
+            setRecipes((prev) => prev?.filter(r => r.id !== recipeId) || []);
         } catch (error) {
             console.error("Error rejecting recipe:", error);
         }
