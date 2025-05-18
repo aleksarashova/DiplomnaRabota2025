@@ -80,7 +80,7 @@ const CategoriesPage = () => {
 
             console.log("Backend Response:", data);
             setVisibilityAddCategoryPopup(false);
-            window.location.reload();
+            setCategories((prev) => (prev ? [...prev, category] : [category]));
         } catch (error) {
             console.error("Error during adding category:", error);
 
@@ -110,7 +110,7 @@ const CategoriesPage = () => {
 
         try {
             await deleteCategory(category, token!);
-            window.location.reload();
+            setCategories((prev) => prev?.filter((c) => c !== category) || []);
         } catch (error) {
             console.error("Error during deleting category:", error);
 
