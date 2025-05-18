@@ -63,7 +63,7 @@ const CommentsPage = () => {
 
         try {
             await approveComment(token!, commentId);
-            window.location.reload();
+            setComments((prev) => prev?.filter(c => c.id !== commentId) || []);
         } catch (error) {
             console.error("Error approving comment:", error);
         }
@@ -78,7 +78,7 @@ const CommentsPage = () => {
         }
         try {
             await rejectComment(token!, commentId);
-            window.location.reload();
+            setComments((prev) => prev?.filter(c => c.id !== commentId) || []);
         } catch (error) {
             console.error("Error rejecting comment:", error);
         }
