@@ -104,7 +104,8 @@ const Profile = () => {
 
         try {
             await rateUserRequest(token!, rateData);
-            window.location.reload();
+            setUserRating(selectedRating);
+            await getOtherUserData();
         } catch (error) {
             console.error('Error rating the author:', error);
 
