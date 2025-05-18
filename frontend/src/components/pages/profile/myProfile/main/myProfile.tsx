@@ -106,9 +106,9 @@ const MyProfile = () => {
         try {
             const data = await deleteProfilePictureRequest(token!);
             console.log("Profile picture deleted successfully:", data);
-            setSelectedImage(null);
             setVisibilityEditProfilePicturePopup(false);
-            window.location.reload();
+            await getUserData();
+            setSelectedImage(null);
         } catch (error) {
             console.error("Error deleting profile picture:", error);
         }
@@ -134,7 +134,9 @@ const MyProfile = () => {
             const data = await editProfilePictureRequest(token!, formData);
             console.log("Profile picture updated successfully:", data);
             setVisibilityEditProfilePicturePopup(false);
-            window.location.reload();
+
+            await getUserData();
+            setSelectedImage(null);
         } catch (error) {
             console.error("Error updating profile picture:", error);
         }
@@ -195,7 +197,7 @@ const MyProfile = () => {
             const data = await editAccountRequest(token!, formData);
             console.log('Backend Response:', data);
             setVisibilityEditAccountPopup(false);
-            window.location.reload();
+            await getUserData();
         } catch (error) {
             console.error('Error editing account:', error);
 
