@@ -89,7 +89,6 @@ const CommentsSection = ({recipeData}: CommentsInfoProps) => {
 
     const handleCloseAddCommentMessage = () => {
         setVisibilityAddCommentMessage(false);
-        window.location.reload();
     }
 
     return (
