@@ -1,13 +1,14 @@
 jest.mock('../../models/User');
-import User from "../../models/User";
 
 jest.mock('bcryptjs');
-import bcrypt from 'bcryptjs';
 
 jest.mock('../../shared/utils', () => ({
     checkIdFormat: jest.fn(),
     checkEmailFormat: jest.fn(() => true),
 }));
+
+import User from "../../models/User";
+import bcrypt from 'bcryptjs';
 
 import {
     checkForRightPassword,
@@ -143,7 +144,7 @@ describe('getAverageRating', () => {
         (findUserByUsername as jest.Mock) = jest.fn().mockResolvedValue(mockUser);
 
         const result = await getAverageRating('someUsername');
-        expect(result).toBe(4); 
+        expect(result).toBe(4);
     });
 
     it('should return 0 if user has no ratings', async () => {
