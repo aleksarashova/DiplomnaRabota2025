@@ -4,7 +4,7 @@ export const decodeBase64URL = (base64URL: string) => {
     return atob(base64 + padding);
 }
 
-export const validateJWT = (token: string | null): { isValid: boolean; role?: string } => {
+export const validateJWT = (token: string | null): { isValid: boolean; username?: string, role?: string } => {
     if (!token) {
         console.log("No access token.");
         return { isValid: false };
@@ -14,7 +14,8 @@ export const validateJWT = (token: string | null): { isValid: boolean; role?: st
         const payload = JSON.parse(decodeBase64URL(token.split(".")[1]));
         const isValid = payload.exp * 1000 > Date.now();
         const role = payload.role;
-        return { isValid, role };
+        const username = payload.username;
+        return { isValid, username, role };
     } catch (error) {
         console.error("Failed to validate JWT:", error);
         return { isValid: false };

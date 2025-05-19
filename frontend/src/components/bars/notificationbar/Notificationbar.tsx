@@ -4,6 +4,7 @@ import { decodeBase64URL, validateJWT } from "../../pages/authCheck";
 import { UserNotification } from "./types";
 import {deleteNotifications, getAllNotifications} from "./requests";
 import { MdOutlineCircleNotifications } from "react-icons/md";
+import {useNavigate} from "react-router-dom";
 
 interface NotificationbarProps {
     visibility: boolean;
@@ -14,14 +15,19 @@ const NotificationBar = ({ visibility }: NotificationbarProps) => {
     const [selectedNotifications, setSelectedNotifications] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState(false);
 
+    const navigateTo = useNavigate();
+
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
             const token = sessionStorage.getItem("accessToken");
-            const isValid = token && validateJWT(token);
+            if(!token) {
+                navigateTo("/login");
+                return;
+            }
 
-            if (isValid) {
-                const payload = JSON.parse(decodeBase64URL(token.split(".")[1]));
-                const username = payload.username;
+            const {isValid, username} = validateJWT(token);
+
+            if (isValid && username) {
                 try {
                     const userNotifications = await getAllNotifications(token, username);
                     setNotifications(userNotifications);
