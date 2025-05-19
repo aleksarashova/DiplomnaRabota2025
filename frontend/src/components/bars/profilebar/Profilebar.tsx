@@ -3,12 +3,12 @@ import "./profilebar.css";
 
 import { MdRemoveRedEye } from "react-icons/md";
 
-type ProfileBarProps = {
+interface ProfileBarProps {
     setShowMyRecipes: React.Dispatch<React.SetStateAction<boolean>>;
     setShowMyLiked: React.Dispatch<React.SetStateAction<boolean>>;
     setShowMyFavourites: React.Dispatch<React.SetStateAction<boolean>>;
     setShowMyRatings: React.Dispatch<React.SetStateAction<boolean>>;
-};
+}
 
 const Profilebar: React.FC<ProfileBarProps> = ({
        setShowMyRecipes,
