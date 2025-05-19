@@ -69,9 +69,6 @@ const NotificationBar = ({ visibility }: NotificationbarProps) => {
                 navigateTo("/login");
                 return;
             }
-            setSelectedNotifications([]);
-            setSelectAll(false);
-
             setNotifications((prev) => prev.filter((n) => !selectedNotifications.includes(n.id)));
             setSelectedNotifications([]);
             setSelectAll(false);
