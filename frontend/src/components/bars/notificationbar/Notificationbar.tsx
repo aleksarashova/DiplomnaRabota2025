@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./notificationbar.css";
-import { decodeBase64URL, validateJWT } from "../../pages/authCheck";
+import { validateJWT } from "../../pages/authCheck";
 import { UserNotification } from "./types";
 import {deleteNotifications, getAllNotifications} from "./requests";
 import { MdOutlineCircleNotifications } from "react-icons/md";
@@ -10,7 +10,7 @@ interface NotificationbarProps {
     visibility: boolean;
 }
 
-const NotificationBar = ({ visibility }: NotificationbarProps) => {
+const NotificationBar: React.FC<NotificationbarProps> = ({ visibility }) => {
     const [notifications, setNotifications] = useState<UserNotification[]>([]);
     const [selectedNotifications, setSelectedNotifications] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState(false);

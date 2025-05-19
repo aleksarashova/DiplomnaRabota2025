@@ -43,6 +43,7 @@ const AddRecipeForm = () => {
 
         if (!isValid) {
             navigateTo("/login");
+            return;
         }
 
         try {
