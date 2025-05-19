@@ -4,7 +4,7 @@ import { validateJWT } from "../../pages/authCheck";
 import { UserNotification } from "./types";
 import {deleteNotifications, getAllNotifications} from "./requests";
 import { MdOutlineCircleNotifications } from "react-icons/md";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 interface NotificationbarProps {
     visibility: boolean;
@@ -16,9 +16,14 @@ const NotificationBar: React.FC<NotificationbarProps> = ({ visibility }) => {
     const [selectAll, setSelectAll] = useState(false);
 
     const navigateTo = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
+            if (location.pathname === "/login" || location.pathname === "/register") {
+                return;
+            }
+
             const token = sessionStorage.getItem("accessToken");
             if(!token) {
                 navigateTo("/login");
@@ -29,7 +34,7 @@ const NotificationBar: React.FC<NotificationbarProps> = ({ visibility }) => {
 
             if (isValid && username) {
                 try {
-                    const userNotifications = await getAllNotifications(token, username);
+                    const userNotifications = await getAllNotifications(token!, username);
                     setNotifications(userNotifications);
                 } catch (error) {
                     console.error("Error fetching user notifications:", error);
