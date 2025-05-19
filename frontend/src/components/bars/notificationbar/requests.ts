@@ -24,7 +24,7 @@ export const getAllNotifications = async (accessToken: string, username: string)
     }
 }
 
-export const deleteNotifications = async (accessToken: string, username: string, selectedNotificationIds: string[]): Promise<UserNotification[]> => {
+export const deleteNotifications = async (accessToken: string, selectedNotificationIds: string[]): Promise<UserNotification[]> => {
     try {
         const response = await fetch(`${process.env.REACT_APP_BASE_URL}users/delete-notifications`, {
             method: "DELETE",
@@ -32,7 +32,7 @@ export const deleteNotifications = async (accessToken: string, username: string,
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
             },
-            body: JSON.stringify({ username, selectedNotificationIds }),
+            body: JSON.stringify({ selectedNotificationIds }),
         });
 
         const data = await response.json();

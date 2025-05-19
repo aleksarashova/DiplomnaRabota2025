@@ -61,9 +61,7 @@ const NotificationBar = ({ visibility }: NotificationbarProps) => {
             const isValid = token && validateJWT(token);
             if(isValid) {
                 try {
-                    const payload = JSON.parse(decodeBase64URL(token.split(".")[1]));
-                    const username = payload.username;
-                    await deleteNotifications(token, username, selectedNotifications);
+                    await deleteNotifications(token, selectedNotifications);
                 } catch (error){
                     console.error("Error deleting user notifications:", error);
                 }
