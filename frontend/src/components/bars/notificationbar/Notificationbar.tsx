@@ -67,6 +67,9 @@ const NotificationBar = ({ visibility }: NotificationbarProps) => {
                 } catch (error){
                     console.error("Error deleting user notifications:", error);
                 }
+            } else {
+                navigateTo("/login");
+                return;
             }
             setSelectedNotifications([]);
             setSelectAll(false);
