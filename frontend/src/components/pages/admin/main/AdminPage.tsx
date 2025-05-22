@@ -15,11 +15,6 @@ const AdminPage = () => {
 
     const navigateTo = useNavigate();
 
-    const handleCloseNotAdminError = () => {
-        setNotAdminErrorPopup(false);
-        navigateTo("/");
-    }
-
     useEffect(() => {
         const token = sessionStorage.getItem("accessToken");
         const { isValid, role } = validateJWT(token);
@@ -39,7 +34,11 @@ const AdminPage = () => {
         }
     }, []);
 
-
+    const handleCloseNotAdminError = () => {
+        setNotAdminErrorPopup(false);
+        navigateTo("/");
+    }
+    
     return (
         <div className="admin-page">
             <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} isProfilePage={false} isHomePage={false}/>

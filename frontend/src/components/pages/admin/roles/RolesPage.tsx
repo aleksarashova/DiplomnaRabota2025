@@ -46,7 +46,7 @@ const RolesPage = () => {
         };
 
         fetchUsers().then();
-    }, [navigateTo]);
+    }, []);
 
     const handleCloseNotAdminError = () => {
         setNotAdminErrorPopup(false);
