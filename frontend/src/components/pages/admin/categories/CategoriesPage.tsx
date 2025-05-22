@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
 import "./categories.css";
 
-import {addCategory, deleteCategory, getAllCategoriesForAdmin} from "../../../bars/adminbar/requests";
+import {addCategory, deleteCategory} from "../../../bars/adminbar/requests";
+import {getAllCategoriesForAdmin} from "./requests";
 
 import { FaPlus } from "react-icons/fa";
 import {AddCategoryPopup} from "../../../popups/actions/add-category/AddCategoryPopup";
