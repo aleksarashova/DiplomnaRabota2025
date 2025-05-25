@@ -13,7 +13,7 @@ import {findRecipeById} from "./RecipeService";
 import path from "path";
 import {deleteFile} from "./FileService";
 import Recipe, {RecipeInterface} from "../models/Recipe";
-import Comment from "../models/Comment";
+import Comment, {CommentInterface} from "../models/Comment";
 import {findKey, validatePasswordResetKey} from "./EmailService";
 import Notification, {NotificationInterface} from "../models/Notification";
 import {GetNotificationDTO} from "../DTOs/NotificationDTOs";
@@ -318,7 +318,7 @@ export const addRecipeToFavouritesList = async (recipeId: string, userId: string
         await user.save();
 
         const notificationContent: string = user.username + " added " + recipe.title.toLocaleUpperCase() + " to favourites";
-        await createNotification(recipe.author, user._id, notificationContent, null, null);
+        await createNotification(recipe.author, user._id, notificationContent, null);
     } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -354,7 +354,7 @@ export const addRecipeToLikedList = async (recipeId: string, userId: string): Pr
         await recipe.save();
 
         const notificationContent: string = user.username + " liked " + recipe.title.toLocaleUpperCase() + "";
-        await createNotification(recipe.author, user._id, notificationContent, null, null);
+        await createNotification(recipe.author, user._id, notificationContent, null);
     } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -560,7 +560,7 @@ export const changeUserRating = async (userIdOfRater: string, usernameOfUserBein
         }
 
         const notificationContent: string = rater.username + " rated you with " + rating + " stars";
-        await createNotification(userBeingRated._id, rater._id, notificationContent, null, null);
+        await createNotification(userBeingRated._id, rater._id, notificationContent, null);
     } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
@@ -587,7 +587,7 @@ export const changeUserRole = async (userId: string, newRole: string): Promise<v
         await user.save();
 
         const notificationContent: string = "With the next login your role will be changed to: " + newRole;
-        await createNotification(user._id, null, notificationContent, null, null);
+        await createNotification(user._id, null, notificationContent, null);
     } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
@@ -743,43 +743,54 @@ export const getUserNotifications = async (username: string): Promise<GetNotific
             throw new Error("User not found.");
         }
 
-        const rawNotifications: HydratedDocument<NotificationInterface>[] = await Notification.find({
-            for_user: user._id,
-            $or: [{ is_comment_approved: true }, { is_comment_approved: { $exists: false } }]
-        }).sort({ createdAt: -1 });
+        const rawNotifications: HydratedDocument<NotificationInterface>[] = await Notification
+            .find({ for_user: user._id })
+            .sort({ createdAt: -1 });
 
         const notifications: GetNotificationDTO[] = [];
         for (const rawNotification of rawNotifications) {
-            const now: Date = new Date();
-            const notificationDate: Date = new Date(rawNotification.date);
-            const diffInSeconds: number = Math.floor((now.getTime() - notificationDate.getTime()) / 1000);
+            let shouldInclude: boolean = true;
 
-            let timeAgo: string = "";
+            if (rawNotification.related_comment_id) {
+                const relatedComment:HydratedDocument<CommentInterface> | null = await Comment.findById(rawNotification.related_comment_id);
 
-            if (diffInSeconds < 60) {
-                timeAgo = `${diffInSeconds} second${diffInSeconds > 1 ? 's' : ''} ago`;
-            } else if (diffInSeconds < 3600) {
-                const diffInMinutes: number = Math.floor(diffInSeconds / 60);
-                timeAgo = `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
-            } else if (diffInSeconds < 86400) {
-                const diffInHours: number = Math.floor(diffInSeconds / 3600);
-                timeAgo = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-            } else if (diffInSeconds < 2592000) {
-                const diffInDays: number = Math.floor(diffInSeconds / 86400);
-                timeAgo = `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
-            } else if (diffInSeconds < 31536000) {
-                const diffInMonths: number = Math.floor(diffInSeconds / 2592000);
-                timeAgo = `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
-            } else {
-                const diffInYears: number = Math.floor(diffInSeconds / 31536000);
-                timeAgo = `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
+                if (!relatedComment || !relatedComment.is_approved) {
+                    shouldInclude = false;
+                }
             }
 
-            notifications.push({
-                id: rawNotification._id.toString(),
-                content: rawNotification.content,
-                date: timeAgo,
-            });
+            if(shouldInclude) {
+                const now: Date = new Date();
+                const notificationDate: Date = new Date(rawNotification.date);
+                const diffInSeconds: number = Math.floor((now.getTime() - notificationDate.getTime()) / 1000);
+
+                let timeAgo: string = "";
+
+                if (diffInSeconds < 60) {
+                    timeAgo = `${diffInSeconds} second${diffInSeconds > 1 ? 's' : ''} ago`;
+                } else if (diffInSeconds < 3600) {
+                    const diffInMinutes: number = Math.floor(diffInSeconds / 60);
+                    timeAgo = `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
+                } else if (diffInSeconds < 86400) {
+                    const diffInHours: number = Math.floor(diffInSeconds / 3600);
+                    timeAgo = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+                } else if (diffInSeconds < 2592000) {
+                    const diffInDays: number = Math.floor(diffInSeconds / 86400);
+                    timeAgo = `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+                } else if (diffInSeconds < 31536000) {
+                    const diffInMonths: number = Math.floor(diffInSeconds / 2592000);
+                    timeAgo = `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
+                } else {
+                    const diffInYears: number = Math.floor(diffInSeconds / 31536000);
+                    timeAgo = `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
+                }
+
+                notifications.push({
+                    id: rawNotification._id.toString(),
+                    content: rawNotification.content,
+                    date: timeAgo,
+                });
+            }
         }
 
         return notifications;

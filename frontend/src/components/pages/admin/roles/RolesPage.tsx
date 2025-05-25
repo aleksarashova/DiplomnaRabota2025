@@ -124,7 +124,7 @@ const RolesPage = () => {
                             );
                         })
                     ) : (
-                        <p className="noCommentsMessage">
+                        <p className="noUsersMessage">
                             No users available. Please check back later!
                         </p>
                     )}

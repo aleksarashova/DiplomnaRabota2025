@@ -344,7 +344,7 @@ export const updateRecipeApproved = async(recipeId: string): Promise<void> => {
         await recipe.save();
 
         const notificationContent: string = "Your recipe " + recipe.title.toLocaleUpperCase() + " has been approved";
-        await createNotification(recipe.author, null, notificationContent, null, null);
+        await createNotification(recipe.author, null, notificationContent, null);
     } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);

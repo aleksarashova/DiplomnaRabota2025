@@ -130,7 +130,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, isAdmin, isProfilePage, isH
                 )}
             </ul>
         </nav>
-            <Notificationbar visibility={visibilityNotificationBar} />
+            {visibilityNotificationBar && <Notificationbar visibility={true} />}
         </div>
     );
 };

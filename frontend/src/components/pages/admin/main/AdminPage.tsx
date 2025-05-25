@@ -38,7 +38,7 @@ const AdminPage = () => {
         setNotAdminErrorPopup(false);
         navigateTo("/");
     }
-    
+
     return (
         <div className="admin-page">
             <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} isProfilePage={false} isHomePage={false}/>

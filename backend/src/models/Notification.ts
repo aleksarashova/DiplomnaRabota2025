@@ -5,7 +5,6 @@ export interface NotificationInterface {
     from_user?: Types.ObjectId;
     content: string;
     date: Date;
-    is_comment_approved?: boolean;
     related_comment_id?: Types.ObjectId;
 }
 
@@ -16,7 +15,6 @@ const NotificationSchema: Schema = new Schema<NotificationInterface, Notificatio
     from_user: { type: Schema.Types.ObjectId, ref: "User", required: false},
     content: { type: String },
     date: { type: Date },
-    is_comment_approved: { type: Boolean, required: false },
     related_comment_id: { type: Schema.Types.ObjectId, ref: "Comment", required: false },
 }, {collection: 'notifications', timestamps: true});
 

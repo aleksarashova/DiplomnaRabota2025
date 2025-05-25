@@ -5,7 +5,7 @@ import { findUserById } from "./UserService";
 import {HydratedDocument, Types} from "mongoose";
 import {findRecipeById} from "./RecipeService";
 import Recipe, {RecipeInterface} from "../models/Recipe";
-import {createNotification, updateNotificationWhenCommentIsApproved} from "./NotificationService";
+import {createNotification} from "./NotificationService";
 import {UserInterface} from "../models/User";
 import {checkIdFormat} from "../shared/utils";
 
@@ -49,11 +49,11 @@ export const addComment = async(commentData: AddCommentDTO): Promise<void> => {
 
         if(commentToReplyToId != null && commentToReplyTo != null) {
             const notificationContent: string = author.username + " replied to your comment on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content;
-            await createNotification(commentToReplyTo.author._id, author._id, notificationContent, false, newComment._id);
+            await createNotification(commentToReplyTo.author._id, author._id, notificationContent, newComment._id);
         }
 
         const notificationContent: string = author.username + " commented on " + recipe.title.toLocaleUpperCase() + ": " + commentData.content;
-        await createNotification(recipe.author, author._id, notificationContent, false, newComment._id);
+        await createNotification(recipe.author, author._id, notificationContent, newComment._id);
     } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
@@ -129,9 +129,7 @@ export const updateCommentApproved = async(commentId: string): Promise<void> => 
         await comment.save();
 
         const notificationContent: string = "Your comment: '" + comment.content + "' has been approved";
-        await createNotification(comment.author, null, notificationContent, null, null);
-
-        await updateNotificationWhenCommentIsApproved(comment._id);
+        await createNotification(comment.author, null, notificationContent, null);
     } catch(error: unknown) {
         if(error instanceof Error) {
             throw new Error(error.message);
