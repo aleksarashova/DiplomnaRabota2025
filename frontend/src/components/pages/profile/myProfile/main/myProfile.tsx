@@ -156,6 +156,8 @@ const MyProfile = () => {
     }
 
     const handleCancelEditAccount = () => {
+        setCurrentFieldForEdit("");
+        setCurrentFieldValue("");
         setVisibilityEditAccountPopup(false);
     }
 
@@ -209,6 +211,8 @@ const MyProfile = () => {
         try {
             const data = await editAccountRequest(token!, formData);
             console.log('Backend Response:', data);
+            setCurrentFieldForEdit("");
+            setCurrentFieldValue("");
             setVisibilityEditAccountPopup(false);
             await getUserData();
         } catch (error) {
