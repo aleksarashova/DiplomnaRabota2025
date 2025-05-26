@@ -22,6 +22,7 @@ import Footer from "../../../../sections/footer/Footer";
 import MyLikedWindow from "../myLikedWindow/myLikedWindow";
 import MyFavouritesWindow from "../myFavouritesWindow/myFavouritesWindow";
 import MyRatingsWindow from "../myRatingsWindow/myRatingsWindow";
+import EditProfileError from "../../../../popups/errors/EditProfileError";
 
 const MyProfile = () => {
     const [visibilityDeleteAccountPopup, setVisibilityDeleteAccountPopup] = useState(false);
@@ -38,6 +39,9 @@ const MyProfile = () => {
     const [showMyLiked, setShowMyLiked] = useState<boolean>(false);
     const [showMyFavourites, setShowMyFavourites] = useState<boolean>(false);
     const [showMyRatings, setShowMyRatings] = useState<boolean>(false);
+
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [editProfileErrorPopup, setVisibilityEditProfileErrorPopup] = useState(false);
 
     const navigateTo = useNavigate();
 
@@ -65,6 +69,15 @@ const MyProfile = () => {
 
         fetchData().then();
     }, []);
+
+    const handleInvalidInput = (message: string) => {
+        setErrorMessage(message);
+        setVisibilityEditProfileErrorPopup(true);
+    }
+
+    const handleCloseEditProfileErrorPopup = () => {
+        setVisibilityEditProfileErrorPopup(false);
+    }
 
     const getUserData = async () => {
         const token = sessionStorage.getItem("accessToken");
@@ -201,8 +214,14 @@ const MyProfile = () => {
         } catch (error) {
             console.error('Error editing account:', error);
 
-            if (error instanceof Error && error.message.includes('401')) {
-                navigateTo('/login');
+            if (error instanceof Error) {
+                if(error.message.includes('401')) {
+                    navigateTo('/login');
+                    return;
+                }
+                handleInvalidInput(error.message)
+            } else {
+                handleInvalidInput("An unknown error occured.");
             }
         }
     }
@@ -310,6 +329,13 @@ const MyProfile = () => {
                 setShowMyFavourites={setShowMyFavourites}
                 setShowMyRatings={setShowMyRatings}
             />
+
+            {editProfileErrorPopup && (
+                <EditProfileError
+                    handleCloseError={handleCloseEditProfileErrorPopup}
+                    errorContent={errorMessage}
+                />
+            )}
 
             {visibilityDeleteAccountPopup && (
                 <DeleteAccountPopup

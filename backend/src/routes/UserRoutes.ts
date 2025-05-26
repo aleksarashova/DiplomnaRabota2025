@@ -38,7 +38,7 @@ import {
     checkAuthentication,
     checkCredentialsLogin,
     checkEmailForSendingAVerificationCodeOrResetPasswordLink,
-    checkUniquenessRegister
+    checkUniquenessRegister, checkUniquenessUsernameForEdit
 } from "../middlewares/UserMiddleware";
 import {uploadProfileImage} from "../middlewares/UploadsMiddleware";
 
@@ -66,7 +66,7 @@ router.post("/add-recipe-to-favourites", checkAuthentication, addRecipeToFavouri
 router.post("/add-recipe-to-liked", checkAuthentication, addRecipeToLiked);
 router.post("/rate-user", checkAuthentication, rateUser);
 
-router.patch("/update-profile", validateRequest(profileUpdateSchema), checkAuthentication, updateProfile);
+router.patch("/update-profile", validateRequest(profileUpdateSchema), checkUniquenessUsernameForEdit, checkAuthentication, updateProfile);
 router.patch("/edit-profile-picture", uploadProfileImage.single("image"), checkAuthentication, editProfilePicture);
 router.patch("/verify-profile", verify);
 router.patch("/reset-password", validateRequest(userResetPasswordSchema), resetPassword);

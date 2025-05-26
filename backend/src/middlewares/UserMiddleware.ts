@@ -38,6 +38,34 @@ export const checkUniquenessRegister = async (
     }
 }
 
+export const checkUniquenessUsernameForEdit = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { field, value } = req.body;
+
+        if(field === "username") {
+            const existingUsername: HydratedDocument<UserInterface> | null = await findUserByUsername(value);
+            if (existingUsername) {
+                res.status(400).json({ message: "Username is already in use. Try another one." });
+                return;
+            }
+        }
+
+        next();
+    } catch (error: unknown) {
+        console.error("Error during checking uniqueness of username of user:", error);
+
+        if (error instanceof Error) {
+            res.status(400).json({message: error.message});
+        } else {
+            res.status(500).json({message: "Internal server error."});
+        }
+    }
+}
+
 export const checkCredentialsLogin = async (
     req: Request,
     res: Response,
