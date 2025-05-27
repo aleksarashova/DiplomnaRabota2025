@@ -5,6 +5,9 @@ import "./errors.css";
 import { useParams} from "react-router-dom";
 
 import ResendEmailSuccessfulMessage from "../messages/ResendVerificationEmailMessage";
+import {sendVerificationEmail} from "../../forms/send-verification-email/requests";
+import {SendVerificationEmailFormData} from "../../forms/send-verification-email/types";
+import EmailError from "./EmailError";
 
 type verificationErrorProps = {
     handleCloseError: () => void;
@@ -16,6 +19,8 @@ const VerificationError = ({ handleCloseError, errorContent }: verificationError
     const [visibilityResendEmailCodeSuccessMessage, setVisibilityResendEmailCodeSuccessMessage] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { email } = useParams();
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [visibilityEmailErrorPopup, setVisibilityEmailErrorPopup] = useState(false);
 
     useEffect(() => {
         if (errorContent === "Expired verification code.") {
@@ -30,39 +35,41 @@ const VerificationError = ({ handleCloseError, errorContent }: verificationError
         handleCloseError();
     }
 
-    const handleResendEmail = (e: FormEvent<HTMLButtonElement>) => {
+    const handleInvalidInput = (message: string) => {
+        setErrorMessage(message);
+        setVisibilityEmailErrorPopup(true);
+    }
+
+    const handleCloseEmailError = () => {
+        setVisibilityEmailErrorPopup(false);
+    }
+
+    const handleResendEmail = async (e: FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        console.log(email);
-
-        const formData = {
-            email: email,
+        const formData: SendVerificationEmailFormData = {
+            email: email || "",
         };
 
         console.log("Form Data Submitted:", formData);
 
         setIsLoading(true);
 
-        fetch(`${process.env.REACT_APP_BASE_URL}users/resend-verification-email`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        })
-            .then(async (response) => {
-                return await response.json();
-            })
-            .then((data) => {
-                console.log("Backend Response:", data);
-                setVisibilityResendEmailCodeSuccessMessage(true);
-            })
-            .catch((error) => {
-                console.error("Error:", error.message);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+        try {
+            const data = await sendVerificationEmail(formData);
+
+            console.log("Backend Response:", data);
+            setVisibilityResendEmailCodeSuccessMessage(true);
+        } catch (error) {
+            console.error("Error:", error);
+            if (error instanceof Error) {
+                handleInvalidInput(error.message);
+            } else {
+                handleInvalidInput("An unknown error occurred.");
+            }
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -90,6 +97,11 @@ const VerificationError = ({ handleCloseError, errorContent }: verificationError
                 <ResendEmailSuccessfulMessage
                     handleCloseMessage={handleCloseSuccessfulResendMessage}
                 />
+            )}
+            {visibilityEmailErrorPopup && (
+                <EmailError
+                    handleCloseError={handleCloseEmailError}
+                    errorContent={errorMessage} />
             )}
         </div>
     );
