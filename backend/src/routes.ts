@@ -12,7 +12,7 @@ const routes = (app: Express) => {
     app.use('/api/comments', commentRoutes);
     app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {
         setHeaders: (res, path) => {
-            res.setHeader('Cache-Control', 'no-store');
+            res.setHeader('Cache-Control', 'public, max-age=604800');
         }
     }));
 
