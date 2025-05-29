@@ -222,7 +222,7 @@ export const getRecipeData = async (id: string): Promise<GetExtendedRecipeDTO> =
         }
 
         const comments: HydratedDocument<CommentInterface>[] = await Comment.find({
-            '_id': { $in: recipe.comments },
+            _id: { $in: recipe.comments },
         });
 
         const commentsWithAuthors: GetCommentDTO[] = await Promise.all(
@@ -230,6 +230,7 @@ export const getRecipeData = async (id: string): Promise<GetExtendedRecipeDTO> =
                 .filter(comment => comment.is_approved)
                 .map(async (comment) => {
                     const commentAuthor: HydratedDocument<UserInterface> | null = await User.findById(comment.author).select('username');
+
                     const now: Date = new Date();
                     const commentDate: Date = new Date(comment.date);
                     const diffInSeconds: number = Math.floor((now.getTime() - commentDate.getTime()) / 1000);

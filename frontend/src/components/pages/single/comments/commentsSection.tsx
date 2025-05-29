@@ -89,6 +89,8 @@ const CommentsSection = ({recipeData}: CommentsInfoProps) => {
 
     const handleCloseAddCommentMessage = () => {
         setVisibilityAddCommentMessage(false);
+        setVisibilityAddCommentPopup(false);
+        setVisibilityReplyToCommentPopup(false);
     }
 
     return (

@@ -32,7 +32,7 @@ import {
 } from "../services/EmailService";
 import {ExtendedRequest} from "../shared/interfaces";
 import {GetAllUsersDTO, OtherUserProfileDTO, UpdateUserDTO, UserProfileDTO, UserRatingDTO} from "../DTOs/UserDTOs";
-import {HydratedArraySubdocument, HydratedDocument} from "mongoose";
+import {HydratedDocument} from "mongoose";
 import {UserInterface} from "../models/User";
 import {GetNotificationDTO} from "../DTOs/NotificationDTOs";
 

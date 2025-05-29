@@ -608,7 +608,7 @@ export const resetUserPassword = async(password: string, key: string): Promise<v
         if(!recordInPasswordResetKeys) {
             throw new Error("No record with this key in the database.");
         }
-        const userEmail: string = recordInPasswordResetKeys!.email;
+        const userEmail: string = recordInPasswordResetKeys.email;
         const newHashedPassword: string = await hashPassword(password);
 
         const user: HydratedDocument<UserInterface> | null = await findUserByEmail(userEmail);

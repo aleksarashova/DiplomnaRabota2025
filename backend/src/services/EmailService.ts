@@ -89,14 +89,14 @@ export const saveRecordInVerificationCodes = async (email: string, code: number)
     try {
         checkEmailFormat(email);
 
-        const row: VerificationCodeInterface = {
+        const document: VerificationCodeInterface = {
             email: email,
             code: code,
             expire: new Date(Date.now() + 5 * 60 * 1000),
         }
 
-        const newRow: HydratedDocument<VerificationCodeInterface> = new VerificationCode(row);
-        await newRow.save();
+        const newDocument: HydratedDocument<VerificationCodeInterface> = new VerificationCode(document);
+        await newDocument.save();
     } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
@@ -110,14 +110,14 @@ export const saveRecordInPasswordResetKeys = async (email: string, key: string):
     try {
         checkEmailFormat(email);
 
-        const row: PasswordResetKeyInterface = {
+        const document: PasswordResetKeyInterface = {
             email: email,
             key: key,
             expire: new Date(Date.now() + 5 * 60 * 1000),
         }
 
-        const newRow: HydratedDocument<PasswordResetKeyInterface> = new PasswordResetKey(row);
-        await newRow.save();
+        const newDocument: HydratedDocument<PasswordResetKeyInterface> = new PasswordResetKey(document);
+        await newDocument.save();
     } catch (error: unknown) {
         if (error instanceof Error) {
             throw new Error(error.message);
